@@ -29,6 +29,7 @@ private:
 public slots:
     bool loadROM();
     bool loadPalette();
+    void change_palette();
 };
 
 #endif // MAINWINDOW_H

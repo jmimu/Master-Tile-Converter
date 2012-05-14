@@ -5,7 +5,7 @@
 
 #include <math.h>
 
-Palette::Palette()
+Palette::Palette() : m_sprites_palette(true)
 {
     /*for (int i=0;i<16;i++)
         colors.append( QColor(4*i,4*i,4*i).rgb() );*/
@@ -17,14 +17,17 @@ plot(127+127*cos(pi/16*x))
 replot(127+127*cos(pi/16*x+2*pi/3))
 replot(127+127*cos(pi/16*x+4*pi/3))
    */
-    int nbr=16;
+    int nbr=32;
     for (int i=0;i<nbr;i++)
     {
         unsigned short r,g,b;
         r=127+127*cos(2*3.14159/nbr*i);
         g=127+127*cos(2*3.14159/nbr*i+2*3.14159/3);
         b=127+127*cos(2*3.14159/nbr*i+4*3.14159/3);
-        colors.append( QColor(r,g,b).rgb() );
+        if (i<nbr/2)
+            colors_back.append( QColor(r,g,b).rgb() );
+        else
+            colors_sprites.append( QColor(r,g,b).rgb() );
     }
 
 
@@ -50,7 +53,7 @@ replot(127+127*cos(pi/16*x+4*pi/3))
 }
 
 
-bool Palette::read_from_file(QString fileName,bool sprites_palette)
+bool Palette::read_from_file(QString fileName)
 {
     long pal_length;
     unsigned char * pal_data;
@@ -72,18 +75,19 @@ bool Palette::read_from_file(QString fileName,bool sprites_palette)
 
     std::cout<<"Palette: read "<<pal_length<<" bytes."<<std::endl;
 
-    colors.clear();
+    colors_back.clear();
+    colors_sprites.clear();
 
-    int start=0;//for background palette
-    if (sprites_palette) start=16;//for sprites palette
     unsigned char r,g,b;
-    for (int i=0;i<16;i++)
+    for (int i=0;i<32;i++)
     {
-        b= ((pal_data[start+i] & 0x30)>>4)* 0x55;
-        g= ((pal_data[start+i] & 0x0C)>>2)* 0x55;
-        r= ((pal_data[start+i] & 0x03)>>0)* 0x55;
-        std::cout<<"color: "<<r<<" "<<g<<" "<<b<<std::endl;
-        colors.append( QColor(r,g,b).rgb() );
+        b= ((pal_data[i] & 0x30)>>4)* 0x55;
+        g= ((pal_data[i] & 0x0C)>>2)* 0x55;
+        r= ((pal_data[i] & 0x03)>>0)* 0x55;
+        if (i<16)
+            colors_back.append( QColor(r,g,b).rgb() );
+        else
+            colors_sprites.append( QColor(r,g,b).rgb() );
     }
 
 

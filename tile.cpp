@@ -17,7 +17,7 @@ Tile::Tile(Palette *palette) :image(8,8,QImage::Format_Indexed8)
 
 void Tile::update_palette(Palette *palette)
 {
-    image.setColorTable(palette->colors);
+    image.setColorTable( palette->get_colors() );
 }
 
 void Tile::update_image()

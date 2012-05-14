@@ -20,11 +20,17 @@ void PaletteWidget::paintEvent(QPaintEvent*)
 {
     std::cout<<"Repaint!"<<std::endl;
     QPainter painter(this);
-    int x=0;
     QVector<QRgb>::iterator it;
-    for ( it=m_palette->colors.begin(); it < m_palette->colors.end(); it++ )
+    int x=0;
+    for ( it=m_palette->get_back_colors().begin(); it < m_palette->get_back_colors().end(); it++ )
     {
-        painter.fillRect(x*16,0,16,32,(*it));
+        painter.fillRect(x*16,0,16,20,(*it));
+        x++;
+    }
+    x=0;
+    for ( it=m_palette->get_sprites_colors().begin(); it < m_palette->get_sprites_colors().end(); it++ )
+    {
+        painter.fillRect(x*16,20,16,20,(*it));
         x++;
     }
 }

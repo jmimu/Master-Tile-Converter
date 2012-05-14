@@ -30,7 +30,7 @@
       <x>30</x>
       <y>480</y>
       <width>256</width>
-      <height>32</height>
+      <height>40</height>
      </rect>
     </property>
    </widget>
@@ -80,6 +80,48 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>460</y>
+      <width>111</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Palette Part</string>
+    </property>
+    <widget class="QRadioButton" name="background_palette_radioButton">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>20</y>
+       <width>101</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Background</string>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="sprite_palette_radioButton">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>40</y>
+       <width>105</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Sprite</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -95,9 +137,11 @@
      <string>File</string>
     </property>
     <addaction name="actionOpen_Rom"/>
-    <addaction name="actionImport_Picture"/>
     <addaction name="separator"/>
     <addaction name="actionImport_Palette"/>
+    <addaction name="separator"/>
+    <addaction name="actionExport_Picture"/>
+    <addaction name="actionImport_Picture"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -136,6 +180,11 @@
   <action name="actionImport_Palette">
    <property name="text">
     <string>Import Palette</string>
+   </property>
+  </action>
+  <action name="actionExport_Picture">
+   <property name="text">
+    <string>Export Picture</string>
    </property>
   </action>
  </widget>

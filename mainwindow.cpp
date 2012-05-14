@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     QObject::connect(ui->actionOpen_Rom, SIGNAL(activated()), this, SLOT(loadROM()));
     QObject::connect(ui->actionImport_Palette, SIGNAL(activated()), this, SLOT(loadPalette()));
+    QObject::connect(ui->background_palette_radioButton, SIGNAL(clicked()), this, SLOT(change_palette()));
+    QObject::connect(ui->sprite_palette_radioButton, SIGNAL(clicked()), this, SLOT(change_palette()));
 
     palette=new Palette();
     ui->palettewidget->set_palette(palette);
@@ -62,6 +64,18 @@ bool MainWindow::loadPalette()
         return true;
     }
     return false;
+}
+
+void MainWindow::change_palette()
+{
+    palette->set_colors(ui->sprite_palette_radioButton->isChecked());
+    std::vector<Tile*>::iterator it;
+    for ( it=tiles.begin() ; it < tiles.end(); it++ )
+    {
+        (*it)->update_palette(palette);
+    }
+    ui->tileswidget->repaint();
+    ui->palettewidget->repaint();
 }
 
 bool MainWindow::loadROM()
