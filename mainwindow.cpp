@@ -24,6 +24,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->offset_lineEdit, SIGNAL(returnPressed()), this, SLOT(apply_offset()));
     QObject::connect(ui->Apply_offset_pushButton, SIGNAL(pressed()), this, SLOT(apply_offset()));
 
+    QObject::connect(ui->mode_3bpp_radioButton, SIGNAL(clicked()), this, SLOT(change_mode()));
+    QObject::connect(ui->mode_4bpp_radioButton, SIGNAL(clicked()), this, SLOT(change_mode()));
+
     QObject::connect(ui->up_1Byte_pushButton, SIGNAL(pressed()), this, SLOT(move_up1Byte()));
     QObject::connect(ui->down_1Byte_pushButton, SIGNAL(pressed()), this, SLOT(move_down1Byte()));
     QObject::connect(ui->up_1row_pushButton, SIGNAL(pressed()), this, SLOT(move_up1row()));
@@ -128,6 +131,12 @@ bool MainWindow::loadROM()
     return false;
 }
 
+
+void MainWindow::change_mode()
+{
+    Tile::is3bpp=ui->mode_3bpp_radioButton->isChecked();
+    apply_offset();
+}
 
 void MainWindow::move_up1Byte()
 {

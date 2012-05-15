@@ -43,6 +43,8 @@ public slots:
     void move_down1tile();
     void move_up16tiles();
     void move_down16tiles();
+
+    void change_mode();
 };
 
 #endif // MAINWINDOW_H
