@@ -7,6 +7,7 @@
 
 Palette::Palette() : m_sprites_palette(true)
 {
+    std::cout<<"Init palette..."<<std::endl;
     /*for (int i=0;i<16;i++)
         colors.append( QColor(4*i,4*i,4*i).rgb() );*/
 

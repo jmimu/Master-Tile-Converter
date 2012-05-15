@@ -19,6 +19,7 @@ void TilesWidget::paintEvent(QPaintEvent*) {
     QPainter painter(this);
     painter.scale(4,4);
     painter.fillRect(0,0,16*8,12*8,Qt::darkCyan);
+    painter.fillRect(0,0,16*8,12*8,Qt::DiagCrossPattern);
     if (m_tiles)
     {
         long x=0;
@@ -26,7 +27,8 @@ void TilesWidget::paintEvent(QPaintEvent*) {
         std::vector<Tile*>::iterator it;
         for ( it=m_tiles->begin() ; it < m_tiles->end(); it++ )
         {
-            painter.drawImage(x*8 , y*8 , (*it)->image);
+            if (!(*it)->is_empty())
+                painter.drawImage(x*8 , y*8 , (*it)->image);
             x++;
             if (x>=nb_tiles_width)
             {

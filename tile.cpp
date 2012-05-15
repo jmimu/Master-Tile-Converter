@@ -4,7 +4,7 @@
 
 #include "tile3bpp.h"
 
-Tile::Tile(Palette *palette) :image(8,8,QImage::Format_Indexed8)
+Tile::Tile(Palette *palette) :image(8,8,QImage::Format_Indexed8), m_is_empty(true)
 {
     for (int x=0;x<8;x++)
     {
@@ -13,7 +13,6 @@ Tile::Tile(Palette *palette) :image(8,8,QImage::Format_Indexed8)
             data[x].push_back(0);
     }
     update_palette(palette);
-    update_image();
 }
 
 void Tile::update_palette(Palette *palette)
@@ -23,6 +22,7 @@ void Tile::update_palette(Palette *palette)
 
 void Tile::update_image()
 {
+    m_is_empty=false;
     for (int x=0;x<8;x++)
         for (int y=0;y<8;y++)
         {
@@ -32,12 +32,24 @@ void Tile::update_image()
 
 }
 
-
-unsigned long Tile::read(unsigned char * romdata, unsigned long offset)
+void Tile::empty_image()
 {
-    for (int i=0;i<8;i++)
-        offset+=read_8pixels(romdata,offset,i);
-    update_image();
+    m_is_empty=true;
+    for (int x=0;x<8;x++)
+        for (int y=0;y<8;y++)
+            image.setPixel(x,y,0);
+}
+
+unsigned long Tile::read(unsigned char * romdata, unsigned long offset, unsigned long romlength)
+{
+    if (offset+tile_size()<=romlength)
+    {
+        for (int i=0;i<8;i++)
+            offset+=read_8pixels(romdata,offset,i);
+        update_image();
+    }else{
+        empty_image();
+    }
     return offset;
 }
 

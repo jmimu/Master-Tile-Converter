@@ -29,3 +29,13 @@ unsigned long Tile3bpp::read_8pixels(unsigned char * romdata, unsigned long offs
     }
     return 3;
 }
+
+unsigned long Tile3bpp::row_size()
+{
+    return 3;
+}
+
+unsigned long Tile3bpp::tile_size()
+{
+    return 3*8;
+}

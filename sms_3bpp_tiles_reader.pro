@@ -10,12 +10,14 @@ SOURCES += main.cpp \
     tile3bpp.cpp \
     tileswidget.cpp \
     palettewidget.cpp \
-    zoomwidget.cpp
+    zoomwidget.cpp \
+    rom.cpp
 HEADERS += mainwindow.h \
     tile.h \
     palette.h \
     tile3bpp.h \
     tileswidget.h \
     palettewidget.h \
-    zoomwidget.h
+    zoomwidget.h \
+    rom.h
 FORMS += mainwindow.ui

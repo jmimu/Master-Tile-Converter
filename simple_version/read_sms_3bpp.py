@@ -32,7 +32,7 @@ from pygame.locals import *
 
 if (len(sys.argv)<4):
   print("Synthax: python (3bpp|4bpp) main.py romfile.sms offset_hex")
-  print("Example for AlexKidd : python main.py 3bpp ../\[BIOS\]\ Alex\ Kidd\ in\ Miracle\ World\ \(USA\,\ Europe\)_JM.sms 0x10341")
+  print("Example for AlexKidd : python read_sms_3bpp.py 3bpp ../\[BIOS\]\ Alex\ Kidd\ in\ Miracle\ World\ \(USA\,\ Europe\)_JM.sms 0x10341")
   exit()
 
 if (sys.argv[1]!="3bpp")and(sys.argv[1]!="4bpp"):

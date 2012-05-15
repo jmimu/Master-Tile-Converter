@@ -7,6 +7,7 @@
 
 #include "tile3bpp.h"
 #include "palette.h"
+#include "rom.h"
 
 namespace Ui {
     class MainWindow;
@@ -23,14 +24,16 @@ protected:
 
 private:
     Ui::MainWindow *ui;
-    std::vector<Tile*> tiles;
-    Palette *palette;
+    Palette palette;
+    Rom rom;
 
 public slots:
     bool loadROM();
     bool loadPalette();
     void change_palette();
     void update_tiles();
+    void enable_offset_button();
+    bool apply_offset();
 };
 
 #endif // MAINWINDOW_H
