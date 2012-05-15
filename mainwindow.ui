@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>657</width>
+    <width>720</width>
     <height>621</height>
    </rect>
   </property>
@@ -19,8 +19,8 @@
      <rect>
       <x>10</x>
       <y>40</y>
-      <width>520</width>
-      <height>392</height>
+      <width>512</width>
+      <height>384</height>
      </rect>
     </property>
    </widget>
@@ -122,13 +122,46 @@
      </property>
     </widget>
    </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>10</y>
+      <width>128</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Zoom</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="ZoomWidget" name="zoomwidget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>40</y>
+      <width>128</width>
+      <height>128</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>657</width>
+     <width>720</width>
      <height>23</height>
     </rect>
    </property>
@@ -199,6 +232,11 @@
    <class>PaletteWidget</class>
    <extends>QWidget</extends>
    <header>palettewidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ZoomWidget</class>
+   <extends>QWidget</extends>
+   <header>zoomwidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

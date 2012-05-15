@@ -25,6 +25,7 @@ private:
     Ui::MainWindow *ui;
     std::vector<Tile*> tiles;
     Palette *palette;
+    void update_tiles();
 
 public slots:
     bool loadROM();

@@ -1,0 +1,36 @@
+On part de "[BIOS] Alex Kidd in Miracle World (USA, Europe).sms".
+
+ * mettre à jour la checksum : $7FF9 (voir valeur calculée par SMSandGGHeaderReader.exe)
+ * boot hack : $17EDE => CD 00 C7 (pour vraie SMS) ou 00 00 00 (pour émulateur)
+
+Description des éléments de la ROM :
+http://www.smspower.org/Development/AlexKiddInMiracleWorld-SMS
+
+Les sprites d'Alex sont en 3bpp. $10341 - $118e8
+Pas trouvé d'éditeur.
+Les 8 couleurs sont celles en position 16 à 23 de la palette.
+Les couleurs sont :
+Color 16 : %00110000 | $30 | R=0, G=0, B=3    #0000FF
+Color 17 : %00111111 | $3F | R=3, G=3, B=3    #FFFFFF
+Color 18 : %00000101 | $05 | R=1, G=1, B=0    #555500
+Color 19 : %00001011 | $0B | R=3, G=2, B=0    #FFAA00
+Color 20 : %00000011 | $03 | R=3, G=0, B=0    #FF0000
+Color 21 : %00000010 | $02 | R=2, G=0, B=0    #AA0000
+Color 22 : %00000000 | $00 | R=0, G=0, B=0    #000000
+Color 23 : %00110000 | $30 | R=0, G=0, B=3    #0000FF
+
+Lecture d'une palette row de meka :
+c : octet de la couleur de meka
+r,g,b : les 3 octets en sortie
+b= (c & 0x30)* 0x55;
+g= (c & 0x0C)* 0x55;
+r= (c & 0x03)* 0x55;
+
+
+
+
+Tiles : (voir http://www.smspower.org/maxim/HowToProgram/Tiles)
+"planar format" : les 8 bits d'un octets correspondent aux 8 pixels d'une
+ligne de tile. En 4bpp, il faut 4 octets pour représenter une ligne.
+Le premier bit des 4 pixels va représenter la couleur du 1er pixels,
+le 2e bit des 4 pixels va représenter la couleur du 2e pixels, etc...

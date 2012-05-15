@@ -13,6 +13,7 @@ Tile::Tile(Palette *palette) :image(8,8,QImage::Format_Indexed8)
             data[x].push_back(0);
     }
     update_palette(palette);
+    update_image();
 }
 
 void Tile::update_palette(Palette *palette)

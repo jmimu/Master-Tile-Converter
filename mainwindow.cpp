@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     for (int i=0;i<12*16;i++)
         tiles.push_back(new Tile3bpp(palette));
     ui->tileswidget->set_tiles(&tiles);
+    ui->zoomwidget->set_tile(ui->tileswidget->get_selected_tile());
 
 
 }
@@ -48,19 +49,26 @@ void MainWindow::changeEvent(QEvent *e)
 }
 
 
+void MainWindow::update_tiles()
+{
+    std::vector<Tile*>::iterator it;
+    for ( it=tiles.begin() ; it < tiles.end(); it++ )
+    {
+        (*it)->update_palette(palette);
+    }
+    ui->tileswidget->repaint();
+    ui->palettewidget->repaint();
+    ui->zoomwidget->repaint();
+
+}
+
 bool MainWindow::loadPalette()
 {
     QString fileName = QFileDialog::getOpenFileName(this,tr("Choose palette"), ".", tr("SMS Meka Raw Palette Files (*)"));
     if (fileName!="")
     {
         palette->read_from_file(fileName);
-        std::vector<Tile*>::iterator it;
-        for ( it=tiles.begin() ; it < tiles.end(); it++ )
-        {
-            (*it)->update_palette(palette);
-        }
-        ui->tileswidget->repaint();
-        ui->palettewidget->repaint();
+        update_tiles();
         return true;
     }
     return false;
@@ -69,13 +77,7 @@ bool MainWindow::loadPalette()
 void MainWindow::change_palette()
 {
     palette->set_colors(ui->sprite_palette_radioButton->isChecked());
-    std::vector<Tile*>::iterator it;
-    for ( it=tiles.begin() ; it < tiles.end(); it++ )
-    {
-        (*it)->update_palette(palette);
-    }
-    ui->tileswidget->repaint();
-    ui->palettewidget->repaint();
+    update_tiles();
 }
 
 bool MainWindow::loadROM()
@@ -115,6 +117,7 @@ bool MainWindow::loadROM()
     delete[] romdata;
 
     ui->tileswidget->repaint();
+    ui->zoomwidget->repaint();
 
     return true;
 }
