@@ -24,6 +24,16 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->offset_lineEdit, SIGNAL(returnPressed()), this, SLOT(apply_offset()));
     QObject::connect(ui->Apply_offset_pushButton, SIGNAL(pressed()), this, SLOT(apply_offset()));
 
+    QObject::connect(ui->up_1Byte_pushButton, SIGNAL(pressed()), this, SLOT(move_up1Byte()));
+    QObject::connect(ui->down_1Byte_pushButton, SIGNAL(pressed()), this, SLOT(move_down1Byte()));
+    QObject::connect(ui->up_1row_pushButton, SIGNAL(pressed()), this, SLOT(move_up1row()));
+    QObject::connect(ui->down_1row_pushButton, SIGNAL(pressed()), this, SLOT(move_down1row()));
+    QObject::connect(ui->up_1tile_pushButton, SIGNAL(pressed()), this, SLOT(move_up1tile()));
+    QObject::connect(ui->down_1tile_pushButton, SIGNAL(pressed()), this, SLOT(move_down1tile()));
+    QObject::connect(ui->up_16tiles_pushButton, SIGNAL(pressed()), this, SLOT(move_up16tiles()));
+    QObject::connect(ui->down_16tiles_pushButton, SIGNAL(pressed()), this, SLOT(move_down16tiles()));
+
+
     std::cout<<"Init UI..."<<std::endl;
     ui->offset_lineEdit->setText(QString("%1").arg(rom.get_offset(),0,16));
     ui->palettewidget->set_palette(&palette);
@@ -116,4 +126,77 @@ bool MainWindow::loadROM()
         return apply_offset();
     }
     return false;
+}
+
+
+void MainWindow::move_up1Byte()
+{
+    long offset=rom.get_offset();
+    offset-=1;
+    if (offset<0) offset=0;
+    ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
+    apply_offset();
+}
+
+void MainWindow::move_down1Byte()
+{
+    long offset=rom.get_offset();
+    offset+=1;
+    if (offset<0) offset=0;
+    ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
+    apply_offset();
+}
+
+void MainWindow::move_up1row()
+{
+    long offset=rom.get_offset();
+    offset-=Tile::row_size();
+    if (offset<0) offset=0;
+    ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
+    apply_offset();
+}
+
+void MainWindow::move_down1row()
+{
+    long offset=rom.get_offset();
+    offset+=Tile::row_size();
+    if (offset<0) offset=0;
+    ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
+    apply_offset();
+}
+
+void MainWindow::move_up1tile()
+{
+    long offset=rom.get_offset();
+    offset-=Tile::tile_size();
+    if (offset<0) offset=0;
+    ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
+    apply_offset();
+}
+
+void MainWindow::move_down1tile()
+{
+    long offset=rom.get_offset();
+    offset+=Tile::tile_size();
+    if (offset<0) offset=0;
+    ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
+    apply_offset();
+}
+
+void MainWindow::move_up16tiles()
+{
+    long offset=rom.get_offset();
+    offset-=Tile::tile_size()*16;
+    if (offset<0) offset=0;
+    ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
+    apply_offset();
+}
+
+void MainWindow::move_down16tiles()
+{
+    long offset=rom.get_offset();
+    offset+=Tile::tile_size()*16;
+    if (offset<0) offset=0;
+    ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
+    apply_offset();
 }

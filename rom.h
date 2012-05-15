@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "tile.h"
-#include "tile3bpp.h"
 #include "palette.h"
 
 class Rom

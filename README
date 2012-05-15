@@ -21,3 +21,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 TODO:
  * 4bpp (in only 1 class Tile::set3bpp(bool) )
  * add buttons: 1 byte / 1 row / 1 tile / 16 tiles / 192 tiles up or down 
+

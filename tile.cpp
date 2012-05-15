@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "tile3bpp.h"
+bool Tile::is3bpp=true;
 
 Tile::Tile(Palette *palette) :image(8,8,QImage::Format_Indexed8), m_is_empty(true)
 {
@@ -53,15 +53,44 @@ unsigned long Tile::read(unsigned char * romdata, unsigned long offset, unsigned
     return offset;
 }
 
-/*
-Tile* Tile::frompalette(Palette *palette,unsigned char index)
+
+
+unsigned long Tile::read_8pixels(unsigned char * romdata, unsigned long offset, int line)
 {
-    Tile* tile=new Tile3bpp(palette);
-    for (int x=0;x<8;x++)
-        for (int y=0;y<8;y++)
-        {
-            tile->data[y][x]=index;
-            tile->update_image();
-        }
-    return tile;
-}*/
+    for (int i=0;i<8;i++)
+        data[line][i]=0;
+
+    int nbr_bytes;
+    if (is3bpp)
+        nbr_bytes=3;
+    else
+        nbr_bytes=4;
+
+    int shift=1;
+    for (int i=0;i<nbr_bytes;i++)
+    {
+        //std::cout<<"ROM data: "<<(int)(romdata[offset+i])<<std::endl;
+        data[line][0]+=( (romdata[offset+i]/128)%2 ) * shift;
+        data[line][1]+=( (romdata[offset+i]/64)%2 ) * shift;
+        data[line][2]+=( (romdata[offset+i]/32)%2 ) * shift;
+        data[line][3]+=( (romdata[offset+i]/16)%2 ) * shift;
+        data[line][4]+=( (romdata[offset+i]/8)%2 ) * shift;
+        data[line][5]+=( (romdata[offset+i]/4)%2 ) * shift;
+        data[line][6]+=( (romdata[offset+i]/2)%2 ) * shift;
+        data[line][7]+=( (romdata[offset+i]/1)%2 ) * shift;
+        shift*=2;
+    }
+    return nbr_bytes;
+}
+
+unsigned long Tile::row_size()
+{
+    if (is3bpp) return 3;
+    else return 4;
+}
+
+unsigned long Tile::tile_size()
+{
+    if (is3bpp) return 3*8;
+    else return 4*8;
+}

@@ -7,7 +7,6 @@ SOURCES += main.cpp \
     mainwindow.cpp \
     tile.cpp \
     palette.cpp \
-    tile3bpp.cpp \
     tileswidget.cpp \
     palettewidget.cpp \
     zoomwidget.cpp \
@@ -15,7 +14,6 @@ SOURCES += main.cpp \
 HEADERS += mainwindow.h \
     tile.h \
     palette.h \
-    tile3bpp.h \
     tileswidget.h \
     palettewidget.h \
     zoomwidget.h \

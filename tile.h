@@ -10,6 +10,9 @@ class Tile
 {
 public:
     Tile(Palette *palette);
+
+    static bool is3bpp;
+
     //static Tile* frompalette(Palette *palette,unsigned char index);
     void update_palette(Palette *palette);
     void update_image();
@@ -20,9 +23,10 @@ public:
     unsigned long read(unsigned char * romdata, unsigned long offset, unsigned long romlength);
 
     /*read 8 pixels (1 raw) in ROM. Returns number of bytes read*/
-    virtual unsigned long read_8pixels(unsigned char * romdata, unsigned long offset, int line)=0;
-    virtual unsigned long row_size()=0; //one row size in byte
-    virtual unsigned long tile_size()=0; //one tile size in byte
+    unsigned long read_8pixels(unsigned char * romdata, unsigned long offset, int line);
+
+    static unsigned long row_size(); //one row size in byte
+    static unsigned long tile_size(); //one tile size in byte
 
     QImage image;
     std::vector< std::vector<unsigned char> > data;

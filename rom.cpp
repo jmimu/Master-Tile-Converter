@@ -8,7 +8,7 @@ Rom::Rom(Palette * palette) : romlength(0),romdata(0),m_palette(palette),m_offse
     std::cout<<"Init ROM..."<<std::endl;
     m_tiles.clear();
     for (int i=0;i<12*16;i++) // number of tiles is fixed
-        m_tiles.push_back(new Tile3bpp(m_palette));
+        m_tiles.push_back(new Tile(m_palette));
 }
 
 Rom::~Rom()

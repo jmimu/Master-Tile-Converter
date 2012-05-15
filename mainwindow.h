@@ -5,7 +5,7 @@
 
 #include <vector>
 
-#include "tile3bpp.h"
+#include "tile.h"
 #include "palette.h"
 #include "rom.h"
 
@@ -34,6 +34,15 @@ public slots:
     void update_tiles();
     void enable_offset_button();
     bool apply_offset();
+
+    void move_up1Byte();
+    void move_down1Byte();
+    void move_up1row();
+    void move_down1row();
+    void move_up1tile();
+    void move_down1tile();
+    void move_up16tiles();
+    void move_down16tiles();
 };
 
 #endif // MAINWINDOW_H
