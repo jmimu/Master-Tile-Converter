@@ -9,7 +9,6 @@ ZoomWidget::ZoomWidget(QWidget * parent, Qt::WindowFlags f) : QWidget(parent,f),
 }
 
 void ZoomWidget::paintEvent(QPaintEvent*) {
-    std::cout<<"Repaint!"<<std::endl;
     QPainter painter(this);
     painter.scale(16,16);
     painter.fillRect(0,0,8,8,Qt::darkCyan);

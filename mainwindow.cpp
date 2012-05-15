@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->actionImport_Palette, SIGNAL(activated()), this, SLOT(loadPalette()));
     QObject::connect(ui->background_palette_radioButton, SIGNAL(clicked()), this, SLOT(change_palette()));
     QObject::connect(ui->sprite_palette_radioButton, SIGNAL(clicked()), this, SLOT(change_palette()));
+    QObject::connect(ui->tileswidget, SIGNAL(change_selected_tile(int)), this, SLOT(update_tiles()));//all click coordinates treatement is done in "void TilesWidget::mousePressEvent( QMouseEvent *event )"
 
     palette=new Palette();
     ui->palettewidget->set_palette(palette);
@@ -56,6 +57,7 @@ void MainWindow::update_tiles()
     {
         (*it)->update_palette(palette);
     }
+    ui->zoomwidget->set_tile(ui->tileswidget->get_selected_tile());
     ui->tileswidget->repaint();
     ui->palettewidget->repaint();
     ui->zoomwidget->repaint();

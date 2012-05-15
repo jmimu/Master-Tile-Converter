@@ -2,7 +2,7 @@
 
 #include <QPainter>
 #include <QPen>
-
+#include <QMouseEvent>
 #include <iostream>
 
 TilesWidget::TilesWidget(QWidget * parent, Qt::WindowFlags f) : QWidget(parent,f),nb_tiles_width(16), m_tiles(0),selected_tile(0)
@@ -16,11 +16,6 @@ void TilesWidget::set_tiles(std::vector<Tile*> * tiles)
 }
 
 void TilesWidget::paintEvent(QPaintEvent*) {
-    std::cout<<"Repaint!"<<std::endl;
-
-
-
-
     QPainter painter(this);
     painter.scale(4,4);
     painter.fillRect(0,0,16*8,12*8,Qt::darkCyan);
@@ -53,4 +48,17 @@ void TilesWidget::paintEvent(QPaintEvent*) {
         painter.setPen(pen);
         painter.drawRect(x*8,y*8,8,8);
     }
+}
+
+
+void TilesWidget::mousePressEvent( QMouseEvent *event )
+{
+    if (event->button()==Qt::LeftButton)
+    {
+        int x=(event->x()/(4*8));
+        int y=(event->y()/(4*8));
+        selected_tile=y*nb_tiles_width+x;
+        emit(change_selected_tile(selected_tile));
+    }
+    //repaint();
 }

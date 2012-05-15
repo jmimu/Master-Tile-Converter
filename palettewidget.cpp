@@ -18,7 +18,6 @@ void PaletteWidget::set_palette(Palette* palette)
 
 void PaletteWidget::paintEvent(QPaintEvent*)
 {
-    std::cout<<"Repaint!"<<std::endl;
     QPainter painter(this);
     QVector<QRgb>::iterator it;
     int x=0;
