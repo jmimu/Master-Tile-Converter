@@ -30,6 +30,8 @@ private:
 public slots:
     bool loadROM();
     bool loadPalette();
+    bool export_picture();
+    bool import_picture();
     void change_palette();
     void update_tiles();
     void enable_offset_button();

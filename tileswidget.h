@@ -15,6 +15,7 @@ public:
     void set_tiles(std::vector<Tile*> * tiles);
     int nb_tiles_width;
     Tile* get_selected_tile(){ if (m_tiles) return m_tiles->at(selected_tile);else return 0;};
+    int get_selection_number(){return selected_tile;};
 protected:
     void paintEvent(QPaintEvent*);
     void mousePressEvent( QMouseEvent* event);

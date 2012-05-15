@@ -155,22 +155,22 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label_4">
+   <widget class="QLabel" name="tile_offset_label">
     <property name="geometry">
      <rect>
       <x>550</x>
       <y>170</y>
-      <width>128</width>
+      <width>131</width>
       <height>21</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>10</pointsize>
      </font>
     </property>
     <property name="text">
-     <string>Tile: 0xAAAAA</string>
+     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="label_5">
@@ -388,19 +388,19 @@
    <widget class="QGroupBox" name="groupBox_3">
     <property name="geometry">
      <rect>
-      <x>550</x>
+      <x>530</x>
       <y>350</y>
-      <width>101</width>
+      <width>151</width>
       <height>71</height>
      </rect>
     </property>
     <property name="title">
-     <string>Mode</string>
+     <string>Mode:</string>
     </property>
     <widget class="QRadioButton" name="mode_3bpp_radioButton">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>30</x>
        <y>20</y>
        <width>71</width>
        <height>20</height>
@@ -416,7 +416,7 @@
     <widget class="QRadioButton" name="mode_4bpp_radioButton">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>30</x>
        <y>40</y>
        <width>71</width>
        <height>20</height>

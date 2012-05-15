@@ -27,6 +27,10 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->mode_3bpp_radioButton, SIGNAL(clicked()), this, SLOT(change_mode()));
     QObject::connect(ui->mode_4bpp_radioButton, SIGNAL(clicked()), this, SLOT(change_mode()));
 
+    QObject::connect(ui->actionExport_Picture, SIGNAL(activated()), this, SLOT(export_picture()));
+    QObject::connect(ui->actionImport_Picture, SIGNAL(activated()), this, SLOT(import_picture()));
+
+
     QObject::connect(ui->up_1Byte_pushButton, SIGNAL(pressed()), this, SLOT(move_up1Byte()));
     QObject::connect(ui->down_1Byte_pushButton, SIGNAL(pressed()), this, SLOT(move_down1Byte()));
     QObject::connect(ui->up_1row_pushButton, SIGNAL(pressed()), this, SLOT(move_up1row()));
@@ -75,6 +79,7 @@ bool MainWindow::apply_offset()
     }
     rom.create_tiles(offset);
     ui->Apply_offset_pushButton->setEnabled(false);
+    ui->tile_offset_label->setText(QString("Tile Offset: 0x%1").arg(rom.get_offset()+ui->tileswidget->get_selection_number()*Tile::tile_size(),0,16));
     ui->tileswidget->repaint();
     ui->zoomwidget->repaint();
 
@@ -94,11 +99,11 @@ void MainWindow::update_tiles()
         (*it)->update_palette(&palette);
     }
     ui->palettewidget->set_palette(&palette);
+    ui->tile_offset_label->setText(QString("Tile Offset: 0x%1").arg(rom.get_offset()+ui->tileswidget->get_selection_number()*Tile::tile_size(),0,16));
     ui->zoomwidget->set_tile(ui->tileswidget->get_selected_tile());
     ui->tileswidget->repaint();
     ui->palettewidget->repaint();
     ui->zoomwidget->repaint();
-
 }
 
 bool MainWindow::loadPalette()
@@ -129,6 +134,32 @@ bool MainWindow::loadROM()
         return apply_offset();
     }
     return false;
+}
+
+bool MainWindow::export_picture()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Export to BMP"),"dump.BMP",tr("BMP Images (*.bmp *.BMP)"));
+    if (fileName!="")
+        return rom.export_BMP(fileName.toStdString());
+    return false;
+
+}
+
+bool MainWindow::import_picture()
+{
+
+    QString fileName = QFileDialog::getOpenFileName(this,tr("Choose BMP"), ".", tr("BMP Images (*.bmp *.BMP)"));
+    if (fileName!="")
+    {
+        if (rom.import_BMP(fileName.toStdString()))
+        {
+            std::cout<<"Import OK!"<<std::endl;
+            return true;
+        }
+        std::cout<<"Import error..."<<std::endl;
+    }
+    return false;
+
 }
 
 

@@ -36,6 +36,7 @@ void TilesWidget::paintEvent(QPaintEvent*) {
                 y++;
             }
         }
+        //draw selection
         y=selected_tile/nb_tiles_width;
         x=selected_tile%nb_tiles_width;
         QPen pen;
