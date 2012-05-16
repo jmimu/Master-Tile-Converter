@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     std::cout<<"Setup UI..."<<std::endl;
     ui->setupUi(this);
     QObject::connect(ui->actionOpen_Rom, SIGNAL(activated()), this, SLOT(loadROM()));
+    QObject::connect(ui->actionSave_Rom, SIGNAL(activated()), this, SLOT(saveROM()));
     QObject::connect(ui->actionImport_Palette, SIGNAL(activated()), this, SLOT(loadPalette()));
     QObject::connect(ui->background_palette_radioButton, SIGNAL(clicked()), this, SLOT(change_palette()));
     QObject::connect(ui->sprite_palette_radioButton, SIGNAL(clicked()), this, SLOT(change_palette()));
@@ -136,6 +137,14 @@ bool MainWindow::loadROM()
     return false;
 }
 
+bool MainWindow::saveROM()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save ROM"),"out.sms",tr("SMS ROM (*.sms)"));
+    if (fileName!="")
+        return rom.save_ROM(fileName.toStdString());
+    return false;
+}
+
 bool MainWindow::export_picture()
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Export to BMP"),"dump.BMP",tr("BMP Images (*.bmp *.BMP)"));
@@ -153,6 +162,7 @@ bool MainWindow::import_picture()
     {
         if (rom.import_BMP(fileName.toStdString()))
         {
+            update_tiles();
             std::cout<<"Import OK!"<<std::endl;
             return true;
         }

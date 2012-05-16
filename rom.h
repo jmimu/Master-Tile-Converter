@@ -17,11 +17,12 @@ public:
     std::vector<Tile*> * get_tiles(){return & m_tiles;};
     bool export_BMP(std::string filename);
     bool import_BMP(std::string filename);
+    bool save_ROM(std::string filename);
 protected:
     long romlength;
-    unsigned char * romdata;
+    unsigned char * romdata; // exact data of the ROM
 
-    std::vector<Tile*> m_tiles;
+    std::vector<Tile*> m_tiles; //a certain number of tiles extracted from romdata
     Palette *m_palette;
 
     unsigned long m_offset;

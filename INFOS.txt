@@ -1,6 +1,6 @@
 On part de "[BIOS] Alex Kidd in Miracle World (USA, Europe).sms".
 
- * mettre à jour la checksum : $7FF9 (voir valeur calculée par SMSandGGHeaderReader.exe)
+ * mettre à jour la checksum : $7FFA (voir valeur calculée par SMSandGGHeaderReader.exe)
  * boot hack : $17EDE => CD 00 C7 (pour vraie SMS) ou 00 00 00 (pour émulateur)
 
 Description des éléments de la ROM :

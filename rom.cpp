@@ -35,6 +35,8 @@ void Rom::create_tiles(unsigned long offset)
 
 bool Rom::loadfile(std::string filename)
 {
+    if (romdata) delete[] romdata;
+    
     //from http://www.cplusplus.com/reference/iostream/istream/read/
     std::ifstream is;
     is.open (filename.c_str(), std::ios::binary );
@@ -111,24 +113,28 @@ bool Rom::import_BMP(std::string filename)
                 byte1=byte2=byte3=byte4=0;
                 if (Tile::is3bpp)
                 {
+                    long shift=7;
                     for (int x=0;x<8;x++)
                     {
-                        std::cout<<"Pixel "<<img.pixelIndex(8*x_tile+x,8*y_tile+y)<<" ";
-                        byte1+=((img.pixelIndex(8*x_tile+x,8*y_tile+y))>>2)%2;
-                        byte2+=((img.pixelIndex(8*x_tile+x,8*y_tile+y))>>1)%2;
-                        byte3+=((img.pixelIndex(8*x_tile+x,8*y_tile+y))>>0)%2;
+                        //std::cout<<"Pixel "<<img.pixelIndex(8*x_tile+x,8*y_tile+y)<<" ";
+                        byte1+=(((img.pixelIndex(8*x_tile+x,8*y_tile+y))>>0)%2)<<shift;
+                        byte2+=(((img.pixelIndex(8*x_tile+x,8*y_tile+y))>>1)%2)<<shift;
+                        byte3+=(((img.pixelIndex(8*x_tile+x,8*y_tile+y))>>2)%2)<<shift;
+                        shift--;
                     }
                     romdata[index++]=byte1;
                     romdata[index++]=byte2;
                     romdata[index++]=byte3;
-                    std::cout<<"\nRaw: "<<(int)byte1<<" "<<(int)byte2<<" "<<(int)byte3<<std::endl;
+                    //std::cout<<"\nRaw: "<<(int)byte1<<" "<<(int)byte2<<" "<<(int)byte3<<std::endl;
                 }else{
+                    long shift=7;
                     for (int x=0;x<8;x++)
                     {
-                        byte1+=(img.pixelIndex(8*x_tile+x,8*y_tile+y)>>3)%2;
-                        byte2+=(img.pixelIndex(8*x_tile+x,8*y_tile+y)>>2)%2;
-                        byte3+=(img.pixelIndex(8*x_tile+x,8*y_tile+y)>>1)%2;
-                        byte4+=(img.pixelIndex(8*x_tile+x,8*y_tile+y)>>0)%2;
+                        byte1+=((img.pixelIndex(8*x_tile+x,8*y_tile+y)>>0)%2)<<shift;
+                        byte2+=((img.pixelIndex(8*x_tile+x,8*y_tile+y)>>1)%2)<<shift;
+                        byte3+=((img.pixelIndex(8*x_tile+x,8*y_tile+y)>>2)%2)<<shift;
+                        byte4+=((img.pixelIndex(8*x_tile+x,8*y_tile+y)>>3)%2)<<shift;
+                        shift--;
                     }
                     romdata[index++]=byte1;
                     romdata[index++]=byte2;
@@ -138,7 +144,25 @@ bool Rom::import_BMP(std::string filename)
             }
         }
     }
-    std::cout<<"Total wrote: "<<index-m_offset<<std::endl;
+    //std::cout<<"Total wrote: "<<index-m_offset<<std::endl;
     create_tiles(m_offset);
+    
+    //correct checksum on-the-fly
+    
+    
+    return true;
+}
+
+
+bool Rom::save_ROM(std::string filename)
+{
+    //from http://www.cplusplus.com/reference/iostream/istream/read/
+    std::ofstream os;
+    os.open (filename.c_str(), std::ofstream::binary );
+
+    os.write ((char*)romdata,romlength);
+    os.close();
+
+    std::cout<<"Wrote ROM file: "<<filename<<"."<<std::endl;
     return true;
 }

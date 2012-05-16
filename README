@@ -19,14 +19,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ////////////////////////////////////////////////////////////////////////
 
 TODO:
+ * fix checksum
  * if 3bpp, export a bmp with only 8 colors
  * import checks (palette, bmp..)
- * implement BMP importation
  * add help
+ * add default config in an external file (palette, mode, offset)
  * add copyright
  * make a webpage...
-
-import is not working. Wrong number of bytes written. Correct color index ?
 
 
 Usage :

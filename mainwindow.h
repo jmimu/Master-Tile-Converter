@@ -29,6 +29,7 @@ private:
 
 public slots:
     bool loadROM();
+    bool saveROM();
     bool loadPalette();
     bool export_picture();
     bool import_picture();
