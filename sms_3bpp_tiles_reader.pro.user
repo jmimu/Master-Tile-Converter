@@ -76,15 +76,15 @@
   <valuemap type="QVariantMap">
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList">
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-gv0GKbF7oq,guid=56624a44b3580a018037df1900000021</value>
+    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-2k6y0pfhQz,guid=7b502d309aa3a421b3006f3e00000021</value>
     <value type="QString">DESKTOP_SESSION=default</value>
     <value type="QString">DISPLAY=:0.0</value>
     <value type="QString">GDMSESSION=default</value>
     <value type="QString">GDM_KEYBOARD_LAYOUT=fr	latin9</value>
     <value type="QString">GDM_LANG=en_US.utf8</value>
     <value type="QString">GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
-    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-oSpSck</value>
-    <value type="QString">GPG_AGENT_INFO=/tmp/seahorse-2zaesU/S.gpg-agent:2208:1</value>
+    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-5QtVw4</value>
+    <value type="QString">GPG_AGENT_INFO=/tmp/seahorse-qkSqor/S.gpg-agent:2165:1</value>
     <value type="QString">GTK_MODULES=canberra-gtk-module</value>
     <value type="QString">GTK_RC_FILES=/etc/gtk/gtkrc:/home/roa/.gtkrc-1.2-gnome2</value>
     <value type="QString">HOME=/home/roa</value>
@@ -95,16 +95,16 @@
     <value type="QString">PATH=/usr/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games</value>
     <value type="QString">PWD=/home/roa</value>
     <value type="QString">QTDIR=/usr/share/qt4</value>
-    <value type="QString">SESSION_MANAGER=local/debian:@/tmp/.ICE-unix/2083,unix/debian:/tmp/.ICE-unix/2083</value>
+    <value type="QString">SESSION_MANAGER=local/debian:@/tmp/.ICE-unix/2080,unix/debian:/tmp/.ICE-unix/2080</value>
     <value type="QString">SHELL=/bin/bash</value>
-    <value type="QString">SSH_AGENT_PID=2194</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-oSpSck/ssh</value>
+    <value type="QString">SSH_AGENT_PID=2151</value>
+    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-5QtVw4/ssh</value>
     <value type="QString">USER=roa</value>
     <value type="QString">USERNAME=roa</value>
     <value type="QString">WINDOWPATH=7</value>
-    <value type="QString">XAUTHORITY=/var/run/gdm3/auth-for-roa-LzA6hw/database</value>
+    <value type="QString">XAUTHORITY=/var/run/gdm3/auth-for-roa-6zkbFA/database</value>
     <value type="QString">XDG_DATA_DIRS=/usr/share/gnome:/usr/share/gdm/:/usr/local/share/:/usr/share/</value>
-    <value type="QString">XDG_SESSION_COOKIE=335c45c42538d41a4b89a1f90000044b-1337097491.643553-789150106</value>
+    <value type="QString">XDG_SESSION_COOKIE=335c45c42538d41a4b89a1f90000044b-1337177363.629742-628991845</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList">
     <value type="QString">/home/roa/prog/infos_SMS/alex_hack/qt_lect_3bpp/sms_3bpp_tiles_reader/sms_3bpp_tiles_reader.pro</value>
@@ -123,15 +123,15 @@
   <valuemap type="QVariantMap">
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString">Debug</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList">
-    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-gv0GKbF7oq,guid=56624a44b3580a018037df1900000021</value>
+    <value type="QString">DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-2k6y0pfhQz,guid=7b502d309aa3a421b3006f3e00000021</value>
     <value type="QString">DESKTOP_SESSION=default</value>
     <value type="QString">DISPLAY=:0.0</value>
     <value type="QString">GDMSESSION=default</value>
     <value type="QString">GDM_KEYBOARD_LAYOUT=fr	latin9</value>
     <value type="QString">GDM_LANG=en_US.utf8</value>
     <value type="QString">GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
-    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-oSpSck</value>
-    <value type="QString">GPG_AGENT_INFO=/tmp/seahorse-2zaesU/S.gpg-agent:2208:1</value>
+    <value type="QString">GNOME_KEYRING_CONTROL=/tmp/keyring-5QtVw4</value>
+    <value type="QString">GPG_AGENT_INFO=/tmp/seahorse-qkSqor/S.gpg-agent:2165:1</value>
     <value type="QString">GTK_MODULES=canberra-gtk-module</value>
     <value type="QString">GTK_RC_FILES=/etc/gtk/gtkrc:/home/roa/.gtkrc-1.2-gnome2</value>
     <value type="QString">HOME=/home/roa</value>
@@ -142,16 +142,16 @@
     <value type="QString">PATH=/usr/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games</value>
     <value type="QString">PWD=/home/roa</value>
     <value type="QString">QTDIR=/usr/share/qt4</value>
-    <value type="QString">SESSION_MANAGER=local/debian:@/tmp/.ICE-unix/2083,unix/debian:/tmp/.ICE-unix/2083</value>
+    <value type="QString">SESSION_MANAGER=local/debian:@/tmp/.ICE-unix/2080,unix/debian:/tmp/.ICE-unix/2080</value>
     <value type="QString">SHELL=/bin/bash</value>
-    <value type="QString">SSH_AGENT_PID=2194</value>
-    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-oSpSck/ssh</value>
+    <value type="QString">SSH_AGENT_PID=2151</value>
+    <value type="QString">SSH_AUTH_SOCK=/tmp/keyring-5QtVw4/ssh</value>
     <value type="QString">USER=roa</value>
     <value type="QString">USERNAME=roa</value>
     <value type="QString">WINDOWPATH=7</value>
-    <value type="QString">XAUTHORITY=/var/run/gdm3/auth-for-roa-LzA6hw/database</value>
+    <value type="QString">XAUTHORITY=/var/run/gdm3/auth-for-roa-6zkbFA/database</value>
     <value type="QString">XDG_DATA_DIRS=/usr/share/gnome:/usr/share/gdm/:/usr/local/share/:/usr/share/</value>
-    <value type="QString">XDG_SESSION_COOKIE=335c45c42538d41a4b89a1f90000044b-1337097491.643553-789150106</value>
+    <value type="QString">XDG_SESSION_COOKIE=335c45c42538d41a4b89a1f90000044b-1337177363.629742-628991845</value>
    </valuelist>
    <value key="abstractProcess.IgnoreReturnValue" type="bool">false</value>
    <valuelist key="abstractProcess.arguments" type="QVariantList">

@@ -6,6 +6,8 @@
 #include <iostream>
 #include <fstream>
 
+#include "romheader.h"
+
 Rom::Rom(Palette * palette) : romlength(0),romdata(0),m_palette(palette),m_offset(0x10341)
 {
     std::cout<<"Init ROM..."<<std::endl;
@@ -54,6 +56,11 @@ bool Rom::loadfile(std::string filename)
     is.close();
 
     std::cout<<"Read "<<romlength<<" bytes."<<std::endl;
+
+    ROMHeader header(this);
+    header.check_TMR_SEGA();
+    std::cout<<"Read checksum: "<<std::hex<<header.read_checksum()<<std::endl;
+    header.read_region_and_size();
 
     return true;
 }
