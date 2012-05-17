@@ -60,7 +60,7 @@ bool Rom::loadfile(std::string filename)
     ROMHeader header(this);
     header.check_TMR_SEGA();
     std::cout<<"Read checksum: "<<std::hex<<header.read_checksum()<<std::endl;
-    header.read_region_and_size();
+    header.compute_checksum();
 
     return true;
 }
@@ -163,6 +163,9 @@ bool Rom::import_BMP(std::string filename)
 
 bool Rom::save_ROM(std::string filename)
 {
+    ROMHeader header(this);
+    header.fix_checksum();
+
     //from http://www.cplusplus.com/reference/iostream/istream/read/
     std::ofstream os;
     os.open (filename.c_str(), std::ofstream::binary );

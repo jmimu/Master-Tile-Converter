@@ -5,11 +5,17 @@
 
 //see http://www.smspower.org/Development/ROMHeader
 
+//Some code taken from:
+//---------------------------------------------------------------------------
+// SMS Check (c) Omar Cornut (Bock) 2000-2006
+// Sega 8-bit ROM tool, showing checksum and various informations
+//---------------------------------------------------------------------------
 
 //$1ff0, $3ff0 or $7ff0
 #define HEADER_ADDRESS 0x7ff0
 #define CHECKSUM_ADDRESS 0x7ffa
 #define REGION_AND_SIZE_ADDRESS 0x7fff
+#define SMS_HEADER_SIZE 0x10
 
 /* regions (the high 4 bits at REGION_AND_SIZE_ADDRESS)
 $3	SMS Japan

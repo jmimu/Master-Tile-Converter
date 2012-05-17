@@ -5,7 +5,7 @@
 #include <QPainter>
 
 #include <iostream>
-
+#include <sstream>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -147,7 +147,9 @@ bool MainWindow::saveROM()
 
 bool MainWindow::export_picture()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Export to BMP"),"dump.BMP",tr("BMP Images (*.bmp *.BMP)"));
+    std::stringstream oss_default_bmp_name;
+    oss_default_bmp_name<<"dump_0x"<<std::hex<<rom.get_offset()<<".BMP";
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Export to BMP"),oss_default_bmp_name.str().c_str(),tr("BMP Images (*.bmp *.BMP)"));
     if (fileName!="")
         return rom.export_BMP(fileName.toStdString());
     return false;

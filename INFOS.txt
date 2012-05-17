@@ -34,3 +34,9 @@ Tiles : (voir http://www.smspower.org/maxim/HowToProgram/Tiles)
 ligne de tile. En 4bpp, il faut 4 octets pour représenter une ligne.
 Le premier bit des 4 pixels va représenter la couleur du 1er pixels,
 le 2e bit des 4 pixels va représenter la couleur du 2e pixels, etc...
+
+
+
+Header: http://www.smspower.org/Development/ROMHeader
+Checksum: voir sources de headerreader.
+

@@ -16,10 +16,17 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+
+
 ////////////////////////////////////////////////////////////////////////
 
+Some code is taken from:
+SMS Check (c) Omar Cornut (Bock) 2000-2006
+
+
+
 TODO:
- * fix checksum
+ * make Alexkidd the default palette
  * if 3bpp, export a bmp with only 8 colors
  * import checks (palette, bmp..)
  * add help
@@ -41,4 +48,4 @@ Usage :
  - back in ???, if you are in the correct position, import your BMP.
  - Save the resulting rom.
 Done ! (you may have to correct the rom checksum)
- 
+

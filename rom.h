@@ -19,6 +19,7 @@ public:
     bool import_BMP(std::string filename);
     bool save_ROM(std::string filename);
     unsigned char * get_romdata(){return romdata;};
+    long get_romlength(){return romlength;};
 protected:
     long romlength;
     unsigned char * romdata; // exact data of the ROM
