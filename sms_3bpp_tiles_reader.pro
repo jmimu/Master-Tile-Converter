@@ -21,3 +21,4 @@ HEADERS += mainwindow.h \
     rom.h \
     romheader.h
 FORMS += mainwindow.ui
+RESOURCES += data.qrc

@@ -15,8 +15,8 @@ public:
     void create_tiles(unsigned long offset);
     unsigned long get_offset(){return m_offset;};
     std::vector<Tile*> * get_tiles(){return & m_tiles;};
-    bool export_BMP(std::string filename);
-    bool import_BMP(std::string filename);
+    bool export_BMP(std::string filename,bool is3bpp);
+    bool import_BMP(std::string filename,bool is3bpp);
     bool save_ROM(std::string filename);
     unsigned char * get_romdata(){return romdata;};
     long get_romlength(){return romlength;};

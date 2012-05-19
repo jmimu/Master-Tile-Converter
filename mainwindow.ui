@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="data.qrc">
+    <normaloff>:/data/icon</normaloff>:/data/icon</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="TilesWidget" name="tileswidget" native="true">
     <property name="geometry">
@@ -518,7 +522,9 @@
    <header>zoomwidget.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="data.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>actionExit</sender>

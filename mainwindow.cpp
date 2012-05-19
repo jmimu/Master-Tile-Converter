@@ -148,10 +148,15 @@ bool MainWindow::saveROM()
 bool MainWindow::export_picture()
 {
     std::stringstream oss_default_bmp_name;
-    oss_default_bmp_name<<"dump_0x"<<std::hex<<rom.get_offset()<<".BMP";
+    oss_default_bmp_name<<"dump_0x"<<std::hex<<rom.get_offset()<<"_";
+    if (ui->mode_3bpp_radioButton->isChecked())
+        oss_default_bmp_name<<"3bpp";
+    else
+        oss_default_bmp_name<<"4bpp";
+    oss_default_bmp_name<<".BMP";
     QString fileName = QFileDialog::getSaveFileName(this, tr("Export to BMP"),oss_default_bmp_name.str().c_str(),tr("BMP Images (*.bmp *.BMP)"));
     if (fileName!="")
-        return rom.export_BMP(fileName.toStdString());
+        return rom.export_BMP(fileName.toStdString(),ui->mode_3bpp_radioButton->isChecked());
     return false;
 
 }
@@ -162,7 +167,7 @@ bool MainWindow::import_picture()
     QString fileName = QFileDialog::getOpenFileName(this,tr("Choose BMP"), ".", tr("BMP Images (*.bmp *.BMP)"));
     if (fileName!="")
     {
-        if (rom.import_BMP(fileName.toStdString()))
+        if (rom.import_BMP(fileName.toStdString(),ui->mode_3bpp_radioButton->isChecked()))
         {
             update_tiles();
             std::cout<<"Import OK!"<<std::endl;

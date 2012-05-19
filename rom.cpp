@@ -2,6 +2,7 @@
 
 #include <QImage>
 #include <QPainter>
+#include <QMessageBox>
 
 #include <iostream>
 #include <fstream>
@@ -58,20 +59,28 @@ bool Rom::loadfile(std::string filename)
     std::cout<<"Read "<<romlength<<" bytes."<<std::endl;
 
     ROMHeader header(this);
-    header.check_TMR_SEGA();
+    if (!header.check_TMR_SEGA())
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Bad rom signature (must be \"TMR SEGA\").");
+        msgBox.setIcon(QMessageBox::Critical);
+        msgBox.exec();
+        return false;
+    }
     std::cout<<"Read checksum: "<<std::hex<<header.read_checksum()<<std::endl;
     header.compute_checksum();
 
     return true;
 }
 
-bool Rom::export_BMP(std::string filename)
+bool Rom::export_BMP(std::string filename,bool is3bpp)
 {
     int nb_tiles_width=16;
     QImage img(nb_tiles_width*8,12*8,QImage::Format_Indexed8);
     //can't use painter on 8bit images => fill it pixel-by-pixel...
     //define palette (16 or 8 colors, only background or sprites part)
     img.setColorTable( m_palette->get_colors() );
+    if (is3bpp) img.setColorCount(8);
 
     //copy pixels for each tile
     long x_tile=0;
@@ -98,11 +107,50 @@ bool Rom::export_BMP(std::string filename)
 
 
 //TODO import format check !
-bool Rom::import_BMP(std::string filename)
+bool Rom::import_BMP(std::string filename,bool is3bpp)
 {
     int nb_tiles_width=0;
     int nb_tiles_height=0;
     QImage img(filename.c_str(),"BMP");
+
+    if (img.isNull())
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Problem loading image.");
+        msgBox.exec();
+        return false;
+    }
+
+    if (is3bpp)
+    {
+        if (img.colorCount()>8)
+        {
+            QMessageBox msgBox;
+            msgBox.setText("Wrong image palette or color profile.\nMaximum palette size is 8.");
+            msgBox.setIcon(QMessageBox::Critical);
+            msgBox.exec();
+            return false;
+        }
+    }else{
+        if (img.colorCount()>16)
+        {
+            QMessageBox msgBox;
+            msgBox.setText("Wrong image palette or color profile.\nMaximum palette size is 16.");
+            msgBox.setIcon(QMessageBox::Critical);
+            msgBox.exec();
+            return false;
+        }
+    }
+
+    if(img.width()%8 != 0)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Image width must be n*8 pixels.");
+        msgBox.setIcon(QMessageBox::Critical);
+        msgBox.exec();
+        return false;
+    }
+
     nb_tiles_width=img.width()/8;
     nb_tiles_height=img.height()/8;
 
