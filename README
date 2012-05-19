@@ -26,9 +26,10 @@ SMS Check (c) Omar Cornut (Bock) 2000-2006
 
 
 TODO:
- * make Alexkidd the default palette
  * if 3bpp, export a bmp with only 8 colors
+ * when click on palette image, ask for a new file
  * import checks (palette, bmp..)
+ * add "undo" button!
  * add help
  * add default config in an external file (palette, mode, offset)
  * add copyright
@@ -43,7 +44,13 @@ Usage :
  - select the correct part of the palette
  - export !
 
- - edit BMP in an external editor (don't modify the palette ! don't change tiles with no meaning !)
+ - edit BMP in an external editor (don't modify the palette! don't change tiles with no meaning!)
+(you can change the size of the picture)
+* make your own graphics (respect size and palette)
+* rearrange tiles to have the same layout as your dump (you may have to be pixel-precise!)
+* add transparent for the tiles you don't want to change
+* past it in the dump image in GIMP (it respects the palette)
+* save it as you new image
 
  - back in ???, if you are in the correct position, import your BMP.
  - Save the resulting rom.

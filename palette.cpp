@@ -18,6 +18,7 @@ plot(127+127*cos(pi/16*x))
 replot(127+127*cos(pi/16*x+2*pi/3))
 replot(127+127*cos(pi/16*x+4*pi/3))
    */
+    /*
     int nbr=32;
     for (int i=0;i<nbr;i++)
     {
@@ -29,27 +30,43 @@ replot(127+127*cos(pi/16*x+4*pi/3))
             colors_back.append( QColor(r,g,b).rgb() );
         else
             colors_sprites.append( QColor(r,g,b).rgb() );
-    }
-
+    }*/
 
 
     //default: make Alex Kidd palette
-   /* colors.append( QColor(0x00,0x00,0xFF).rgb() );//#alex kidd 3bpp palette (+8 gray for 4bpp)
-    colors.append( QColor(0xFF,0xFF,0xFF).rgb() );
-    colors.append( QColor(0x55,0x55,0x00).rgb() );
-    colors.append( QColor(0xFF,0xAA,0x00).rgb() );
-    colors.append( QColor(0xFF,0x00,0x00).rgb() );
-    colors.append( QColor(0xAA,0x00,0x00).rgb() );
-    colors.append( QColor(0x00,0x00,0x00).rgb() );
-    colors.append( QColor(0x00,0x00,0xFF).rgb() );
-    colors.append( QColor(0x10,0x10,0x10).rgb() );//only for 4bpp
-    colors.append( QColor(0x30,0x30,0x30).rgb() );
-    colors.append( QColor(0x50,0x50,0x50).rgb() );
-    colors.append( QColor(0x70,0x70,0x70).rgb() );
-    colors.append( QColor(0x90,0x90,0x90).rgb() );
-    colors.append( QColor(0xb0,0xb0,0xb0).rgb() );
-    colors.append( QColor(0xd0,0xd0,0xd0).rgb() );
-    colors.append( QColor(0xF0,0xF0,0xF0).rgb() );*/
+    colors_back.append( QColor(0x0, 0x0, 0xff).rgb() );
+    colors_back.append( QColor(0xff, 0xff, 0xff).rgb() );
+    colors_back.append( QColor(0xff, 0x55, 0xff).rgb() );
+    colors_back.append( QColor(0xff, 0xaa, 0xff).rgb() );
+    colors_back.append( QColor(0xff, 0xff, 0x0).rgb() );
+    colors_back.append( QColor(0xff, 0xaa, 0x0).rgb() );
+    colors_back.append( QColor(0x0, 0x0, 0x0).rgb() );
+    colors_back.append( QColor(0xff, 0xff, 0xaa).rgb() );
+    colors_back.append( QColor(0xaa, 0x55, 0x0).rgb() );
+    colors_back.append( QColor(0xff, 0xaa, 0x0).rgb() );
+    colors_back.append( QColor(0x55, 0x0, 0x0).rgb() );
+    colors_back.append( QColor(0x55, 0xff, 0xff).rgb() );
+    colors_back.append( QColor(0x0, 0xaa, 0xff).rgb() );
+    colors_back.append( QColor(0x0, 0xff, 0x0).rgb() );
+    colors_back.append( QColor(0x0, 0xaa, 0x0).rgb() );
+    colors_back.append( QColor(0x0, 0xff, 0xff).rgb() );
+
+    colors_sprites.append( QColor(0x0D,0xE6,0xDF).rgb() );//modified from 0x0 0x0 0xff
+    colors_sprites.append( QColor(0xff, 0xff, 0xff).rgb() );
+    colors_sprites.append( QColor(0x55, 0x55, 0x0).rgb() );
+    colors_sprites.append( QColor(0xff, 0xaa, 0x0).rgb() );
+    colors_sprites.append( QColor(0xff, 0x0, 0x0).rgb() );
+    colors_sprites.append( QColor(0xaa, 0x0, 0x0).rgb() );
+    colors_sprites.append( QColor(0x0, 0x0, 0x0).rgb() );
+    colors_sprites.append( QColor(0x0, 0x0, 0xff).rgb() );
+    colors_sprites.append( QColor(0x0, 0xff, 0xff).rgb() );
+    colors_sprites.append( QColor(0x0, 0xff, 0x0).rgb() );
+    colors_sprites.append( QColor(0xff, 0xff, 0x0).rgb() );
+    colors_sprites.append( QColor(0x0, 0xaa, 0x0).rgb() );
+    colors_sprites.append( QColor(0xaa, 0xaa, 0xff).rgb() );
+    colors_sprites.append( QColor(0xaa, 0x55, 0xff).rgb() );
+    colors_sprites.append( QColor(0x55, 0x0, 0x0).rgb() );//modified from 0xff 0x0 0x0
+    colors_sprites.append( QColor(0xaa, 0xaa, 0x0).rgb() );
 
 }
 
@@ -85,6 +102,7 @@ bool Palette::read_from_file(QString fileName)
         b= ((pal_data[i] & 0x30)>>4)* 0x55;
         g= ((pal_data[i] & 0x0C)>>2)* 0x55;
         r= ((pal_data[i] & 0x03)>>0)* 0x55;
+        std::cout<<"read: 0x"<<std::hex<<(int)r<<" 0x"<<(int)g<<" 0x"<<(int)b<<std::endl;
         if (i<16)
             colors_back.append( QColor(r,g,b).rgb() );
         else
