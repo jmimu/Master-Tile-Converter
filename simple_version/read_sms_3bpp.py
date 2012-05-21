@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 
-#    ???
+#    MASTER TILE CONVERTER
 #    Copyright (C) 2012  JM Muller
 #
 #    This program is free software: you can redistribute it and/or modify
