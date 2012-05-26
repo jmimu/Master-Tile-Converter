@@ -1,7 +1,4 @@
-# -------------------------------------------------
-# Project created by QtCreator 2012-05-13T18:26:15
-# -------------------------------------------------
-TARGET = sms_3bpp_tiles_reader
+TARGET = mastertileconverter
 TEMPLATE = app
 SOURCES += main.cpp \
     mainwindow.cpp \

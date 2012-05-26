@@ -7,7 +7,7 @@ body
     line-height: 1;
     font-family: Arial, "Arial Black", Verdana, serif;
     color: #3C1700;
-    background-color:#111;
+    background-color:#222;
     /*background-image:url(images/back.png);
     background-repeat:repeat;*/
 }
@@ -16,12 +16,18 @@ body
 {
     text-align:center;
 }
+#corps_et_entete
+{
+    background-color:#000;
+}
 
 #en_tete
 {
     height: 120px;
     background-image:url(images/back.png);
     background-repeat:repeat;
+    margin-top: -50px;
+    padding-top: 25px;
 
     border: 20px solid #000;
     -moz-border-radius: 50px;
@@ -31,10 +37,12 @@ body
 
 #corps
 {
-    background-color:#000;
+    
     /*background-color: #FFFFFF;*/
     
     padding:20px;
+    /*margin-top: -50px;
+    padding-top: 50px;*/
     color:#FFFFFF;
     /*border: 8px solid #FFFFFF;*/
     

@@ -8,59 +8,63 @@
         <title>Master Tile Converter</title>
     </head>
     <body>
+      <div id="corps_et_entete">
         <div class="centrage" id="en_tete">
             <h1>Master Tile Converter</h1>
         </div>
         
         <div id="corps">
-            <h2>Description</h2>
-            	<p>Welcome to <strong>Master Tile Converter</strong>!</p>
-		<p>Master Tile Converter (MTC) can export and import 3bpp and 4bpp tiles in Sega Master System (SMS) roms. It uses a portable QT interface.<p>
-		<p>Features:
-			<ul>
-			    <li>Read SMS roms</li>
-			    <li>import <a href="http://www.smspower.org/meka/">Meka</a> palette</li>
-			    <li>display 4bpp and 3bpp uncompressed pictures</li>
-			    <li>export 4bpp and 3bpp uncompressed pictures</li>
-			    <li>import BMP pictures</li>
-			    <li>export modified ROM</li>
-			    <li>correct ROM checksum</li>
-			    <li>Works on GNU/Linux, MacOS and Windows</li>
-			    <li>Free software (GNU), open source</li>
-			</ul>
-		<p>
+          <h2>Description</h2>
+            <p>Welcome to <strong>Master Tile Converter</strong>!</p>
+            <p>Master Tile Converter (MTC) can export and import 3bpp and 4bpp tiles in Sega Master System (SMS) roms. It uses a portable QT interface.<p>
+            <p>Features:
+              <ul>
+                  <li>Read SMS roms</li>
+                  <li>Import <a href="http://www.smspower.org/meka/">Meka</a> palette</li>
+                  <li>Display 4bpp and 3bpp uncompressed pictures</li>
+                  <li>Export 4bpp and 3bpp uncompressed pictures</li>
+                  <li>Import BMP pictures</li>
+                  <li>Export modified ROM</li>
+                  <li>Correct ROM checksum</li>
+                  <li>Works on GNU/Linux, MacOS and Windows</li>
+                  <li>Free software (GNU), open source</li>
+              </ul>
+            <p>
+            <p>Contact: <img src="images/ctct.png" alt="contact"/></p>
+          
+          <h2>Downloads</h2>
+            <p>Stable version (Windows): <a href="https://github.com/jmimu/Master-Tile-Converter">https://github.com/jmimu/Master-Tile-Converter</a></p>
+            <p>Development version sources (using <a href="http://git-scm.com/">git</a>): <a href="https://github.com/jmimu/Master-Tile-Converter">https://github.com/jmimu/Master-Tile-Converter</a></p>
+            <p>How to compile: intall <a href="http://qt.nokia.com/downloads/downloads#qt-creator">QtCreator</a>, and open <strong>mastertileconverter.pro</strong></p>
 
-                <p>Contact: <img src="images/ctct.png" alt="contact"/></p>
-            
+          <h2>Help</h2>              
+            <h3>Interface</h3>
+              <p class="centrage" ><img  src="images/interface_mini.png"  alt="interface"/></p>
+            <h3>Instruction</h3>
+              <ul>
+                  <li>Open a SMS ROM in meka. When you see the tile you want to modify, export the palette (raw)</li>
+                  <li>Run mastertileconverter, and open the SMS ROM (file>open rom)</li>
+                  <li>Import your Meka palette (file import palette)</li>
+                  <li>Go through the whole tiles (using UP/DOWN 160 tiles button) to find</li>
+              </ul>
+            <h3>Align tile</h3>
+            <h3>Modify tiles</h3>
+          
+          <h2>License</h2>
+              <p>This program is free software: you can redistribute it and/or modify
+              it under the terms of the GNU General Public License as published by
+              the Free Software Foundation, either version 3 of the License, or
+              (at your option) any later version.</p>
+              <p>See <strong>readme</strong> file for more information.</p>
 
-            <h2>Downloads</h2>
-		<p>Stable version (Windows): <a href="https://github.com/jmimu/Master-Tile-Converter">https://github.com/jmimu/Master-Tile-Converter</a></p>
-                <p>Development version sources (using <a href="http://git-scm.com/">git</a>): <a href="https://github.com/jmimu/Master-Tile-Converter">https://github.com/jmimu/Master-Tile-Converter</a></p>
-
-
-            <h2>Help</h2>
-
-            <h2>Commands</h2>
-              
-		    <h3>Interface</h3>
-		      <p class="centrage" ><img  src="images/interface_mini.png"  alt="interface"/></p>
-		      <p>When your player is out of the screen, its number is written on the edge f the window to show you in which direction you are.</p>
-		      
-           
-            <h2>License</h2>
-                <p>This program is free software: you can redistribute it and/or modify
-                it under the terms of the GNU General Public License as published by
-                the Free Software Foundation, either version 3 of the License, or
-                (at your option) any later version.</p>
-                <p>See <strong>readme</strong> file for more information.</p>
-
-            <h2>Links</h2>
-		<p>SMS power website: <a href="http://www.smspower.org/">http://www.smspower.org</a><p>
-		<p>Meka emulator: <a href="http://www.smspower.org/meka/">http://www.smspower.org/meka</a><p>
+          <h2>Links</h2>
+            <p>SMS power website: <a href="http://www.smspower.org/">http://www.smspower.org</a><p>
+            <p>Meka emulator: <a href="http://www.smspower.org/meka/">http://www.smspower.org/meka</a><p>
 
         </div>
         <div id="pied_de_page">
             <footer>©  2012 <a href="http://tataches.legtux.org/"><img id="signature" src="images/sign_am1.png" alt="Signature"/></a></footer>
         </div>
+      </div>
     </body>
 </html>
