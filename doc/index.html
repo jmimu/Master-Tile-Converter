@@ -45,10 +45,36 @@
                   <li>Open a SMS ROM in meka. When you see the tile you want to modify, export the palette (raw)</li>
                   <li>Run mastertileconverter, and open the SMS ROM (file>open rom)</li>
                   <li>Import your Meka palette (file import palette)</li>
-                  <li>Go through the whole tiles (using UP/DOWN 160 tiles button) to find</li>
+                  <li>Choose the part of the palette (sprite or background)</li>
+                  <li>Choose tile mode (3bpp or 4bpp)</li>
+                  <li>Go through the whole tiles (using UP/DOWN 160 tiles button) to find the tiles you want</li>
+                  <li>Align the tiles (see "Align tile" above), or input a known offset (and click on "Apply")</li>
+                  <li>Export or import BMP (see "Modify tiles" above)</li>
+                  <li>Save the modified rom (file>save rom)</li>
               </ul>
+
             <h3>Align tile</h3>
+                <p>When your palette is correct and you find something similar to what you are looking for:</p>
+		<p class="centrage"><img  class="screenshot" src="images/screen_align.png"  alt="align"/></p>
+                <p>This is not the colors you expected. It is due to an incorrect byte alignment. Since (3 or 4) bytes represent 8 pixels, you have to begin at the right byte to have somethong correct.</p>
+		<p class="centrage"><img  class="screenshot" src="images/byte_align.png"  alt="align"/></p>
+                <p>With the UP/Down 1 Byte buttons, find when the colors are correct (there are 3 or 4 possibilities)</p>
+		<p class="centrage"><img  class="screenshot" src="images/row_align.png"  alt="align"/></p>
+                <p>Then use the UP/Down 1 Row buttons to get the correct tile at the top of the tile</p>
+		<p class="centrage"><img  class="screenshot" src="images/ok_align.png"  alt="align"/></p>
+                <p>Finally use the UP/Down 1/16 tiles buttons to get the first tile at at the beginning of the displayed part of ROM</p>
+		<p class="centrage"><img  class="screenshot" src="images/screen_align_correct.png"  alt="align"/></p>
+                <p>You are ready to import/import! You can note the offset for next time...</p>
+
             <h3>Modify tiles</h3>
+                <p>When you have your tiles in correct position, you can export an image of them (file>Export Picture). You will get an 16 or 8-color BMP file, named after the offset and the number of bits per pixel, to help you remember where and how it has been taken from the ROM.</p>
+		<p class="centrage"><img  class="divers" src="images/dump_0x10341_3bpp.BMP"  alt="dump"/></p>
+                <p>You can modify the picture in a graphic editor that respects indexed images palettes. It is the case of "GIMP" but not "kolourpaint", as an example.</p>
+                <p>It is very important to keep the part of the picture that are not intelligible unchanged. This data is not graphics, it may represent the music or the program and you don't want to modify it randomly...</p>
+		<p class="centrage"><img  class="divers" src="images/dump_0x10341_3bpp_new.BMP"  alt="dump"/></p>
+                <p>This picture will be the record of your work. You will be able to use it to quickly re-patch the rom.</p>
+                <p>You can import the modified picture in the rom if it is correctly aligned. The simplest way for it is to input the offset. Use file>Export Picture.</p>
+
           
           <h2>License</h2>
               <p>This program is free software: you can redistribute it and/or modify
