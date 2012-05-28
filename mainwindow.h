@@ -47,6 +47,7 @@ private:
     Rom rom;
 
 public slots:
+    void show_about();
     bool loadROM();
     bool saveROM();
     bool loadPalette();

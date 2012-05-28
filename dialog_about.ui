@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog_About</class>
+ <widget class="QDialog" name="Dialog_About">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>570</width>
+    <height>312</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QDialogButtonBox" name="buttonBox">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>260</y>
+     <width>511</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::Ok</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>20</y>
+     <width>511</width>
+     <height>231</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;h2&gt;Welcome to Master Tile Converter!&lt;/h2&gt;
+&lt;p&gt;Master Tile Converter (MTC) can export and import 3bpp and 4bpp tiles in Sega Master System (SMS) roms.&lt;p&gt;
+&lt;p&gt;See documentation: &lt;a href=&quot;http://jmimu.free.fr/mastertileconverter&quot;&gt;http://jmimu.free.fr/mastertileconverter&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Check new version: &lt;a href=&quot;https://github.com/jmimu/Master-Tile-Converter&quot;&gt;https://github.com/jmimu/Master-Tile-Converter&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.&lt;/p&gt;
+&lt;p&gt;See &lt;strong&gt;readme&lt;/strong&gt; file for more information.&lt;/p&gt;
+&lt;p&gt;Contact: &lt;a href=&quot;mailto:jmimu@free.fr&quot;&gt;jmimu@free.fr&lt;/a&gt;&lt;/p&gt;
+</string>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>Dialog_About</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>Dialog_About</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

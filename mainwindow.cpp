@@ -26,6 +26,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 #include <sstream>
 
+#include "dialog_about.h"
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -37,6 +39,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->actionOpen_Rom, SIGNAL(activated()), this, SLOT(loadROM()));
     QObject::connect(ui->actionSave_Rom, SIGNAL(activated()), this, SLOT(saveROM()));
     QObject::connect(ui->actionImport_Palette, SIGNAL(activated()), this, SLOT(loadPalette()));
+    QObject::connect(ui->actionAbout, SIGNAL(activated()), this, SLOT(show_about()));
+
     QObject::connect(ui->background_palette_radioButton, SIGNAL(clicked()), this, SLOT(change_palette()));
     QObject::connect(ui->sprite_palette_radioButton, SIGNAL(clicked()), this, SLOT(change_palette()));
     QObject::connect(ui->tileswidget, SIGNAL(change_selected_tile(int)), this, SLOT(update_tiles()));//all click coordinates treatement is done in "void TilesWidget::mousePressEvent( QMouseEvent *event )"
@@ -79,6 +83,15 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::show_about()
+{
+    Dialog_About dialog;
+    dialog.show();
+    dialog.exec();
+
+}
+
 
 void MainWindow::changeEvent(QEvent *e)
 {
