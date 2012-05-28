@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="data.qrc">
+    <normaloff>:/data/icon</normaloff>:/data/icon</iconset>
+  </property>
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
@@ -39,7 +43,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>&lt;h2&gt;Welcome to Master Tile Converter!&lt;/h2&gt;
+    <string>&lt;h2&gt;Welcome to Master Tile Converter v0.3!&lt;/h2&gt;
 &lt;p&gt;Master Tile Converter (MTC) can export and import 3bpp and 4bpp tiles in Sega Master System (SMS) roms.&lt;p&gt;
 &lt;p&gt;See documentation: &lt;a href=&quot;http://jmimu.free.fr/mastertileconverter&quot;&gt;http://jmimu.free.fr/mastertileconverter&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Check new version: &lt;a href=&quot;https://github.com/jmimu/Master-Tile-Converter&quot;&gt;https://github.com/jmimu/Master-Tile-Converter&lt;/a&gt;&lt;/p&gt;
@@ -56,7 +60,9 @@ the Free Software Foundation, either version 3 of the License, or
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="data.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>
