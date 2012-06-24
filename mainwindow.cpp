@@ -252,7 +252,8 @@ void MainWindow::move_down1Byte()
 {
     long offset=rom.get_offset();
     offset+=1;
-    if (offset<0) offset=0;
+    if (offset>=rom.get_romlength()-Tile::tile_size()*16)
+        offset=rom.get_romlength()-Tile::tile_size()*16;
     ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
     apply_offset();
 }
@@ -270,7 +271,8 @@ void MainWindow::move_down1row()
 {
     long offset=rom.get_offset();
     offset+=Tile::row_size();
-    if (offset<0) offset=0;
+    if (offset>=rom.get_romlength()-Tile::tile_size()*16)
+        offset=rom.get_romlength()-Tile::tile_size()*16;
     ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
     apply_offset();
 }
@@ -288,7 +290,8 @@ void MainWindow::move_down1tile()
 {
     long offset=rom.get_offset();
     offset+=Tile::tile_size();
-    if (offset<0) offset=0;
+    if (offset>=rom.get_romlength()-Tile::tile_size()*16)
+        offset=rom.get_romlength()-Tile::tile_size()*16;
     ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
     apply_offset();
 }
@@ -306,7 +309,8 @@ void MainWindow::move_down16tiles()
 {
     long offset=rom.get_offset();
     offset+=Tile::tile_size()*16;
-    if (offset<0) offset=0;
+    if (offset>=rom.get_romlength()-Tile::tile_size()*16)
+        offset=rom.get_romlength()-Tile::tile_size()*16;
     ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
     apply_offset();
 }
@@ -324,7 +328,8 @@ void MainWindow::move_down160tiles()
 {
     long offset=rom.get_offset();
     offset+=Tile::tile_size()*160;
-    if (offset<0) offset=0;
+    if (offset>=rom.get_romlength()-Tile::tile_size()*16)
+        offset=rom.get_romlength()-Tile::tile_size()*16;
     ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
     apply_offset();
 }

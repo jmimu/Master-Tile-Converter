@@ -140,6 +140,14 @@ bool Rom::import_BMP(std::string filename,bool is3bpp)
         return false;
     }
 
+    if (img.colorCount()==0)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("The picutre must be in indexed colors.");
+        msgBox.setIcon(QMessageBox::Critical);
+        msgBox.exec();
+        return false;
+    }
     if (is3bpp)
     {
         if (img.colorCount()>8)
