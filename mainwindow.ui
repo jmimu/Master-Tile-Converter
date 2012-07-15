@@ -180,9 +180,9 @@
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>420</x>
+      <x>400</x>
       <y>490</y>
-      <width>141</width>
+      <width>171</width>
       <height>21</height>
      </rect>
     </property>
@@ -194,6 +194,9 @@
     <property name="text">
      <string>Current Offset: 0x</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
     <property name="margin">
      <number>0</number>
     </property>
@@ -201,7 +204,7 @@
    <widget class="QLineEdit" name="offset_lineEdit">
     <property name="geometry">
      <rect>
-      <x>560</x>
+      <x>570</x>
       <y>490</y>
       <width>81</width>
       <height>21</height>
@@ -225,7 +228,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>640</x>
+      <x>650</x>
       <y>490</y>
       <width>51</width>
       <height>21</height>
@@ -419,9 +422,9 @@
     <property name="geometry">
      <rect>
       <x>560</x>
-      <y>370</y>
+      <y>360</y>
       <width>151</width>
-      <height>61</height>
+      <height>101</height>
      </rect>
     </property>
     <property name="title">
@@ -431,7 +434,7 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>20</y>
+       <y>60</y>
        <width>71</width>
        <height>20</height>
       </rect>
@@ -447,13 +450,45 @@
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>40</y>
+       <y>80</y>
        <width>71</width>
        <height>20</height>
       </rect>
      </property>
      <property name="text">
       <string>4 bpp</string>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="mode_2bpp_radioButton">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>40</y>
+       <width>71</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>2 bpp</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="mode_1bpp_radioButton">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>20</y>
+       <width>71</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>1 bpp</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
      </property>
     </widget>
    </widget>
@@ -486,7 +521,7 @@
      <x>0</x>
      <y>0</y>
      <width>720</width>
-     <height>23</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

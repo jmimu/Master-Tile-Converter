@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
 
-bool Tile::is3bpp=true;
+unsigned int Tile::number_bpp=3;
 
 Tile::Tile(Palette *palette) :image(8,8,QImage::Format_Indexed8), m_is_empty(true)
 {
@@ -80,10 +80,7 @@ unsigned long Tile::read_8pixels(unsigned char * romdata, unsigned long offset, 
         data[line][i]=0;
 
     int nbr_bytes;
-    if (is3bpp)
-        nbr_bytes=3;
-    else
-        nbr_bytes=4;
+    nbr_bytes=number_bpp;
 
     int shift=0;
     for (int i=0;i<nbr_bytes;i++)
@@ -104,12 +101,10 @@ unsigned long Tile::read_8pixels(unsigned char * romdata, unsigned long offset, 
 
 unsigned long Tile::row_size()
 {
-    if (is3bpp) return 3;
-    else return 4;
+    return number_bpp;
 }
 
 unsigned long Tile::tile_size()
 {
-    if (is3bpp) return 3*8;
-    else return 4*8;
+    return number_bpp*8;
 }

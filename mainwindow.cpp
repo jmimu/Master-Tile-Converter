@@ -51,6 +51,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //QObject::connect(ui->tilesScrollBar, SIGNAL(valueChanged(int)), this, SLOT(change_offset_scrollbar(int)));
 
 
+    QObject::connect(ui->mode_1bpp_radioButton, SIGNAL(clicked()), this, SLOT(change_mode()));
+    QObject::connect(ui->mode_2bpp_radioButton, SIGNAL(clicked()), this, SLOT(change_mode()));
     QObject::connect(ui->mode_3bpp_radioButton, SIGNAL(clicked()), this, SLOT(change_mode()));
     QObject::connect(ui->mode_4bpp_radioButton, SIGNAL(clicked()), this, SLOT(change_mode()));
 
@@ -200,25 +202,42 @@ bool MainWindow::export_picture()
 {
     std::stringstream oss_default_bmp_name;
     oss_default_bmp_name<<"dump_0x"<<std::hex<<rom.get_offset()<<"_";
-    if (ui->mode_3bpp_radioButton->isChecked())
-        oss_default_bmp_name<<"3bpp";
+
+    unsigned int nb_bpp=4;
+    if (ui->mode_1bpp_radioButton->isChecked())
+        nb_bpp=1;
+    else if (ui->mode_2bpp_radioButton->isChecked())
+        nb_bpp=2;
+    else if (ui->mode_3bpp_radioButton->isChecked())
+        nb_bpp=3;
     else
-        oss_default_bmp_name<<"4bpp";
+        nb_bpp=4;
+
+    oss_default_bmp_name<<nb_bpp<<"bpp";
     oss_default_bmp_name<<".BMP";
     QString fileName = QFileDialog::getSaveFileName(this, tr("Export to BMP"),oss_default_bmp_name.str().c_str(),tr("BMP Images (*.bmp *.BMP)"));
     if (fileName!="")
-        return rom.export_BMP(fileName.toStdString(),ui->mode_3bpp_radioButton->isChecked());
+        return rom.export_BMP(fileName.toStdString(),nb_bpp);
     return false;
 
 }
 
 bool MainWindow::import_picture()
 {
+    unsigned int nb_bpp=4;
+    if (ui->mode_1bpp_radioButton->isChecked())
+        nb_bpp=1;
+    else if (ui->mode_2bpp_radioButton->isChecked())
+        nb_bpp=2;
+    else if (ui->mode_3bpp_radioButton->isChecked())
+        nb_bpp=3;
+    else
+        nb_bpp=4;
 
     QString fileName = QFileDialog::getOpenFileName(this,tr("Choose BMP"), ".", tr("BMP Images (*.bmp *.BMP)"));
     if (fileName!="")
     {
-        if (rom.import_BMP(fileName.toStdString(),ui->mode_3bpp_radioButton->isChecked()))
+        if (rom.import_BMP(fileName.toStdString(),nb_bpp))
         {
             update_tiles();
             std::cout<<"Import OK!"<<std::endl;
@@ -233,7 +252,14 @@ bool MainWindow::import_picture()
 
 void MainWindow::change_mode()
 {
-    Tile::is3bpp=ui->mode_3bpp_radioButton->isChecked();
+    if (ui->mode_1bpp_radioButton->isChecked())
+        Tile::number_bpp=1;
+    if (ui->mode_2bpp_radioButton->isChecked())
+        Tile::number_bpp=2;
+    if (ui->mode_3bpp_radioButton->isChecked())
+        Tile::number_bpp=3;
+    if (ui->mode_4bpp_radioButton->isChecked())
+        Tile::number_bpp=4;
     ui->tilesScrollBar->setSingleStep(1);
     ui->tilesScrollBar->setPageStep(10);
     apply_offset();

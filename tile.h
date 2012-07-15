@@ -30,7 +30,7 @@ class Tile
 public:
     Tile(Palette *palette);
 
-    static bool is3bpp;
+    static unsigned int number_bpp;//1;2;3;4
 
     //static Tile* frompalette(Palette *palette,unsigned char index);
     void update_palette(Palette *palette);

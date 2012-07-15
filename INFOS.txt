@@ -2,6 +2,8 @@ On part de "[BIOS] Alex Kidd in Miracle World (USA, Europe).sms".
 
  * mettre à jour la checksum : $7FFA (voir valeur calculée par SMSandGGHeaderReader.exe)
  * boot hack : $17EDE => CD 00 C7 (pour vraie SMS) ou 00 00 00 (pour émulateur)
+hexcurse
+
 
 Description des éléments de la ROM :
 http://www.smspower.org/Development/AlexKiddInMiracleWorld-SMS
@@ -39,4 +41,29 @@ le 2e bit des 4 pixels va représenter la couleur du 2e pixels, etc...
 
 Header: http://www.smspower.org/Development/ROMHeader
 Checksum: voir sources de headerreader.
+
+
+*****
+Images compressées :
+Trouver les images dans tile decoder,
+faire vram2text si on veut.
+Après, je fais une copie d'écran, je coupe les tiles (noter le nb de tiles
+et l'adresse).
+J'enregistre l'image en BMP avec Gimp en mettant la palette dans le même ordre
+que dans tile decoder.
+
+
+convertir les sorties de BMP2tile :
+grep ".db" ex02_tiles.inc | sed -r 's/[.db$]//g' | tr -d '\n\r' > out.txt
+grep ".db" ex02_tiles.inc | sed -r 's/.db //g;s/$//g' | tr -d '\n\r' > out.txt
+
+Ensuite en fait text2vram,
+puis refresh pour vérifier, puis compress (combien de tiles ?)
+
+Ou alors on peut importer les .inc de BMP2tile.
+
+Et copier ça à la bonne adresse dans la rom.
+=> ça marche !
+
+
 

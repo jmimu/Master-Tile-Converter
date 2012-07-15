@@ -92,14 +92,28 @@ bool Rom::loadfile(std::string filename)
     return true;
 }
 
-bool Rom::export_BMP(std::string filename,bool is3bpp)
+bool Rom::export_BMP(std::string filename,int nbbpp)
 {
     int nb_tiles_width=16;
     QImage img(nb_tiles_width*8,12*8,QImage::Format_Indexed8);
     //can't use painter on 8bit images => fill it pixel-by-pixel...
     //define palette (16 or 8 colors, only background or sprites part)
     img.setColorTable( m_palette->get_colors() );
-    if (is3bpp) img.setColorCount(8);
+    switch (nbbpp)
+    {
+    case 1:
+        img.setColorCount(4);//to avoid gimp 2 colors mode !
+        break;
+    case 2:
+        img.setColorCount(4);
+        break;
+    case 3:
+        img.setColorCount(8);
+        break;
+    default:
+        img.setColorCount(16);
+        break;
+    }
 
     //copy pixels for each tile
     long x_tile=0;
@@ -126,7 +140,7 @@ bool Rom::export_BMP(std::string filename,bool is3bpp)
 
 
 //TODO import format check !
-bool Rom::import_BMP(std::string filename,bool is3bpp)
+bool Rom::import_BMP(std::string filename,int nbbpp)
 {
     int nb_tiles_width=0;
     int nb_tiles_height=0;
@@ -148,7 +162,31 @@ bool Rom::import_BMP(std::string filename,bool is3bpp)
         msgBox.exec();
         return false;
     }
-    if (is3bpp)
+
+
+    else if (nbbpp==1)
+    {
+        if (img.colorCount()>4)//4 to avoid gimp 2 colors mode
+        {
+            QMessageBox msgBox;
+            msgBox.setText("Wrong image palette or color profile.\nMaximum palette size is 4.");
+            msgBox.setIcon(QMessageBox::Critical);
+            msgBox.exec();
+            return false;
+        }
+    }
+    else if (nbbpp==2)
+    {
+        if (img.colorCount()>4)
+        {
+            QMessageBox msgBox;
+            msgBox.setText("Wrong image palette or color profile.\nMaximum palette size is 4.");
+            msgBox.setIcon(QMessageBox::Critical);
+            msgBox.exec();
+            return false;
+        }
+    }
+    else if (nbbpp==3)
     {
         if (img.colorCount()>8)
         {
@@ -158,7 +196,9 @@ bool Rom::import_BMP(std::string filename,bool is3bpp)
             msgBox.exec();
             return false;
         }
-    }else{
+    }
+    else
+    {
         if (img.colorCount()>16)
         {
             QMessageBox msgBox;
@@ -193,9 +233,35 @@ bool Rom::import_BMP(std::string filename,bool is3bpp)
 
             for (int y=0;y<8;y++)
             {
-                //depending on 3bpp or 4 bpp, write data to rom
+                //depending on number of bpp, write data to rom
                 byte1=byte2=byte3=byte4=0;
-                if (Tile::is3bpp)
+                if (Tile::number_bpp==1)
+                {
+                    long shift=7;
+                    for (int x=0;x<8;x++)
+                    {
+                        //std::cout<<"Pixel "<<img.pixelIndex(8*x_tile+x,8*y_tile+y)<<" ";
+                        byte1+=(((img.pixelIndex(8*x_tile+x,8*y_tile+y))>>0)%2)<<shift;
+                        shift--;
+                    }
+                    romdata[index++]=byte1;
+                    //std::cout<<"\nRaw: "<<(int)byte1<<std::endl;
+                }
+                else if (Tile::number_bpp==2)
+                {
+                    long shift=7;
+                    for (int x=0;x<8;x++)
+                    {
+                        //std::cout<<"Pixel "<<img.pixelIndex(8*x_tile+x,8*y_tile+y)<<" ";
+                        byte1+=(((img.pixelIndex(8*x_tile+x,8*y_tile+y))>>0)%2)<<shift;
+                        byte2+=(((img.pixelIndex(8*x_tile+x,8*y_tile+y))>>1)%2)<<shift;
+                        shift--;
+                    }
+                    romdata[index++]=byte1;
+                    romdata[index++]=byte2;
+                    //std::cout<<"\nRaw: "<<(int)byte1<<" "<<(int)byte2<<std::endl;
+                }
+                else if (Tile::number_bpp==3)
                 {
                     long shift=7;
                     for (int x=0;x<8;x++)
