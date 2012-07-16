@@ -66,4 +66,11 @@ Et copier ça à la bonne adresse dans la rom.
 => ça marche !
 
 
+***************
+pinout rom/eprom
+http://www.smspower.org/Development/128kEPROMModificationFor315-5208BasedSMSCartridges
+http://www.smspower.org/Development/SMSPagingChips#ReplacingA831000ROMWithAn27010EPROM
+
+
+http://chayom.org/1/mbit/eeprom
 

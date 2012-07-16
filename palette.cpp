@@ -97,6 +97,7 @@ bool Palette::read_from_file(QString fileName)
 
     std::ifstream is;
     is.open (fileName.toStdString().c_str(), std::ios::binary );
+    if (is.fail()) return false;
 
     // get length of file:
     is.seekg (0, std::ios::end);

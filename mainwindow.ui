@@ -534,6 +534,7 @@
     <addaction name="separator"/>
     <addaction name="actionExport_Picture"/>
     <addaction name="actionImport_Picture"/>
+    <addaction name="actionImport_Compressed_Data"/>
     <addaction name="separator"/>
     <addaction name="actionSave_Rom"/>
     <addaction name="separator"/>
@@ -590,6 +591,11 @@
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="actionImport_Compressed_Data">
+   <property name="text">
+    <string>Import Compressed Data</string>
    </property>
   </action>
  </widget>

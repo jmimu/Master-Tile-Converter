@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <sstream>
 
 #include "dialog_about.h"
+#include "dialog_importcompresseddata.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -40,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->actionSave_Rom, SIGNAL(activated()), this, SLOT(saveROM()));
     QObject::connect(ui->actionImport_Palette, SIGNAL(activated()), this, SLOT(loadPalette()));
     QObject::connect(ui->actionAbout, SIGNAL(activated()), this, SLOT(show_about()));
+    QObject::connect(ui->actionImport_Compressed_Data, SIGNAL(activated()), this, SLOT(import_compressed_data()));
 
     QObject::connect(ui->background_palette_radioButton, SIGNAL(clicked()), this, SLOT(change_palette()));
     QObject::connect(ui->sprite_palette_radioButton, SIGNAL(clicked()), this, SLOT(change_palette()));
@@ -249,6 +251,14 @@ bool MainWindow::import_picture()
 
 }
 
+bool MainWindow::import_compressed_data()
+{
+    Dialog_ImportCompressedData dialog;
+    dialog.show();
+    if (dialog.exec()==QDialog::Accepted)
+        return rom.import_rawdata(dialog.get_filename(),dialog.get_adress());
+    else return false;
+}
 
 void MainWindow::change_mode()
 {

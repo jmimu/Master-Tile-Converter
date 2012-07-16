@@ -53,6 +53,7 @@ public slots:
     bool loadPalette();
     bool export_picture();
     bool import_picture();
+    bool import_compressed_data();
     void change_palette();
     void update_tiles();
     void enable_offset_button();

@@ -62,6 +62,7 @@ bool Rom::loadfile(std::string filename)
     //from http://www.cplusplus.com/reference/iostream/istream/read/
     std::ifstream is;
     is.open (filename.c_str(), std::ios::binary );
+    if (is.fail()) return false;
 
     // get length of file:
     is.seekg (0, std::ios::end);
@@ -300,6 +301,45 @@ bool Rom::import_BMP(std::string filename,int nbbpp)
     //correct checksum on-the-fly
     
     
+    return true;
+}
+
+bool Rom::import_rawdata(std::string filename,unsigned long adress)//<used for compressed tiles
+{
+    //from http://www.cplusplus.com/reference/iostream/istream/read/
+    int data_length;
+    unsigned char * data_buffer;
+
+    std::ifstream is;
+    is.open (filename.c_str(), std::ios::binary );
+    if (is.fail()) return false;
+
+    // get length of file:
+    is.seekg (0, std::ios::end);
+    data_length = is.tellg();
+    is.seekg (0, std::ios::beg);
+
+    // allocate memory:
+    data_buffer = new unsigned char [data_length];
+
+    // read data as a block:
+    is.read ((char*)data_buffer,data_length);
+    is.close();
+
+    std::cout<<"Read "<<data_length<<" bytes in raw data file "<<filename<<"."<<std::endl;
+
+    //import data in romdata
+    unsigned long j=adress;
+    for (unsigned long i=0;i<data_length;i++)
+    {
+        romdata[j]=data_buffer[i];
+        j++;
+    }
+
+    std::cout<<"Raw data imported."<<std::endl;
+
+    delete[] data_buffer;
+
     return true;
 }
 

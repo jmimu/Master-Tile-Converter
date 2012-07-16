@@ -36,6 +36,7 @@ public:
     std::vector<Tile*> * get_tiles(){return & m_tiles;};
     bool export_BMP(std::string filename,int nbbpp);
     bool import_BMP(std::string filename,int nbbpp);
+    bool import_rawdata(std::string filename,unsigned long adress);//<used for compressed tiles
     bool save_ROM(std::string filename);
     unsigned char * get_romdata(){return romdata;};
     long get_romlength(){return romlength;};
