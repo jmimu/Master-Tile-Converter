@@ -27,7 +27,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <sstream>
 
 #include "dialog_about.h"
-#include "dialog_importcompresseddata.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -253,11 +252,13 @@ bool MainWindow::import_picture()
 
 bool MainWindow::import_compressed_data()
 {
-    Dialog_ImportCompressedData dialog;
-    dialog.show();
-    if (dialog.exec()==QDialog::Accepted)
-        return rom.import_rawdata(dialog.get_filename(),dialog.get_adress());
-    else return false;
+    QString fileName = QFileDialog::getOpenFileName(this,tr("Choose data file"), ".", tr("Tile Decoder compressed data (*.dat);;All files (*)"));
+    if (fileName!="")
+    {
+        rom.import_rawdata(fileName.toStdString(),rom.get_offset());
+        return false;
+    }
+    return false;
 }
 
 void MainWindow::change_mode()

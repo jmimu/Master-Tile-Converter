@@ -9,8 +9,7 @@ SOURCES += main.cpp \
     zoomwidget.cpp \
     rom.cpp \
     romheader.cpp \
-    dialog_about.cpp \
-    dialog_importcompresseddata.cpp
+    dialog_about.cpp
 HEADERS += mainwindow.h \
     tile.h \
     palette.h \
@@ -19,9 +18,7 @@ HEADERS += mainwindow.h \
     zoomwidget.h \
     rom.h \
     romheader.h \
-    dialog_about.h \
-    dialog_importcompresseddata.h
+    dialog_about.h
 FORMS += mainwindow.ui \
-    dialog_about.ui \
-    dialog_importcompresseddata.ui
+    dialog_about.ui
 RESOURCES += data.qrc
