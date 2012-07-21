@@ -74,3 +74,15 @@ http://www.smspower.org/Development/SMSPagingChips#ReplacingA831000ROMWithAn2701
 
 http://chayom.org/1/mbit/eeprom
 
+
+***************
+Hack file format :
+;comment
+;one modification is done by changing some values at an adress. It has a description for information.
+;format:
+;adress (hex):list of new bytes (hex, space separated) *description
+;example:
+12EFF:00 12 ED *change something
+
+
+

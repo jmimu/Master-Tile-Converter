@@ -344,6 +344,17 @@ bool Rom::import_rawdata(std::string filename,unsigned long adress)//<used for c
 }
 
 
+bool Rom::set_romdata(unsigned long address,std::vector<unsigned char> *data)
+{
+    for (unsigned int i=0;i<data->size();i++)
+    {
+        if (address>=romlength) return false;
+        romdata[address]=data->at(i);
+        address++;
+    }
+    return true;
+}
+
 bool Rom::save_ROM(std::string filename)
 {
     ROMHeader header(this);

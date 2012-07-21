@@ -546,7 +546,15 @@
     </property>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuHacks">
+    <property name="title">
+     <string>Hacks</string>
+    </property>
+    <addaction name="actionApply_Hack_File_fast"/>
+    <addaction name="actionApply_Hack_File_confirm"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuHacks"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -596,6 +604,16 @@
   <action name="actionImport_Compressed_Data">
    <property name="text">
     <string>Import Compressed Data</string>
+   </property>
+  </action>
+  <action name="actionApply_Hack_File_fast">
+   <property name="text">
+    <string>Apply Hack File (fast)</string>
+   </property>
+  </action>
+  <action name="actionApply_Hack_File_confirm">
+   <property name="text">
+    <string>Apply Hack (confirm)</string>
    </property>
   </action>
  </widget>

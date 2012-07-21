@@ -39,6 +39,7 @@ public:
     bool import_rawdata(std::string filename,unsigned long adress);//<used for compressed tiles
     bool save_ROM(std::string filename);
     unsigned char * get_romdata(){return romdata;};
+    bool set_romdata(unsigned long address,std::vector<unsigned char> *data);//<change a part of the rom data
     long get_romlength(){return romlength;};
 protected:
     long romlength;

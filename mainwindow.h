@@ -60,6 +60,9 @@ public slots:
     bool apply_offset();
     //void change_offset_scrollbar(int val);
 
+    bool applyHackFile(bool confirm=true);
+    bool applyHackFile_fast(){return applyHackFile(false);};
+
     void move_up1Byte();
     void move_down1Byte();
     void move_up1row();

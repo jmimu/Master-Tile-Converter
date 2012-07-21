@@ -22,9 +22,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QFileDialog>
 #include <QPainter>
+#include <QMessageBox>
+
+#include <QRegExp>
 
 #include <iostream>
 #include <sstream>
+#include <fstream>
 
 #include "dialog_about.h"
 
@@ -41,6 +45,10 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->actionImport_Palette, SIGNAL(activated()), this, SLOT(loadPalette()));
     QObject::connect(ui->actionAbout, SIGNAL(activated()), this, SLOT(show_about()));
     QObject::connect(ui->actionImport_Compressed_Data, SIGNAL(activated()), this, SLOT(import_compressed_data()));
+
+    QObject::connect(ui->actionApply_Hack_File_fast, SIGNAL(activated()), this, SLOT(applyHackFile_fast()));
+    QObject::connect(ui->actionApply_Hack_File_confirm, SIGNAL(activated()), this, SLOT(applyHackFile()));
+
 
     QObject::connect(ui->background_palette_radioButton, SIGNAL(clicked()), this, SLOT(change_palette()));
     QObject::connect(ui->sprite_palette_radioButton, SIGNAL(clicked()), this, SLOT(change_palette()));
@@ -256,7 +264,7 @@ bool MainWindow::import_compressed_data()
     if (fileName!="")
     {
         rom.import_rawdata(fileName.toStdString(),rom.get_offset());
-        return false;
+        return true;
     }
     return false;
 }
@@ -274,6 +282,78 @@ void MainWindow::change_mode()
     ui->tilesScrollBar->setSingleStep(1);
     ui->tilesScrollBar->setPageStep(10);
     apply_offset();
+}
+
+
+bool MainWindow::applyHackFile(bool confirm)
+{
+    QString fileName = QFileDialog::getOpenFileName(this,tr("Choose hack file"), ".", tr("text File (*.txt);;All files (*)"));
+    if (fileName!="")
+    {
+        std::ifstream is;
+        is.open (fileName.toStdString().c_str());
+        if (is.fail())
+        {
+            std::cerr<<"Can not open file: "<<fileName.toStdString()<<std::endl;
+            return false;
+        }
+        std::string line;
+        while(getline(is,line))
+        {
+            QRegExp rx("^ *[^;]");
+            if (rx.indexIn(line.c_str())!=-1)
+            {
+                QRegExp rx2("^ *([0-9A-Fa-f]+) *\\: *([0-9A-Fa-f ]+) *\\*(.*)$");
+                if (rx2.indexIn(line.c_str()) != -1) {
+                    //std::cout<<"Got: "<<rx2.cap(1).toStdString()<<" | "<<rx2.cap(2).toStdString()<<" | "<<rx2.cap(3).toStdString()<<std::endl;
+                    bool ok;
+                    unsigned long address=rx2.cap(1).toLong(&ok,16);
+                    if (!ok){
+                        std::cerr<<"Problem reading hex address: "<<rx2.cap(1).toStdString()<<std::endl;
+                        break;
+                    }
+                    std::vector<unsigned char> data;
+                    QStringList data_str_list = rx2.cap(2).split(" ",QString::SkipEmptyParts);
+                    for (unsigned int i = 0; i < data_str_list.size(); ++i)
+                    {
+
+                        //std::cout<<"Try : "<<data_str_list.at(i).toStdString()<<std::endl;
+                        data.push_back(data_str_list.at(i).toInt(&ok,16));
+                        if (!ok){
+                            std::cerr<<"Problem reading hex data: "<<data_str_list.at(i).toStdString()<<std::endl;
+                            break;
+                        }
+                    }
+                    std::string comment=rx2.cap(3).toStdString();
+
+                    bool do_it=true;
+                    if (confirm)
+                    {
+                        //show message...
+                        //do_it=...
+                        QMessageBox msgBox;
+                        msgBox.setText("Apply modification ?");
+                        msgBox.setInformativeText(QString("At ")+rx2.cap(1)+", write:\n"+rx2.cap(2));
+                        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+                        msgBox.setDefaultButton(QMessageBox::Yes);
+                        msgBox.setIcon(QMessageBox::Question);
+                        msgBox.setMinimumSize(300,50);
+                        do_it=(msgBox.exec()==QMessageBox::Yes);
+                    }
+                    if (do_it)
+                        if (!rom.set_romdata(address,&data))
+                        {
+                            std::cerr<<"Modification out of rom: "<<line<<std::endl;
+                        }
+                }
+            }
+        }
+
+        is.close();
+
+        return true;
+    }
+    return false;
 }
 
 void MainWindow::move_up1Byte()
