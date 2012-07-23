@@ -33,14 +33,14 @@
             <p>Contact: <img src="images/ctct.png" alt="contact"/></p>
           
           <h2>Downloads</h2>
-            <p>Binary version for Windows: <a href="https://github.com/jmimu/Master-Tile-Converter">https://github.com/jmimu/Master-Tile-Converter</a></p>
+            <p>Binary version for Windows (old version): <a href="https://github.com/jmimu/Master-Tile-Converter/downloads">https://github.com/jmimu/Master-Tile-Converter/downloads</a></p>
             <p>Development version sources (using <a href="http://git-scm.com/">git</a>): <a href="https://github.com/jmimu/Master-Tile-Converter">https://github.com/jmimu/Master-Tile-Converter</a></p>
             <p>How to compile: install <a href="http://qt.nokia.com/downloads/downloads#qt-creator">QtCreator</a>, and open <strong>mastertileconverter.pro</strong></p>
 
           <h2>Help</h2>              
             <h3>Interface</h3>
               <p class="centrage" ><img  src="images/interface_mini.png"  alt="interface"/></p>
-            <h3>Instruction</h3>
+            <h3>Instructions</h3>
               <ul>
                   <li>Open a SMS ROM in meka. When you see the tile you want to modify, export the palette (raw).</li>
                   <li>Run mastertileconverter, and open the SMS ROM (file>open rom).</li>
@@ -75,7 +75,25 @@
                 <p>This picture will be the record of your work. You will be able to use it to quickly re-patch the rom.</p>
                 <p>You can import the modified picture in the rom if it is correctly aligned. The simplest way for it is to input the offset. Use file>Export Picture.</p>
 
-          
+
+            <h3>Import compressed tiles</h3>
+                <p>When you have to deal with compressed tiles, you can use Maxim’s <a href="http://www.smspower.org/maxim/Software/TileDecoder">TileDecoder</a> to extract data from roms.</p>
+                <p>After having modified tiles, you can re-compress them using Maxim’s <a href="http://www.smspower.org/maxim/Software/BMP2Tile">BMP2Tile</a> and <a href="http://www.smspower.org/maxim/Software/TileDecoder">TileDecoder</a> to create a compressed tiles .dat file.</p>
+                <p>In Master Tile Converter, use <strong>file>import compressed data</strong> to import this .dat file into the rom at the current address.</p>
+
+            <h3>Miscalleous hacks</h3>
+                <p>It you have to make several modifications in a rom, you can make a hack file to regroup them.</p>
+                <p>This has to be a text file containing several entries like this:</p>
+                <code>
+                ;only for emulators<br/>
+                17EDE:00 00 00 *unactivate boot
+                </code>
+                <p>You can apply this file with <strong>hacks>apply hack</strong>.</p>
+
+
+          <h2>Example</h2>
+              <p>You can find examples of modifications for Alex Kidd in Miracle World in the <strong>ex</strong> directory.</p>
+              
           <h2>License</h2>
               <p>This program is free software: you can redistribute it and/or modify
               it under the terms of the GNU General Public License as published by
@@ -84,8 +102,9 @@
               <p>See <strong>readme</strong> file for more information.</p>
 
           <h2>Links</h2>
-            <p>SMS power website: <a href="http://www.smspower.org/">http://www.smspower.org</a><p>
-            <p>Meka emulator: <a href="http://www.smspower.org/meka/">http://www.smspower.org/meka</a><p>
+            <p>SMS power website: <a href="http://www.smspower.org">http://www.smspower.org</a><p>
+            <p>Meka emulator: <a href="http://www.smspower.org/meka">http://www.smspower.org/meka</a><p>
+            <p>Maxim's page: <a href="http://www.smspower.org/maxim">http://www.smspower.org/maxim</a><p>
 
         </div>
         <div id="pied_de_page">
