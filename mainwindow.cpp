@@ -332,12 +332,11 @@ bool MainWindow::applyHackFile(bool confirm)
                         //show message...
                         //do_it=...
                         QMessageBox msgBox;
-                        msgBox.setText("Apply modification ?");
+                        msgBox.setText(QString("Apply modification \"")+rx2.cap(3)+"\"?");
                         msgBox.setInformativeText(QString("At ")+rx2.cap(1)+", write:\n"+rx2.cap(2));
                         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
                         msgBox.setDefaultButton(QMessageBox::Yes);
                         msgBox.setIcon(QMessageBox::Question);
-                        msgBox.setMinimumSize(300,50);
                         do_it=(msgBox.exec()==QMessageBox::Yes);
                     }
                     if (do_it)
