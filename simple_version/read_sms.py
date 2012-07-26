@@ -23,20 +23,17 @@ import os
 import pygame, sys, time, random
 from pygame.locals import *
 
-#add a readme
-#parameters : rom filename, offset
-#add 3bpp/4bpp key
-#faster: http://www.pygame.org/docs/tut/surfarray/SurfarrayIntro.html
 
-
+#with "Phantasy Star" RLE
+#http://www.smspower.org/Development/Compression
 
 if (len(sys.argv)<4):
-  print("Synthax: python (3bpp|4bpp) main.py romfile.sms offset_hex")
-  print("Example for AlexKidd : python read_sms_3bpp.py 3bpp ../\[BIOS\]\ Alex\ Kidd\ in\ Miracle\ World\ \(USA\,\ Europe\)_JM.sms 0x10341")
+  print("Synthax: python read_sms_3bpp.py (3bpp|4bpp|compr) romfile.sms offset_hex")
+  print("Example for AlexKidd : python read_sms.py 3bpp ../\[BIOS\]\ Alex\ Kidd\ in\ Miracle\ World\ \(USA\,\ Europe\).sms 0x10341")
   exit()
 
-if (sys.argv[1]!="3bpp")and(sys.argv[1]!="4bpp"):
-  print("You have to say \"3bpp\" or \"4bpp\".")
+if (sys.argv[1]!="3bpp")and(sys.argv[1]!="4bpp")and(sys.argv[1]!="compr"):
+  print("You have to say \"3bpp\", \"4bpp\" or \"compr\".")
   exit()
 
 filename=sys.argv[2]
@@ -153,6 +150,66 @@ class Tile4bpp(Tile):
     return 4
 
 
+class Compressed_tiles(object):
+  def __init__(self):
+    self.tiles=[]
+    self.uncompressed_bytes=[]#the 4 bitplanes
+    self.uncompressed_data=[]
+    for y in range(4):
+      self.uncompressed_bytes.append([])
+
+  def read_compressed(self,datarom,index): #return number of bytes read
+    offset=0#where we are on the file after index
+    
+    #uncompress data
+    print("Uncompressing...")
+    for num_bitplane in range(4):
+      #print("bitplane ",num_bitplane)
+      while (datarom[index+offset]!=0):
+        if (datarom[index+offset]<128):#identical bytes
+          nb_consecutive_identical_bytes=datarom[index+offset]
+          offset+=1
+          the_byte=datarom[index+offset]
+          #print("   found ",nb_consecutive_identical_bytes," times ",the_byte)
+          for i in range(nb_consecutive_identical_bytes):
+            self.uncompressed_bytes[num_bitplane].append(the_byte)
+          offset+=1
+          continue
+        if (datarom[index+offset]>=128):#consecutive different tiles
+          nb_consecutive_different_bytes=datarom[index+offset]-128
+          #print("   found ",nb_consecutive_different_bytes," different bytes:")
+          for i in range(nb_consecutive_different_bytes):
+            offset+=1
+            the_byte=datarom[index+offset]
+            #print("     ",the_byte)
+            self.uncompressed_bytes[num_bitplane].append(the_byte)
+          offset+=1
+          continue
+      offset+=1
+    
+    #print("uncompressed:")
+    #print(self.uncompressed_bytes)
+    
+    
+    #order bytes
+    for i in range(len(self.uncompressed_bytes[0])):
+      for b in range(4):#bitplane
+        self.uncompressed_data.append(self.uncompressed_bytes[b][i])
+    
+    #print("in order:")
+    #print(self.uncompressed_data)
+    
+    for i in range(len(self.uncompressed_bytes[0])/8):
+      tile=Tile4bpp()
+      self.tiles.append(tile)
+    index2=0
+    for tile in self.tiles:
+      index2=tile.read(self.uncompressed_data,index2)
+      tile.update_image(palette_alexsprite)
+      
+    print("Read ",offset," bytes.")
+    return offset
+
 
 
 pygame.init()
@@ -180,25 +237,25 @@ print("Done. Got ",len(romdata)," bytes")
 
 print("Init...")
 
-tiles=[]
-for i in range(16*16):
-  if (sys.argv[1]=="3bpp"):
-    tile=Tile3bpp()
-  else:
-    tile=Tile4bpp()
-  tiles.append(tile)
 
-print ("Read tiles")
+if (sys.argv[1]=="compr"):
+  compr=Compressed_tiles()
+  compr.read_compressed(romdata,index_init)
+else:
+  tiles=[]
+  for i in range(16*16):
+    if (sys.argv[1]=="3bpp"):
+      tile=Tile3bpp()
+    else:
+      tile=Tile4bpp()
+    tiles.append(tile)
+    print ("Read tiles")
+    index=index_init
+    for tile in tiles:
+      index=tile.read(romdata,index)
+      tile.update_image(palette_alexsprite)
 
 
-
-index=index_init
-for tile in tiles:
-  index=tile.read(romdata,index)
-  tile.update_image(palette_alexsprite)
-
-
-#print(tiles[0].data)
 
 print("Done.")
 
@@ -213,26 +270,36 @@ while 1:
           index_init=0
         index=index_init
         print(index_init)
-        for tile in tiles:
-          index=tile.read(romdata,index)
-          tile.update_image(palette_alexsprite)
+        if (sys.argv[1]!="compr"):
+          for tile in tiles:
+            index=tile.read(romdata,index)
+            tile.update_image(palette_alexsprite)
       if event.key == K_DOWN:
         index_init+=384 #384 for 3bpp, 0x200 for 4bpp
         index=index_init
         print(index_init)
-        for tile in tiles:
-          index=tile.read(romdata,index)
-          tile.update_image(palette_alexsprite)
+        if (sys.argv[1]!="compr"):
+          for tile in tiles:
+            index=tile.read(romdata,index)
+            tile.update_image(palette_alexsprite)
 
   screen.fill(black)
   x=0
   y=0
-  for tile in tiles:
-    tile.draw(tiles_surface,x*8,y*8)
-    x+=1
-    if (x>=16):
-      x=0
-      y+=1
+  if (sys.argv[1]=="compr"):
+    for tile in compr.tiles:
+      tile.draw(tiles_surface,x*8,y*8)
+      x+=1
+      if (x>=16):
+        x=0
+        y+=1
+  else:
+    for tile in tiles:
+      tile.draw(tiles_surface,x*8,y*8)
+      x+=1
+      if (x>=16):
+        x=0
+        y+=1
   tiles_surface_zoomed = pygame.transform.scale(tiles_surface,(16*8*4,32*8*4))
   screen.blit(tiles_surface_zoomed, (0, 0))
   pygame.display.flip()
