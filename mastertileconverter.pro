@@ -22,3 +22,4 @@ HEADERS += mainwindow.h \
 FORMS += mainwindow.ui \
     dialog_about.ui
 RESOURCES += data.qrc
+CONFIG +=debug

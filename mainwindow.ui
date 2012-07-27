@@ -534,6 +534,7 @@
     <addaction name="separator"/>
     <addaction name="actionExport_Picture"/>
     <addaction name="actionImport_Picture"/>
+    <addaction name="actionCompress_Picture"/>
     <addaction name="actionImport_Compressed_Data"/>
     <addaction name="separator"/>
     <addaction name="actionSave_Rom"/>
@@ -614,6 +615,11 @@
   <action name="actionApply_Hack_File_confirm">
    <property name="text">
     <string>Apply Hack (confirm)</string>
+   </property>
+  </action>
+  <action name="actionCompress_Picture">
+   <property name="text">
+    <string>Compress Picture</string>
    </property>
   </action>
  </widget>

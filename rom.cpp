@@ -39,6 +39,7 @@ Rom::Rom(Palette * palette) : romlength(0),romdata(0),m_palette(palette),m_offse
 Rom::~Rom()
 {
     if (romdata) delete[] romdata;
+    m_tiles.clear();
 }
 
 void Rom::create_tiles(unsigned long offset)
@@ -140,6 +141,112 @@ bool Rom::export_BMP(std::string filename,int nbbpp)
 }
 
 
+bool Rom::compress_BMP(std::string filename)
+{
+    if (romdata) delete[] romdata;
+    romlength=0;
+    m_tiles.clear();
+    import_BMP(filename,4);
+
+    //compression of romdata into compressed_data
+    std::vector<unsigned char> compressed_data;
+    //worst case: all is composed by AABAABAABAAB => romlength*4/3+4+4 (have to begin the 4 bitplans and finish them (+4+4))
+
+    for (unsigned long bitplan=0;bitplan<4;bitplan++)
+    {
+         //std::cout<<"Bitplan "<<bitplan<<std::endl;
+         unsigned long data_index=bitplan;//look for 1 byte over 4
+         while (data_index<romlength)
+         {
+             //look for similar bytes
+             unsigned long nb_similar_bytes=1;//the first byte can be at the same time in a group of different or similar bytes
+             unsigned char the_unique_byte=0;
+             unsigned long nb_different_bytes=1;
+             std::vector<unsigned char> the_diff_bytes;
+             //std::cout<<"We are at data_index="<<data_index<<".  read "<<(int)romdata[data_index]<<std::endl;
+             for (unsigned long i=data_index+4;i<romlength;i+=4)
+             {
+                 //std::cout<<"   read "<<(int)romdata[i]<<"   ";
+                 if (nb_different_bytes>1)//we are in a diff bytes group
+                 {
+                     if ((romdata[i]==romdata[i-4])or(nb_different_bytes==127))//found similar bytes, or out of range
+                     {
+                         //end of group
+                         //remove the last one, since it is part of the next block (of similar bytes)
+                         nb_different_bytes--;
+                         the_diff_bytes.pop_back();
+                         i--;
+                         //std::cout<<" end of group"<<std::endl;
+                         break;
+                     }else{
+                         nb_different_bytes++;
+                         the_diff_bytes.push_back(romdata[i]);
+                     }
+                 }else if (nb_similar_bytes>1)//we are in a similar bytes group
+                 {
+                     if ((romdata[i]!=romdata[i-4])or(nb_similar_bytes==127))//found diff bytes, or out of range
+                     {
+                         //end of group
+                         i--;
+                         //std::cout<<" end of group"<<std::endl;
+                         break;
+                     }else{
+                         nb_similar_bytes++;
+                     }
+                 }else{//we are at the beginning of a group
+                     //std::cout<<" begin group ";
+                     if (romdata[i]==romdata[i-4])//found similar bytes
+                     {
+                         nb_different_bytes=0;
+                         nb_similar_bytes=2;
+                         the_unique_byte=romdata[i];
+                         //std::cout<<" similar ";
+                     }else{
+                         nb_different_bytes=2;
+                         nb_similar_bytes=0;
+                         the_diff_bytes.push_back(romdata[i-4]);
+                         the_diff_bytes.push_back(romdata[i]);
+                         //std::cout<<" different from "<<(int)romdata[i-4]<<" ";
+                     }
+
+                 }
+             }//one block has been analyzed, we record it.
+             if (nb_similar_bytes>1)
+             {
+                 compressed_data.push_back(nb_similar_bytes);
+                 compressed_data.push_back(the_unique_byte);
+                 data_index+=nb_similar_bytes*4;
+                 //std::cout<<"We write "<<(int)nb_similar_bytes<<" "<<(int)the_unique_byte<<std::endl;
+             }else{
+                 compressed_data.push_back(nb_different_bytes+128);
+                 //std::cout<<"We write "<<(int)(nb_different_bytes+128);
+
+                 for (unsigned long j=0;j<the_diff_bytes.size();j++)
+                 {
+                     compressed_data.push_back(the_diff_bytes.at(j));
+                     //std::cout<<" "<<(int)the_diff_bytes.at(j);
+                 }
+                 //std::cout<<std::endl;
+                 data_index+=nb_different_bytes*4;
+             }
+
+         }//end of bitplan, write a 0
+         //std::cout<<"end of bitplan"<<std::endl;
+         compressed_data.push_back(0);
+    }//compression finished
+
+    //write compressed data to a file
+    std::ofstream os;
+    os.open("comprjm", std::ios::out | std::ios::binary);
+    if (!compressed_data.empty())
+        os.write((const char*)(&compressed_data[0]),compressed_data.size() * sizeof(unsigned char));
+    os.close();
+
+
+    std::cout<<"Wrote compressed data file"<<"."<<std::endl;
+
+}
+
 //TODO import format check !
 bool Rom::import_BMP(std::string filename,int nbbpp)
 {
@@ -219,8 +326,22 @@ bool Rom::import_BMP(std::string filename,int nbbpp)
         return false;
     }
 
+    Tile::number_bpp=nbbpp;
+
     nb_tiles_width=img.width()/8;
     nb_tiles_height=img.height()/8;
+
+    std::cout<<"Found "<<nb_tiles_width<<"x"<<nb_tiles_height<<" tiles in BMP"<<std::endl;
+
+    //if the rom is empty, we just want to create data from BMP:
+    if (romlength==0)
+    {
+        romlength=nb_tiles_width*4*8*nb_tiles_height;
+        if (romdata) delete[] romdata;
+        romdata = new unsigned char [romlength];
+        m_offset=0;
+    }
+
 
     unsigned char byte1,byte2,byte3,byte4;//what to write
 
@@ -229,7 +350,7 @@ bool Rom::import_BMP(std::string filename,int nbbpp)
     {
         for (int x_tile=0;x_tile<nb_tiles_width;x_tile++)
         {
-            if (index+Tile::tile_size()>=(unsigned long)romlength)
+            if (index+Tile::tile_size()>(unsigned long)romlength)
                 break;
 
             for (int y=0;y<8;y++)
@@ -281,6 +402,7 @@ bool Rom::import_BMP(std::string filename,int nbbpp)
                     long shift=7;
                     for (int x=0;x<8;x++)
                     {
+                        //std::cout<<"BMP byte: "<<img.pixelIndex(8*x_tile+x,8*y_tile+y)<<"   ";
                         byte1+=((img.pixelIndex(8*x_tile+x,8*y_tile+y)>>0)%2)<<shift;
                         byte2+=((img.pixelIndex(8*x_tile+x,8*y_tile+y)>>1)%2)<<shift;
                         byte3+=((img.pixelIndex(8*x_tile+x,8*y_tile+y)>>2)%2)<<shift;
@@ -291,11 +413,11 @@ bool Rom::import_BMP(std::string filename,int nbbpp)
                     romdata[index++]=byte2;
                     romdata[index++]=byte3;
                     romdata[index++]=byte4;
+                    //std::cout<<" => "<<(int)byte1<<" "<<(int)byte2<<" "<<(int)byte3<<" "<<(int)byte4<<std::endl;
                 }
             }
         }
     }
-    //std::cout<<"Total wrote: "<<index-m_offset<<std::endl;
     create_tiles(m_offset);
     
     //correct checksum on-the-fly

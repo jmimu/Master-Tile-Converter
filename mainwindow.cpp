@@ -46,6 +46,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->actionAbout, SIGNAL(activated()), this, SLOT(show_about()));
     QObject::connect(ui->actionImport_Compressed_Data, SIGNAL(activated()), this, SLOT(import_compressed_data()));
 
+    QObject::connect(ui->actionCompress_Picture, SIGNAL(activated()), this, SLOT(compress_picture()));
+
+
     QObject::connect(ui->actionApply_Hack_File_fast, SIGNAL(activated()), this, SLOT(applyHackFile_fast()));
     QObject::connect(ui->actionApply_Hack_File_confirm, SIGNAL(activated()), this, SLOT(applyHackFile()));
 
@@ -351,6 +354,18 @@ bool MainWindow::applyHackFile(bool confirm)
         is.close();
 
         return true;
+    }
+    return false;
+}
+
+
+bool MainWindow::compress_picture()
+{
+    QString fileName = QFileDialog::getOpenFileName(this,tr("Choose BMP file"), ".", tr("BMP File (*.bmp)"));
+    if (fileName!="")
+    {
+        if (rom.compress_BMP(fileName.toStdString()))
+            return true;
     }
     return false;
 }
