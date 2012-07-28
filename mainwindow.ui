@@ -534,7 +534,6 @@
     <addaction name="separator"/>
     <addaction name="actionExport_Picture"/>
     <addaction name="actionImport_Picture"/>
-    <addaction name="actionCompress_Picture"/>
     <addaction name="actionImport_Compressed_Data"/>
     <addaction name="separator"/>
     <addaction name="actionSave_Rom"/>
@@ -554,7 +553,14 @@
     <addaction name="actionApply_Hack_File_fast"/>
     <addaction name="actionApply_Hack_File_confirm"/>
    </widget>
+   <widget class="QMenu" name="menuCompressed_Tiles">
+    <property name="title">
+     <string>Compression</string>
+    </property>
+    <addaction name="actionCompress_Picture"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuCompressed_Tiles"/>
    <addaction name="menuHacks"/>
    <addaction name="menuHelp"/>
   </widget>
@@ -641,6 +647,26 @@
    <header>zoomwidget.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>offset_lineEdit</tabstop>
+  <tabstop>Apply_offset_pushButton</tabstop>
+  <tabstop>background_palette_radioButton</tabstop>
+  <tabstop>sprite_palette_radioButton</tabstop>
+  <tabstop>up_1tile_pushButton</tabstop>
+  <tabstop>down_1Byte_pushButton</tabstop>
+  <tabstop>down_1tile_pushButton</tabstop>
+  <tabstop>up_16tiles_pushButton</tabstop>
+  <tabstop>down_16tiles_pushButton</tabstop>
+  <tabstop>up_1row_pushButton</tabstop>
+  <tabstop>down_1row_pushButton</tabstop>
+  <tabstop>up_1Byte_pushButton</tabstop>
+  <tabstop>down_160tiles_pushButton</tabstop>
+  <tabstop>up_160tiles_pushButton</tabstop>
+  <tabstop>mode_3bpp_radioButton</tabstop>
+  <tabstop>mode_4bpp_radioButton</tabstop>
+  <tabstop>mode_2bpp_radioButton</tabstop>
+  <tabstop>mode_1bpp_radioButton</tabstop>
+ </tabstops>
  <resources>
   <include location="data.qrc"/>
  </resources>

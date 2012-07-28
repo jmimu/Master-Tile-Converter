@@ -23,6 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QFileDialog>
 #include <QPainter>
 #include <QMessageBox>
+#include <QInputDialog>
+#include <QMessageBox>
 
 #include <QRegExp>
 
@@ -86,6 +88,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     std::cout<<"Init UI..."<<std::endl;
     ui->offset_lineEdit->setText(QString("%1").arg(rom.get_offset(),0,16));
+    ui->offset_lineEdit->selectAll();
     ui->palettewidget->set_palette(&palette);
     ui->tileswidget->set_tiles(rom.get_tiles());
     ui->zoomwidget->set_tile(ui->tileswidget->get_selected_tile());
@@ -364,8 +367,21 @@ bool MainWindow::compress_picture()
     QString fileName = QFileDialog::getOpenFileName(this,tr("Choose BMP file"), ".", tr("BMP File (*.bmp)"));
     if (fileName!="")
     {
-        if (rom.compress_BMP(fileName.toStdString()))
+        Rom rom_tmp(&palette);
+        if (rom_tmp.import_BMP(fileName.toStdString(),4))
+        {
+            bool ok;
+            unsigned long nbr_total_tiles=rom_tmp.get_romlength()/4/8;
+            int nb_tiles = QInputDialog::getInt(this, tr("How many tiles to compress?"),
+                                         tr("Number of tiles"), nbr_total_tiles, 0, nbr_total_tiles, 1, &ok);
+            unsigned long nb_bytes=rom_tmp.compress_tiles(nb_tiles);
+
+            QMessageBox::StandardButton reply;
+            reply = QMessageBox::information(this, "Compression done.", QString("The %1 tiles have been compressed to \"comprjm.dat\". It size is %2 bytes").arg(nb_tiles).arg(nb_bytes));
+            //if (reply == QMessageBox::Ok)
+
             return true;
+        }
     }
     return false;
 }

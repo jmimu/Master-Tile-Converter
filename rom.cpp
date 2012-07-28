@@ -142,12 +142,19 @@ bool Rom::export_BMP(std::string filename,int nbbpp)
 
 //with "Phantasy Star" RLE
 //http://www.smspower.org/Development/Compression
-bool Rom::compress_BMP(std::string filename)
+long Rom::compress_tiles(int nbr_tiles)
 {
-    if (romdata) delete[] romdata;
+    /*if (romdata) delete[] romdata;
     romlength=0;
     m_tiles.clear();
-    import_BMP(filename,4);
+    import_BMP(filename,4);*/
+
+    if (nbr_tiles*4*8>romlength)
+    {
+        std::cerr<<"Asking to compress more tiles than exists!"<<std::endl;
+    }else{
+        romlength=nbr_tiles*4*8;
+    }
 
     //compression of romdata into compressed_data
     std::vector<unsigned char> compressed_data;
@@ -238,13 +245,15 @@ bool Rom::compress_BMP(std::string filename)
 
     //write compressed data to a file
     std::ofstream os;
-    os.open("comprjm", std::ios::out | std::ios::binary);
+    os.open("comprjm.dat", std::ios::out | std::ios::binary);
     if (!compressed_data.empty())
         os.write((const char*)(&compressed_data[0]),compressed_data.size() * sizeof(unsigned char));
     os.close();
 
 
-    std::cout<<"Wrote compressed data file"<<"."<<std::endl;
+    std::cout<<"Wrote compressed data file to \"comprjm.dat\"."<<std::endl;
+
+    return compressed_data.size();
 
 }
 
@@ -327,7 +336,7 @@ bool Rom::import_BMP(std::string filename,int nbbpp)
         return false;
     }
 
-    Tile::number_bpp=nbbpp;
+    //Tile::number_bpp=nbbpp;
 
     nb_tiles_width=img.width()/8;
     nb_tiles_height=img.height()/8;
@@ -358,7 +367,7 @@ bool Rom::import_BMP(std::string filename,int nbbpp)
             {
                 //depending on number of bpp, write data to rom
                 byte1=byte2=byte3=byte4=0;
-                if (Tile::number_bpp==1)
+                if (nbbpp==1)
                 {
                     long shift=7;
                     for (int x=0;x<8;x++)
@@ -370,7 +379,7 @@ bool Rom::import_BMP(std::string filename,int nbbpp)
                     romdata[index++]=byte1;
                     //std::cout<<"\nRaw: "<<(int)byte1<<std::endl;
                 }
-                else if (Tile::number_bpp==2)
+                else if (nbbpp==2)
                 {
                     long shift=7;
                     for (int x=0;x<8;x++)
@@ -384,7 +393,7 @@ bool Rom::import_BMP(std::string filename,int nbbpp)
                     romdata[index++]=byte2;
                     //std::cout<<"\nRaw: "<<(int)byte1<<" "<<(int)byte2<<std::endl;
                 }
-                else if (Tile::number_bpp==3)
+                else if (nbbpp==3)
                 {
                     long shift=7;
                     for (int x=0;x<8;x++)
