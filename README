@@ -38,7 +38,7 @@ Version 0.4.
 
 TODO:
  * compress pictures in an other Rom object
- * change compressing method: if only 2 same bytes, add it in a "diff bytes" group
+ * read compressed data in rom, give number of tiles and bytes
  * add number of tiles to compress
  * import checks (palette)
  * add "undo" button!

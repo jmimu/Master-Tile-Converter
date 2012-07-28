@@ -140,7 +140,8 @@ bool Rom::export_BMP(std::string filename,int nbbpp)
     return img.save(filename.c_str(),"BMP");
 }
 
-
+//with "Phantasy Star" RLE
+//http://www.smspower.org/Development/Compression
 bool Rom::compress_BMP(std::string filename)
 {
     if (romdata) delete[] romdata;
@@ -169,7 +170,7 @@ bool Rom::compress_BMP(std::string filename)
                  //std::cout<<"   read "<<(int)romdata[i]<<"   ";
                  if (nb_different_bytes>1)//we are in a diff bytes group
                  {
-                     if ((romdata[i]==romdata[i-4])or(nb_different_bytes==127))//found similar bytes, or out of range
+                     if (((romdata[i]==romdata[i-4])&&(i+4<romlength)&&(romdata[i]==romdata[i+4]))   or(nb_different_bytes==127))//found similar bytes, or out of range
                      {
                          //end of group
                          //remove the last one, since it is part of the next block (of similar bytes)
@@ -195,7 +196,7 @@ bool Rom::compress_BMP(std::string filename)
                      }
                  }else{//we are at the beginning of a group
                      //std::cout<<" begin group ";
-                     if (romdata[i]==romdata[i-4])//found similar bytes
+                     if ((romdata[i]==romdata[i-4])&&(i+4<romlength)&&(romdata[i]==romdata[i+4]))//found similar bytes
                      {
                          nb_different_bytes=0;
                          nb_similar_bytes=2;
@@ -211,7 +212,7 @@ bool Rom::compress_BMP(std::string filename)
 
                  }
              }//one block has been analyzed, we record it.
-             if (nb_similar_bytes>1)
+             if (nb_similar_bytes>2)
              {
                  compressed_data.push_back(nb_similar_bytes);
                  compressed_data.push_back(the_unique_byte);
