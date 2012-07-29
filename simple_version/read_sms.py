@@ -158,13 +158,60 @@ class Compressed_tiles(object):
     for y in range(4):
       self.uncompressed_bytes.append([])
 
+  #test if data at index is compressed
+  def test_compressed(self,datarom,index): #return true if valid
+    #checks if all bitplans are the same size => valid compressed data
+    offset=0
+    bytes_in_bitplan=[]
+    print("Testing data at ",index,"...")
+    for num_bitplane in range(4):
+      bytes_in_bitplan.append(0)
+      if (num_bitplane==1):
+         if (bytes_in_bitplan[0]==0): #already false
+             break
+      if (num_bitplane==2):
+         if (bytes_in_bitplan[0]!=bytes_in_bitplan[1]): #already false
+             break
+      if (num_bitplane==3):
+         if (bytes_in_bitplan[1]!=bytes_in_bitplan[2]): #already false
+             break
+      #print("bitplane ",num_bitplane)
+      while ((index+offset<len(romdata))and(datarom[index+offset]!=0)):
+        if (datarom[index+offset]<128):#identical bytes
+          nb_consecutive_identical_bytes=datarom[index+offset]
+          #print("   found ",nb_consecutive_identical_bytes," identical bytes")
+          bytes_in_bitplan[num_bitplane]+=nb_consecutive_identical_bytes
+          offset+=1+1
+          continue
+        if (datarom[index+offset]>=128):#consecutive different tiles
+          nb_consecutive_different_bytes=datarom[index+offset]-128
+          #print("   found ",nb_consecutive_different_bytes," different bytes")
+          bytes_in_bitplan[num_bitplane]+=nb_consecutive_different_bytes
+          offset+=1+nb_consecutive_different_bytes
+          continue
+      offset+=1
+    #print(bytes_in_bitplan)
+    if (bytes_in_bitplan[0]>0)and(bytes_in_bitplan[0]==bytes_in_bitplan[1]==bytes_in_bitplan[2]==bytes_in_bitplan[3]):
+      print("Found ",bytes_in_bitplan[0]*4," bytes compressed into ",offset," bytes.")
+      return True#(offset-1,bytes_in_bitplan[0]*4)
+    else:
+      print("This is not compressed data.")
+      return False
+
   def read_compressed(self,datarom,index): #return number of bytes read
     offset=0#where we are on the file after index
     
+    #reset
+    self.uncompressed_bytes=[]#the 4 bitplanes
+    self.uncompressed_data=[]
+    for y in range(4):
+      self.uncompressed_bytes.append([])
+    self.tiles=[]
+
     #uncompress data
     print("Uncompressing...")
     for num_bitplane in range(4):
-      #print("bitplane ",num_bitplane)
+     #print("bitplane ",num_bitplane)
       while (datarom[index+offset]!=0):
         if (datarom[index+offset]<128):#identical bytes
           nb_consecutive_identical_bytes=datarom[index+offset]
@@ -207,7 +254,7 @@ class Compressed_tiles(object):
       index2=tile.read(self.uncompressed_data,index2)
       tile.update_image(palette_alexsprite)
       
-    print("Read ",offset," bytes.")
+    print("Read ",offset-1," bytes.")
     return offset
 
 
@@ -240,7 +287,10 @@ print("Init...")
 
 if (sys.argv[1]=="compr"):
   compr=Compressed_tiles()
-  compr.read_compressed(romdata,index_init)
+  while (index_init<len(romdata))and(not compr.test_compressed(romdata,index_init)):
+    index_init+=1
+  if (index_init<len(romdata)):
+    compr.read_compressed(romdata,index_init)
 else:
   tiles=[]
   for i in range(16*16):
@@ -282,8 +332,16 @@ while 1:
           for tile in tiles:
             index=tile.read(romdata,index)
             tile.update_image(palette_alexsprite)
+      if ((sys.argv[1]=="compr")and(event.key == K_RIGHT)):#search for next compressed data
+        index_init+=1
+        while (index_init<len(romdata))and(not compr.test_compressed(romdata,index_init)):
+          index_init+=1
+        if (index_init<len(romdata)):
+          compr.read_compressed(romdata,index_init)
+
 
   screen.fill(black)
+  tiles_surface.fill(black)
   x=0
   y=0
   if (sys.argv[1]=="compr"):
