@@ -44,7 +44,9 @@ protected:
 private:
     Ui::MainWindow *ui;
     Palette palette;
-    Rom rom;
+    Rom real_rom;//the rom from the file
+    Rom decompressed_rom;//a rom created by decompressing data
+    Rom * current_rom_shown;//which rom is shown
 
 public slots:
     void show_about();
@@ -61,7 +63,9 @@ public slots:
     //void change_offset_scrollbar(int val);
 
     bool compress_picture();
-    bool uncompress_tiles();
+    bool decompress_tiles();
+    void return_to_real_rom();
+    void show_decompressed_data();
 
 
     bool applyHackFile(bool confirm=true);
@@ -78,7 +82,7 @@ public slots:
     void move_up160tiles();
     void move_down160tiles();
 
-    void change_mode();
+    void change_mode();//number of bpp
 };
 
 #endif // MAINWINDOW_H

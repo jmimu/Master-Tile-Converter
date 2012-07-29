@@ -42,7 +42,7 @@ Rom::~Rom()
     m_tiles.clear();
 }
 
-void Rom::create_tiles(unsigned long offset)
+void Rom::create_tiles(long offset)
 {
     if (!romdata) return;
 
@@ -144,13 +144,13 @@ bool Rom::export_BMP(std::string filename,int nbbpp)
 //with "Phantasy Star" RLE
 //http://www.smspower.org/Development/Compression
 //return number of bytes read if ok, 0 if not valid, -1 if out of rom
-long Rom::test_uncompress_tiles(Rom * origin, unsigned long index)
+long Rom::test_decompress_tiles(Rom * origin, long index)
 {
     if (index>= origin->get_romlength()) return -1;
 
-    unsigned long offset=0;
-    unsigned long nb_consecutive_identical_bytes=0;
-    unsigned long nb_consecutive_different_bytes=0;
+    long offset=0;
+    long nb_consecutive_identical_bytes=0;
+    long nb_consecutive_different_bytes=0;
 
     long bytes_in_bitplan[4]={0,0,0,0};
     std::cout<<"Testing data at "<<index<<"..."<<std::endl;
@@ -202,16 +202,16 @@ long Rom::test_uncompress_tiles(Rom * origin, unsigned long index)
 
 //with "Phantasy Star" RLE
 //http://www.smspower.org/Development/Compression
-long Rom::uncompress_tiles(Rom * origin, unsigned long index)
+long Rom::decompress_tiles(Rom * origin, long index)
 {
-    if (index>= origin->get_romlength()) return -1;
+    if (index>=origin->get_romlength()) return -1;
 
-    unsigned long offset=0;
-    unsigned long nb_consecutive_identical_bytes=0;
-    unsigned long nb_consecutive_different_bytes=0;
+    long offset=0;
+    long nb_consecutive_identical_bytes=0;
+    long nb_consecutive_different_bytes=0;
     unsigned char the_byte;
 
-    std::vector<unsigned char> uncompressed_bitplane[4];
+    std::vector<unsigned char> decompressed_bitplane[4];
 
     std::cout<<"Testing data at "<<index<<"..."<<std::endl;
     for (int num_bitplane=0;num_bitplane<4;num_bitplane++)
@@ -226,8 +226,8 @@ long Rom::uncompress_tiles(Rom * origin, unsigned long index)
                 //std::cout<<"   found "<<nb_consecutive_identical_bytes<<" identical bytes"<<std::endl;
                 the_byte=(origin->get_romdata())[index+offset];
                 offset++;
-                for (unsigned long i=0;i<nb_consecutive_identical_bytes;i++)
-                    uncompressed_bitplane[num_bitplane].push_back(the_byte);
+                for (long i=0;i<nb_consecutive_identical_bytes;i++)
+                    decompressed_bitplane[num_bitplane].push_back(the_byte);
                 continue;
             }
             if ((origin->get_romdata())[index+offset]>=128)//consecutive different tiles
@@ -235,10 +235,10 @@ long Rom::uncompress_tiles(Rom * origin, unsigned long index)
                 nb_consecutive_different_bytes=(origin->get_romdata())[index+offset]-128;
                 offset++;
                 //std::cout<<"   found "<<nb_consecutive_different_bytes<<" different bytes"<<std::endl;
-                for (unsigned long i=0;i<nb_consecutive_different_bytes;i++)
+                for (long i=0;i<nb_consecutive_different_bytes;i++)
                 {
                     the_byte=(origin->get_romdata())[index+offset];
-                    uncompressed_bitplane[num_bitplane].push_back(the_byte);
+                    decompressed_bitplane[num_bitplane].push_back(the_byte);
                     offset++;
                 }
                 continue;
@@ -249,17 +249,17 @@ long Rom::uncompress_tiles(Rom * origin, unsigned long index)
 
     //rearrange data
     if (romdata) delete[] romdata;
-    romlength=uncompressed_bitplane[0].size()*4;
+    romlength=decompressed_bitplane[0].size()*4;
     romdata = new unsigned char [romlength];
-    unsigned long j=0;
-    for (unsigned long i=0;i<uncompressed_bitplane[0].size();i++)
-        for (unsigned long b=0;b<4;b++)
+    long j=0;
+    for (long i=0;i<decompressed_bitplane[0].size();i++)
+        for (long b=0;b<4;b++)
         {
-            romdata[j]=uncompressed_bitplane[b].at(i);
+            romdata[j]=decompressed_bitplane[b].at(i);
             j++;
         }
 
-    std::cout<<"Uncompressing ok!"<<std::endl;
+    std::cout<<"decompressing ok! "<<romdata<<std::endl;
     return (offset-1);
 }
 
@@ -283,19 +283,19 @@ long Rom::compress_tiles(int nbr_tiles)
     std::vector<unsigned char> compressed_data;
     //worst case: all is composed by AABAABAABAAB => romlength*4/3+4+4 (have to begin the 4 bitplans and finish them (+4+4))
 
-    for (unsigned long bitplan=0;bitplan<4;bitplan++)
+    for (long bitplan=0;bitplan<4;bitplan++)
     {
          //std::cout<<"Bitplan "<<bitplan<<std::endl;
-         unsigned long data_index=bitplan;//look for 1 byte over 4
+         long data_index=bitplan;//look for 1 byte over 4
          while (data_index<romlength)
          {
              //look for similar bytes
-             unsigned long nb_similar_bytes=1;//the first byte can be at the same time in a group of different or similar bytes
+             long nb_similar_bytes=1;//the first byte can be at the same time in a group of different or similar bytes
              unsigned char the_unique_byte=0;
-             unsigned long nb_different_bytes=1;
+             long nb_different_bytes=1;
              std::vector<unsigned char> the_diff_bytes;
              //std::cout<<"We are at data_index="<<data_index<<".  read "<<(int)romdata[data_index]<<std::endl;
-             for (unsigned long i=data_index+4;i<romlength;i+=4)
+             for (long i=data_index+4;i<romlength;i+=4)
              {
                  //std::cout<<"   read "<<(int)romdata[i]<<"   ";
                  if (nb_different_bytes>1)//we are in a diff bytes group
@@ -352,7 +352,7 @@ long Rom::compress_tiles(int nbr_tiles)
                  compressed_data.push_back(nb_different_bytes+128);
                  //std::cout<<"We write "<<(int)(nb_different_bytes+128);
 
-                 for (unsigned long j=0;j<the_diff_bytes.size();j++)
+                 for (long j=0;j<the_diff_bytes.size();j++)
                  {
                      compressed_data.push_back(the_diff_bytes.at(j));
                      //std::cout<<" "<<(int)the_diff_bytes.at(j);
@@ -478,12 +478,12 @@ bool Rom::import_BMP(std::string filename,int nbbpp)
 
     unsigned char byte1,byte2,byte3,byte4;//what to write
 
-    unsigned long index=m_offset;
+    long index=m_offset;
     for (int y_tile=0;y_tile<nb_tiles_height;y_tile++)
     {
         for (int x_tile=0;x_tile<nb_tiles_width;x_tile++)
         {
-            if (index+Tile::tile_size()>(unsigned long)romlength)
+            if (index+Tile::tile_size()>romlength)
                 break;
 
             for (int y=0;y<8;y++)
@@ -559,7 +559,7 @@ bool Rom::import_BMP(std::string filename,int nbbpp)
     return true;
 }
 
-bool Rom::import_rawdata(std::string filename,unsigned long adress)//<used for compressed tiles
+bool Rom::import_rawdata(std::string filename,long adress)//<used for compressed tiles
 {
     //from http://www.cplusplus.com/reference/iostream/istream/read/
     int data_length;
@@ -584,8 +584,8 @@ bool Rom::import_rawdata(std::string filename,unsigned long adress)//<used for c
     std::cout<<"Read "<<data_length<<" bytes in raw data file "<<filename<<"."<<std::endl;
 
     //import data in romdata
-    unsigned long j=adress;
-    for (unsigned long i=0;i<data_length;i++)
+    long j=adress;
+    for (long i=0;i<data_length;i++)
     {
         romdata[j]=data_buffer[i];
         j++;
@@ -599,7 +599,7 @@ bool Rom::import_rawdata(std::string filename,unsigned long adress)//<used for c
 }
 
 
-bool Rom::set_romdata(unsigned long address,std::vector<unsigned char> *data)
+bool Rom::set_romdata(long address,std::vector<unsigned char> *data)
 {
     for (unsigned int i=0;i<data->size();i++)
     {

@@ -31,19 +31,20 @@ public:
     Rom(Palette *palette);
     ~Rom();
     bool loadfile(std::string filename);
-    void create_tiles(unsigned long offset);
-    unsigned long get_offset(){return m_offset;};
+    void create_tiles(long offset);
+    long get_offset(){return m_offset;};
     std::vector<Tile*> * get_tiles(){return & m_tiles;};
     bool export_BMP(std::string filename,int nbbpp);
     bool import_BMP(std::string filename,int nbbpp);
-    long test_uncompress_tiles(Rom * origin, unsigned long index);//return number of bytes read if ok, 0 if not valid, -1 if out of rom
-    long uncompress_tiles(Rom * origin, unsigned long index);//return number of bytes read
+    long test_decompress_tiles(Rom * origin, long index);//return number of bytes read if ok, 0 if not valid, -1 if out of rom
+    long decompress_tiles(Rom * origin, long index);//return number of bytes read
     long compress_tiles(int nbr_tiles);//return number of bytes used
-    bool import_rawdata(std::string filename,unsigned long adress);//<used for compressed tiles
+    bool import_rawdata(std::string filename,long adress);//<used for compressed tiles
     bool save_ROM(std::string filename);
     unsigned char * get_romdata(){return romdata;};
-    bool set_romdata(unsigned long address,std::vector<unsigned char> *data);//<change a part of the rom data
+    bool set_romdata(long address,std::vector<unsigned char> *data);//<change a part of the rom data
     long get_romlength(){return romlength;};
+    void set_offset(long offset){if (offset<romlength) m_offset=offset;};
 protected:
     long romlength;
     unsigned char * romdata; // exact data of the ROM
@@ -51,7 +52,7 @@ protected:
     std::vector<Tile*> m_tiles; //a certain number of tiles extracted from romdata
     Palette *m_palette;
 
-    unsigned long m_offset;
+    long m_offset;
 
 };
 
