@@ -140,14 +140,137 @@ bool Rom::export_BMP(std::string filename,int nbbpp)
     return img.save(filename.c_str(),"BMP");
 }
 
+
+//with "Phantasy Star" RLE
+//http://www.smspower.org/Development/Compression
+//return number of bytes read if ok, 0 if not valid, -1 if out of rom
+long Rom::test_uncompress_tiles(Rom * origin, unsigned long index)
+{
+    if (index>= origin->get_romlength()) return -1;
+
+    unsigned long offset=0;
+    unsigned long nb_consecutive_identical_bytes=0;
+    unsigned long nb_consecutive_different_bytes=0;
+
+    long bytes_in_bitplan[4]={0,0,0,0};
+    std::cout<<"Testing data at "<<index<<"..."<<std::endl;
+    for (int num_bitplane=0;num_bitplane<4;num_bitplane++)
+    {
+        if (num_bitplane==1)
+             if (bytes_in_bitplan[0]==0)//already false
+                break;
+        if (num_bitplane==2)
+            if (bytes_in_bitplan[0]!=bytes_in_bitplan[1])//already false
+                break;
+        if (num_bitplane==3)
+            if (bytes_in_bitplan[1]!=bytes_in_bitplan[2])//already false
+                break;
+        //std::cout<<"bitplane "<<num_bitplane<<std::endl;
+        while ((index+offset<origin->get_romlength())and((origin->get_romdata())[index+offset]!=0))
+        {
+            if ((origin->get_romdata())[index+offset]<128)//identical bytes
+            {
+                nb_consecutive_identical_bytes=(origin->get_romdata())[index+offset];
+                //std::cout<<"   found "<<nb_consecutive_identical_bytes<<" identical bytes"<<std::endl;
+                bytes_in_bitplan[num_bitplane]+=nb_consecutive_identical_bytes;
+                offset+=1+1;
+                continue;
+            }
+            if ((origin->get_romdata())[index+offset]>=128)//consecutive different tiles
+            {
+                nb_consecutive_different_bytes=(origin->get_romdata())[index+offset]-128;
+                //std::cout<<"   found "<<nb_consecutive_different_bytes<<" different bytes"<<std::endl;
+                bytes_in_bitplan[num_bitplane]+=nb_consecutive_different_bytes;
+                offset+=1+nb_consecutive_different_bytes;
+                continue;
+            }
+        }
+        offset+=1;
+    }
+    //std::cout<<"bytes in bitplans: "<<bytes_in_bitplan[0]<<" "<<bytes_in_bitplan[1]<<" "<<bytes_in_bitplan[2]<<" "<<bytes_in_bitplan[3]<<std::endl;
+    if ((bytes_in_bitplan[0]>0)&&(bytes_in_bitplan[0]==bytes_in_bitplan[1])
+        &&(bytes_in_bitplan[0]==bytes_in_bitplan[2])&&(bytes_in_bitplan[0]==bytes_in_bitplan[3]))
+    {
+        std::cout<<"Found "<<bytes_in_bitplan[0]*4<<" bytes compressed into "<<offset<<" bytes."<<std::endl;
+        return offset-1;
+    }else{
+        std::cout<<"This is not compressed data."<<std::endl;
+        return 0;
+    }
+}
+
+
+//with "Phantasy Star" RLE
+//http://www.smspower.org/Development/Compression
+long Rom::uncompress_tiles(Rom * origin, unsigned long index)
+{
+    if (index>= origin->get_romlength()) return -1;
+
+    unsigned long offset=0;
+    unsigned long nb_consecutive_identical_bytes=0;
+    unsigned long nb_consecutive_different_bytes=0;
+    unsigned char the_byte;
+
+    std::vector<unsigned char> uncompressed_bitplane[4];
+
+    std::cout<<"Testing data at "<<index<<"..."<<std::endl;
+    for (int num_bitplane=0;num_bitplane<4;num_bitplane++)
+    {
+        //std::cout<<"bitplane "<<num_bitplane<<std::endl;
+        while ((index+offset<origin->get_romlength())and((origin->get_romdata())[index+offset]!=0))
+        {
+            if ((origin->get_romdata())[index+offset]<128)//identical bytes
+            {
+                nb_consecutive_identical_bytes=(origin->get_romdata())[index+offset];
+                offset++;
+                //std::cout<<"   found "<<nb_consecutive_identical_bytes<<" identical bytes"<<std::endl;
+                the_byte=(origin->get_romdata())[index+offset];
+                offset++;
+                for (unsigned long i=0;i<nb_consecutive_identical_bytes;i++)
+                    uncompressed_bitplane[num_bitplane].push_back(the_byte);
+                continue;
+            }
+            if ((origin->get_romdata())[index+offset]>=128)//consecutive different tiles
+            {
+                nb_consecutive_different_bytes=(origin->get_romdata())[index+offset]-128;
+                offset++;
+                //std::cout<<"   found "<<nb_consecutive_different_bytes<<" different bytes"<<std::endl;
+                for (unsigned long i=0;i<nb_consecutive_different_bytes;i++)
+                {
+                    the_byte=(origin->get_romdata())[index+offset];
+                    uncompressed_bitplane[num_bitplane].push_back(the_byte);
+                    offset++;
+                }
+                continue;
+            }
+        }
+        offset+=1;
+    }
+
+    //rearrange data
+    if (romdata) delete[] romdata;
+    romlength=uncompressed_bitplane[0].size()*4;
+    romdata = new unsigned char [romlength];
+    unsigned long j=0;
+    for (unsigned long i=0;i<uncompressed_bitplane[0].size();i++)
+        for (unsigned long b=0;b<4;b++)
+        {
+            romdata[j]=uncompressed_bitplane[b].at(i);
+            j++;
+        }
+
+    std::cout<<"Uncompressing ok!"<<std::endl;
+    return (offset-1);
+}
+
+
 //with "Phantasy Star" RLE
 //http://www.smspower.org/Development/Compression
 long Rom::compress_tiles(int nbr_tiles)
 {
     /*if (romdata) delete[] romdata;
     romlength=0;
-    m_tiles.clear();
-    import_BMP(filename,4);*/
+    m_tiles.clear();*/
 
     if (nbr_tiles*4*8>romlength)
     {

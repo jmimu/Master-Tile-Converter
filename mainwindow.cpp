@@ -49,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->actionImport_Compressed_Data, SIGNAL(activated()), this, SLOT(import_compressed_data()));
 
     QObject::connect(ui->actionCompress_Picture, SIGNAL(activated()), this, SLOT(compress_picture()));
+    QObject::connect(ui->actionUncompress_Tiles, SIGNAL(activated()), this, SLOT(uncompress_tiles()));
 
 
     QObject::connect(ui->actionApply_Hack_File_fast, SIGNAL(activated()), this, SLOT(applyHackFile_fast()));
@@ -384,6 +385,26 @@ bool MainWindow::compress_picture()
         }
     }
     return false;
+}
+
+
+bool MainWindow::uncompress_tiles()
+{
+    Rom rom_tmp(&palette);
+
+    bool ok;
+    unsigned long offset=0;
+    offset=ui->offset_lineEdit->text().toULong(&ok,16);
+
+    while (!rom_tmp.test_uncompress_tiles(&rom,offset))
+    {
+        //move_down1Byte();
+        offset++;
+        ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
+        ui->tile_offset_label->repaint();
+    }
+    apply_offset();
+    return (rom.get_offset()<rom.get_romlength());
 }
 
 void MainWindow::move_up1Byte()

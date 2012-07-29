@@ -61,6 +61,7 @@ public slots:
     //void change_offset_scrollbar(int val);
 
     bool compress_picture();
+    bool uncompress_tiles();
 
 
     bool applyHackFile(bool confirm=true);

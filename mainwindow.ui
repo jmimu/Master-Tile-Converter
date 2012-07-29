@@ -558,6 +558,7 @@
      <string>Compression</string>
     </property>
     <addaction name="actionCompress_Picture"/>
+    <addaction name="actionUncompress_Tiles"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuCompressed_Tiles"/>
@@ -626,6 +627,11 @@
   <action name="actionCompress_Picture">
    <property name="text">
     <string>Compress Picture</string>
+   </property>
+  </action>
+  <action name="actionUncompress_Tiles">
+   <property name="text">
+    <string>Uncompress Tiles</string>
    </property>
   </action>
  </widget>
