@@ -424,7 +424,7 @@
       <x>560</x>
       <y>430</y>
       <width>151</width>
-      <height>101</height>
+      <height>61</height>
      </rect>
     </property>
     <property name="title">
@@ -551,7 +551,7 @@ compressed tiles</string>
      <x>0</x>
      <y>0</y>
      <width>720</width>
-     <height>25</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

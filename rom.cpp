@@ -153,7 +153,7 @@ long Rom::test_decompress_tiles(Rom * origin, long index)
     long nb_consecutive_different_bytes=0;
 
     long bytes_in_bitplan[4]={0,0,0,0};
-    std::cout<<"Testing data at "<<index<<"..."<<std::endl;
+    //std::cout<<"Testing data at "<<index<<"..."<<std::endl;
     for (int num_bitplane=0;num_bitplane<4;num_bitplane++)
     {
         if (num_bitplane==1)
@@ -176,13 +176,18 @@ long Rom::test_decompress_tiles(Rom * origin, long index)
                 offset+=1+1;
                 continue;
             }
-            if ((origin->get_romdata())[index+offset]>=128)//consecutive different tiles
+            if ((origin->get_romdata())[index+offset]>128)//consecutive different tiles
             {
                 nb_consecutive_different_bytes=(origin->get_romdata())[index+offset]-128;
                 //std::cout<<"   found "<<nb_consecutive_different_bytes<<" different bytes"<<std::endl;
                 bytes_in_bitplan[num_bitplane]+=nb_consecutive_different_bytes;
                 offset+=1+nb_consecutive_different_bytes;
                 continue;
+            }
+            if ((origin->get_romdata())[index+offset]==128)//128 has no meaning! => not compressed data
+            {
+                bytes_in_bitplan[0]=0;
+                break;
             }
         }
         offset+=1;
@@ -194,7 +199,7 @@ long Rom::test_decompress_tiles(Rom * origin, long index)
         std::cout<<"Found "<<bytes_in_bitplan[0]*4<<" bytes compressed into "<<offset<<" bytes."<<std::endl;
         return offset-1;
     }else{
-        std::cout<<"This is not compressed data."<<std::endl;
+        //std::cout<<"This is not compressed data."<<std::endl;
         return 0;
     }
 }
@@ -259,7 +264,7 @@ long Rom::decompress_tiles(Rom * origin, long index)
             j++;
         }
 
-    std::cout<<"decompressing ok! "<<romdata<<std::endl;
+    std::cout<<"decompressing ok! "<<std::endl;
     return (offset-1);
 }
 
