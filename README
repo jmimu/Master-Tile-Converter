@@ -37,9 +37,7 @@ Version 0.4.
 
 
 TODO:
- * what to do when more than 120 compressed tiles ?
- * add info in compressed data export (max size, nb tiles and that it was compressed)
-
+ * how to show more than 192 compressed tiles ?
  * read compressed data in rom, give number of tiles and bytes
  * import checks (palette)
  * add "undo" button!

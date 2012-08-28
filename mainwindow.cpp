@@ -237,10 +237,17 @@ bool MainWindow::export_picture()
         nb_bpp=4;
 
     oss_default_bmp_name<<nb_bpp<<"bpp";
+
+    //if compressed
+    if (current_rom_shown==&decompressed_rom)
+    {
+        oss_default_bmp_name<<std::dec<<"_decompressed_"<<decompressed_rom.get_tiles()->size()<<"tiles_max_"<<decompressed_rom.get_compressed_size()<<"bytes";
+    }
+
     oss_default_bmp_name<<".BMP";
     QString fileName = QFileDialog::getSaveFileName(this, tr("Export to BMP"),oss_default_bmp_name.str().c_str(),tr("BMP Images (*.bmp *.BMP)"));
     if (fileName!="")
-        return current_rom_shown->export_BMP(fileName.toStdString(),nb_bpp);
+        return current_rom_shown->export_BMP(fileName.toStdString(),nb_bpp,decompressed_rom.get_tiles()->size());
     return false;
 
 }
@@ -381,11 +388,11 @@ bool MainWindow::compress_picture()
             bool ok;
             unsigned long nbr_total_tiles=rom_tmp.get_romlength()/4/8;
             int nb_tiles = QInputDialog::getInt(this, tr("How many tiles to compress?"),
-                                         tr("Number of tiles"), nbr_total_tiles, 0, nbr_total_tiles, 1, &ok);
+                                         tr("Number of tiles for file\n\"")+fileName+"\"?", nbr_total_tiles, 0, nbr_total_tiles, 1, &ok);
             unsigned long nb_bytes=rom_tmp.compress_tiles(nb_tiles);
 
             QMessageBox::StandardButton reply;
-            reply = QMessageBox::information(this, "Compression done.", QString("The %1 tiles have been compressed to \"comprjm.dat\". It size is %2 bytes").arg(nb_tiles).arg(nb_bytes));
+            reply = QMessageBox::information(this, "Compression done.", QString("The %1 tiles have been compressed to \"compr_tmp.dat\". Its size is %2 bytes").arg(nb_tiles).arg(nb_bytes));
             //if (reply == QMessageBox::Ok)
 
             return true;
@@ -401,6 +408,7 @@ bool MainWindow::decompress_tiles()
     ui->mode_4bpp_radioButton->setChecked(true);
     change_mode();
 
+    ui->Apply_offset_pushButton->setEnabled(false);
 
     bool ok;
     unsigned long offset=0;
@@ -415,13 +423,14 @@ bool MainWindow::decompress_tiles()
         //move_down1Byte();
         offset++;
         ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
+        ui->Apply_offset_pushButton->setEnabled(false);//do not let apply offset button enabled while offset changes
         ui->tile_offset_label->repaint();
         real_rom.set_offset(offset);
     }
     decompressed_rom.decompress_tiles(&real_rom,offset);
     decompressed_rom.create_tiles(0);
-    show_decompressed_data();
     update_tiles();
+    show_decompressed_data();
 
 
     return (real_rom.get_offset()<real_rom.get_romlength());
@@ -429,6 +438,7 @@ bool MainWindow::decompress_tiles()
 
 void MainWindow::show_decompressed_data()
 {
+
     ui->label->setText("Compressed Tiles");
     current_rom_shown=&decompressed_rom;
     ui->tileswidget->set_tiles(current_rom_shown->get_tiles());

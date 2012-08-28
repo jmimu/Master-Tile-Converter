@@ -34,7 +34,7 @@ public:
     void create_tiles(long offset);
     long get_offset(){return m_offset;};
     std::vector<Tile*> * get_tiles(){return & m_tiles;};
-    bool export_BMP(std::string filename,int nbbpp);
+    bool export_BMP(std::string filename,int nbbpp,long nb_tiles=0);
     bool import_BMP(std::string filename,int nbbpp);
     long test_decompress_tiles(Rom * origin, long index);//return number of bytes read if ok, 0 if not valid, -1 if out of rom
     long decompress_tiles(Rom * origin, long index);//return number of bytes read
@@ -45,6 +45,7 @@ public:
     bool set_romdata(long address,std::vector<unsigned char> *data);//<change a part of the rom data
     long get_romlength(){return romlength;};
     void set_offset(long offset){if (offset<romlength) m_offset=offset;};
+    long get_compressed_size(){return compressed_size;};
 protected:
     long romlength;
     unsigned char * romdata; // exact data of the ROM
@@ -53,6 +54,8 @@ protected:
     Palette *m_palette;
 
     long m_offset;
+
+    long compressed_size;//only for comressed data
 
 };
 

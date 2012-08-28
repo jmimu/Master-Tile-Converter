@@ -28,11 +28,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "romheader.h"
 
-Rom::Rom(Palette * palette) : romlength(0),romdata(0),m_palette(palette),m_offset(0x10341)
+Rom::Rom(Palette * palette) : romlength(0),romdata(0),m_palette(palette),m_offset(0x10341),compressed_size(0)
 {
     std::cout<<"Init ROM..."<<std::endl;
     m_tiles.clear();
-    for (int i=0;i<12*16;i++) // number of tiles is fixed
+    for (int i=0;i<12*16;i++) // number of tiles is fixed for uncompressed data
         m_tiles.push_back(new Tile(m_palette));
 }
 
@@ -94,17 +94,22 @@ bool Rom::loadfile(std::string filename)
     return true;
 }
 
-bool Rom::export_BMP(std::string filename,int nbbpp)
+bool Rom::export_BMP(std::string filename,int nbbpp,long nb_tiles)
 {
+    long nbr_tiles_lines=12;
     int nb_tiles_width=16;
-    QImage img(nb_tiles_width*8,12*8,QImage::Format_Indexed8);
+    if (nb_tiles>0)//this is compressed data
+    {
+       nbr_tiles_lines=(nb_tiles-1)/nb_tiles_width+1;
+    }
+    QImage img(nb_tiles_width*8,nbr_tiles_lines*8,QImage::Format_Indexed8);
     //can't use painter on 8bit images => fill it pixel-by-pixel...
     //define palette (16 or 8 colors, only background or sprites part)
     img.setColorTable( m_palette->get_colors() );
     switch (nbbpp)
     {
     case 1:
-        img.setColorCount(4);//to avoid gimp 2 colors mode !
+        img.setColorCount(4);//to avoid gimp 2 colors mode that is messy for us!
         break;
     case 2:
         img.setColorCount(4);
@@ -195,8 +200,14 @@ long Rom::test_decompress_tiles(Rom * origin, long index)
     //std::cout<<"bytes in bitplans: "<<bytes_in_bitplan[0]<<" "<<bytes_in_bitplan[1]<<" "<<bytes_in_bitplan[2]<<" "<<bytes_in_bitplan[3]<<std::endl;
     if ((bytes_in_bitplan[0]>0)&&(bytes_in_bitplan[0]==bytes_in_bitplan[1])
         &&(bytes_in_bitplan[0]==bytes_in_bitplan[2])&&(bytes_in_bitplan[0]==bytes_in_bitplan[3]))
-    {
-        std::cout<<"Found "<<bytes_in_bitplan[0]*4<<" bytes compressed into "<<offset<<" bytes."<<std::endl;
+    {    
+        std::cout<<"At "<<index<<", found "<<std::dec<<bytes_in_bitplan[0]*4<<" bytes ("<<bytes_in_bitplan[0]*4/Tile::tile_size()<<" tiles) compressed into "<<offset<<" bytes."<<std::endl;
+        compressed_size=offset;
+        if (bytes_in_bitplan[0]*4<Tile::tile_size())
+        {
+            std::cout<<"Not enought to be a tile"<<std::endl;
+            return 0;
+        }
         return offset-1;
     }else{
         //std::cout<<"This is not compressed data."<<std::endl;
@@ -218,7 +229,7 @@ long Rom::decompress_tiles(Rom * origin, long index)
 
     std::vector<unsigned char> decompressed_bitplane[4];
 
-    std::cout<<"Testing data at "<<index<<"..."<<std::endl;
+    //std::cout<<"Testing data at "<<index<<"..."<<std::endl;
     for (int num_bitplane=0;num_bitplane<4;num_bitplane++)
     {
         //std::cout<<"bitplane "<<num_bitplane<<std::endl;
@@ -264,7 +275,13 @@ long Rom::decompress_tiles(Rom * origin, long index)
             j++;
         }
 
-    std::cout<<"decompressing ok! "<<std::endl;
+    //we create the correct number of tiles
+    long nbr_decompressed_tiles=decompressed_bitplane[0].size()*4/Tile::tile_size();
+    m_tiles.clear();
+    for (int i=0;i<nbr_decompressed_tiles;i++) // number of tiles is fixed for uncompressed data
+        m_tiles.push_back(new Tile(m_palette));
+
+    //std::cout<<"Found "<<(long)decompressed_bitplane[0].size()<<" compressed bytes"<<std::endl;
     return (offset-1);
 }
 
@@ -373,13 +390,13 @@ long Rom::compress_tiles(int nbr_tiles)
 
     //write compressed data to a file
     std::ofstream os;
-    os.open("comprjm.dat", std::ios::out | std::ios::binary);
+    os.open("compr_tmp.dat", std::ios::out | std::ios::binary);
     if (!compressed_data.empty())
         os.write((const char*)(&compressed_data[0]),compressed_data.size() * sizeof(unsigned char));
     os.close();
 
 
-    std::cout<<"Wrote compressed data file to \"comprjm.dat\"."<<std::endl;
+    std::cout<<"Wrote compressed data file to \"compr_tmp.dat\"."<<std::endl;
 
     return compressed_data.size();
 
