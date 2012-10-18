@@ -38,10 +38,11 @@ Version 0.4.
 
 TODO:
  * how to show more than 192 compressed tiles ?
+ * when arrives at the end of the rom looking for compressed data, return to normal mode
  * read compressed data in rom, give number of tiles and bytes
  * import checks (palette)
  * add "undo" button!
- * continue help
+ * update position in the rom at the end of compressed data searching
  * add default config in an external file (palette, mode, offset)
 
 

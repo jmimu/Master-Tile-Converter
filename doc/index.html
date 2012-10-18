@@ -5,6 +5,7 @@
         <meta charset="utf-8"/>
         <link rel="stylesheet" href="mastertileconverter.css" />
         <link rel="icon" type="images/png" href="images/mastertileconverter.ico" />
+        <meta name="keywords" content="sega, sms, master system, tile, hack, rom, editor, master tile converter, sms power"/>
         <title>Master Tile Converter</title>
     </head>
     <body>
@@ -16,16 +17,20 @@
         <div id="corps">
           <h2>Description</h2>
             <p>Welcome to <strong>Master Tile Converter</strong>!</p>
-            <p>Master Tile Converter (MTC) can export and import 3bpp and 4bpp tiles in Sega Master System (SMS) roms. It uses a portable QT interface.<p>
+            <p>Master Tile Converter (MTC) can export and import several tiles formats in Sega Master System (SMS) roms. It uses a portable Qt interface.<p>
             <p>Features:
               <ul>
                   <li>Read SMS roms</li>
                   <li>Import <a href="http://www.smspower.org/meka/">Meka</a> palette</li>
-                  <li>Display 4bpp and 3bpp uncompressed pictures</li>
-                  <li>Export 4bpp and 3bpp uncompressed pictures</li>
-                  <li>Import BMP pictures</li>
+                  <li>Display 4bpp, 3bpp, 2bpp and 1bpp uncompressed tiles</li>
+                  <li>Export 4bpp, 3bpp, 2bpp and 1bpp uncompressed tiles</li>
+                  <li>Import BMP tiles</li>
+                  <li>Export 4bpp compressed tiles</li>
+                  <li>Compress 4bpp tiles</li>
+                  <li>Import compressed tiles</li>
                   <li>Export modified ROM</li>
                   <li>Correct ROM checksum</li>
+                  <li>Apply hacks to ROM (byte modification)</li>
                   <li>Work on GNU/Linux, MacOS and Windows</li>
                   <li>Free software (GNU), open source</li>
               </ul>
@@ -33,9 +38,9 @@
             <p>Contact: <img src="images/ctct.png" alt="contact"/></p>
           
           <h2>Downloads</h2>
-            <p>Binary version for Windows (old version): <a href="https://github.com/jmimu/Master-Tile-Converter/downloads">https://github.com/jmimu/Master-Tile-Converter/downloads</a></p>
+            <p>Binary version for Windows: <a href="https://github.com/jmimu/Master-Tile-Converter/downloads">https://github.com/jmimu/Master-Tile-Converter/downloads</a></p>
             <p>Development version sources (using <a href="http://git-scm.com/">git</a>): <a href="https://github.com/jmimu/Master-Tile-Converter">https://github.com/jmimu/Master-Tile-Converter</a></p>
-            <p>How to compile: install <a href="http://qt.nokia.com/downloads/downloads#qt-creator">QtCreator</a>, and open <strong>mastertileconverter.pro</strong></p>
+            <p>How to compile: install <a href="http://qt.nokia.com/downloads/downloads#qt-creator">QtCreator</a>, and open <strong>mastertileconverter.pro</strong>, and compile!</p>
 
           <h2>Help</h2>              
             <h3>Interface</h3>
@@ -43,22 +48,23 @@
             <h3>Instructions</h3>
               <ul>
                   <li>Open a SMS ROM in meka. When you see the tile you want to modify, export the palette (raw).</li>
-                  <li>Run mastertileconverter, and open the SMS ROM (file>open rom).</li>
-                  <li>Import your Meka palette (file import palette).</li>
+                  <li>Run mastertileconverter, and open the SMS ROM (<strong>File>Open rom</strong>).</li>
+                  <li>Import your Meka palette (<strong>File>Import palette</strong>). Default palette is Alex Kidd in Miracle World fisrt level.</li>
                   <li>Choose the part of the palette (sprite or background).</li>
-                  <li>Choose tile mode (3bpp or 4bpp).</li>
+                  <li>Choose tile mode (1bpp, 2bpp, 3bpp or 4bpp).</li>
                   <li>Go through the whole tiles (using UP/DOWN 160 tiles button) to find the tiles you want.</li>
                   <li>Align the tiles (see "Align tile" above), or input a known offset (and click on "Apply").</li>
-                  <li>Export or import BMP (see "Modify tiles" above).</li>
+                  <li>Export, modify and import BMP (see "Modify tiles" above).</li>
+                  <li>If you can't find the tiles, maybe they are compressed (see "Compressed data" above).</li>
                   <li>Save the modified rom (file>save rom). The ROM checksum will be updated.</li>
               </ul>
 
             <h3>Align tile</h3>
                 <p>When your palette is correct and you find something similar to what you are looking for:</p>
 		<p class="centrage"><img  class="screenshot" src="images/screen_align.png"  alt="align"/></p>
-                <p>In the screenshot above, the colors are not what one might expect. It is due to an incorrect byte alignment. Since (3 or 4) bytes represent 8 pixels, you have to begin at the right byte to have something correct.</p>
+                <p>In the screenshot above, the colors are not what one might expect. It is due to an incorrect byte alignment. Since (2, 3 or 4) bytes represent 8 pixels, you have to begin at the right byte to have something correct.</p>
 		<p class="centrage"><img  class="screenshot" src="images/byte_align.png"  alt="align"/></p>
-                <p>With the UP/Down 1 Byte buttons, find when the colors are correct (there are 3 or 4 possibilities)</p>
+                <p>With the UP/Down 1 Byte buttons, find when the colors are correct (there are 2, 3 or 4 possibilities)</p>
 		<p class="centrage"><img  class="screenshot" src="images/row_align.png"  alt="align"/></p>
                 <p>Then use the UP/Down 1 Row buttons to get the correct tile at the top of the tile</p>
 		<p class="centrage"><img  class="screenshot" src="images/ok_align.png"  alt="align"/></p>
@@ -67,19 +73,22 @@
                 <p>You are ready to import/export! You can note the offset for the next time...</p>
 
             <h3>Modify tiles</h3>
-                <p>When you have your tiles in correct position, you can export an image of them (file>Export Picture). You will get a 16 or 8-color BMP file, named after the offset and the number of bits per pixel, to help you remember where and how it has been taken from the ROM.</p>
+                <p>When you have your tiles in correct position, you can export an image of them <strong>File>Export Picture</strong>. You will get a 16, 8 or 4-color BMP file, named after the offset and the number of bits per pixel, to help you remember where and how it has been taken from the ROM.</p>
 		<p class="centrage"><img  class="screenshot" src="images/dump_0x10341_3bpp.png"  alt="dump"/></p>
                 <p>You can modify the picture in a graphic editor that respects indexed images palettes. It is the case of "GIMP" but not "kolourpaint", as an example.</p>
                 <p>It is very important to keep the part of the picture that are not intelligible unchanged. This data is not graphics, it may represent the music or the program and you don't want to modify it randomly...</p>
 		<p class="centrage"><img  class="screenshot" src="images/dump_0x10341_3bpp_new.png"  alt="dump"/></p>
                 <p>This picture will be the record of your work. You will be able to use it to quickly re-patch the rom.</p>
-                <p>You can import the modified picture in the rom if it is correctly aligned. The simplest way for it is to input the offset. Use file>Export Picture.</p>
+                <p>You can import the modified picture in the rom if it is correctly aligned. The simplest way for it is to input the offset. Use <strong>File>Export Picture</strong>.</p>
 
 
-            <h3>Import compressed tiles</h3>
-                <p>When you have to deal with compressed tiles, you can use Maxim’s <a href="http://www.smspower.org/maxim/Software/TileDecoder">TileDecoder</a> to extract data from roms.</p>
-                <p>After having modified tiles, you can re-compress them using Maxim’s <a href="http://www.smspower.org/maxim/Software/BMP2Tile">BMP2Tile</a> and <a href="http://www.smspower.org/maxim/Software/TileDecoder">TileDecoder</a> to create a compressed tiles .dat file.</p>
-                <p>In Master Tile Converter, use <strong>file>import compressed data</strong> to import this .dat file into the rom at the current address.</p>
+            <h3>Compressed data</h3>
+                <p>Master Tile Converter can also uncompress tiles from ROM if the compression is "Phantasy Star" RLE (see <a href="http://www.smspower.org/Development/Compression#PhantasyStarRLE">SMS Power</a>). Thanks to Maxim for his searching and sharing information! See <a href="http://www.smspower.org/maxim/Software/TileDecoder">TileDecoder</a>.</p>
+                <p>To find compressed data, just go to the begining of the rom (offset 0), and click on <strong>Find next compressed tiles</strong>. It can take some time. You can get "false positive" (tiles having no sens). In this case just click again on <strong>Find next compressed tiles</strong>.</p>
+                <p>When you find correct tiles, you can export it using <strong>File>Export Picture</strong>. You will get a 16-color BMP file, named after the offse, the number of bits per pixel, the number of decompressed tiles, and the maximum size of the compressed data.</p>
+                <p>You can modify the picture in a graphic editor that respects indexed images palettes. It is the case of "GIMP" but not "kolourpaint", as an example.</p>
+                <p>You then have to compressed the modified picture, using <strong>Compression>Compress Picture</strong>. You will be asked how many tiles have to be compressed (since the picture is 8 tiles-wide). Check picture name to be sure how many tiles to compress. Then you will have a message saying the size of the compressed data. Check that it is less than the maximum allowed (written on the picture name). It may work with a little more, but anything can happen (other pictures changed, game bug...). The compressed data is written in the file "compr_tmp.dat" in Master Tile Converter folder.</p>
+                <p>Use <strong>File>Import compressed data</strong> to import this "compr_tmp.dat" file into the rom at the current address.</p>
 
             <h3>Miscalleous hacks</h3>
                 <p>It you have to make several modifications in a rom, you can make a hack file to regroup them.</p>
