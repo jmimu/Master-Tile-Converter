@@ -2,7 +2,7 @@
 
 ;17EDE:CD 00 C7 *activate boot
 
-;17EDE:00 00 00 *unactivate boot
+17EDE:00 00 00 *unactivate boot
 
 12DAA:20 *title: replace a tile at the up-right of the E by void
 

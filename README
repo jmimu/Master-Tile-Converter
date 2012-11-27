@@ -37,7 +37,12 @@ Version 0.4.
 
 
 TODO:
+ * when apply a new adress, return to uncompressed data
+ * update display when import compressed data in compressed data mode
+ * add compressed data check if bitplan size is a multiple of tile size...
  * how to show more than 192 compressed tiles ?
+ * for uncompressed data, replace scrollbar down button by 16 more tiles
+ * make a "compress and import" entry in the menu
  * when arrives at the end of the rom looking for compressed data, return to normal mode
  * read compressed data in rom, give number of tiles and bytes
  * import checks (palette)

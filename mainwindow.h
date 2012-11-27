@@ -37,6 +37,7 @@ class MainWindow : public QMainWindow {
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    bool currently_showing_decompressed_data(){return current_rom_shown==&decompressed_rom;}
 
 protected:
     void changeEvent(QEvent *e);
@@ -63,7 +64,7 @@ public slots:
     //void change_offset_scrollbar(int val);
 
     bool compress_picture();
-    bool decompress_tiles();
+    bool decompress_tiles();//return false if reached end of ROM
     void return_to_real_rom();
     void show_decompressed_data();
 

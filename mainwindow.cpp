@@ -138,6 +138,12 @@ bool MainWindow::apply_offset()
         std::cerr<<"Error in offset!"<<std::endl;
         return false;
     }
+
+    if (currently_showing_decompressed_data())
+    {
+        return_to_real_rom();
+    }
+
     real_rom.create_tiles(offset);
     ui->Apply_offset_pushButton->setEnabled(false);
     ui->tile_offset_label->setText(QString("Tile Offset: 0x%1").arg(real_rom.get_offset()+ui->tileswidget->get_selection_number()*Tile::tile_size(),0,16));
@@ -414,8 +420,14 @@ bool MainWindow::decompress_tiles()
     unsigned long offset=0;
     offset=ui->offset_lineEdit->text().toULong(&ok,16);
 
-    if (current_rom_shown==&decompressed_rom)
+    if (currently_showing_decompressed_data())
+    {
         offset++;//if already showing decompressed tiles, search for next
+        ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
+        ui->Apply_offset_pushButton->setEnabled(false);//do not let apply offset button enabled while offset changes
+        ui->tile_offset_label->repaint();
+        real_rom.set_offset(offset);
+    }
 
 
     while (!decompressed_rom.test_decompress_tiles(&real_rom,offset))
@@ -427,13 +439,24 @@ bool MainWindow::decompress_tiles()
         ui->tile_offset_label->repaint();
         real_rom.set_offset(offset);
     }
+    if (offset>=real_rom.get_romlength())
+    {
+        std::cout<<"Reached end of ROM. No more compressed data."<<std::endl;
+        offset=real_rom.get_romlength();
+        ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
+        ui->Apply_offset_pushButton->setEnabled(false);//do not let apply offset button enabled while offset changes
+        ui->tile_offset_label->repaint();
+        real_rom.set_offset(offset);
+        return_to_real_rom();
+        return false;
+    }
     decompressed_rom.decompress_tiles(&real_rom,offset);
     decompressed_rom.create_tiles(0);
     update_tiles();
     show_decompressed_data();
 
 
-    return (real_rom.get_offset()<real_rom.get_romlength());
+    return (true);
 }
 
 void MainWindow::show_decompressed_data()

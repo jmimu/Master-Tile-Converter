@@ -171,6 +171,7 @@ long Rom::test_decompress_tiles(Rom * origin, long index)
             if (bytes_in_bitplan[1]!=bytes_in_bitplan[2])//already false
                 break;
         //std::cout<<"bitplane "<<num_bitplane<<std::endl;
+        //end when out of rom or read a 0 (end of a bitplan)
         while ((index+offset<origin->get_romlength())and((origin->get_romdata())[index+offset]!=0))
         {
             if ((origin->get_romdata())[index+offset]<128)//identical bytes
@@ -201,7 +202,7 @@ long Rom::test_decompress_tiles(Rom * origin, long index)
     if ((bytes_in_bitplan[0]>0)&&(bytes_in_bitplan[0]==bytes_in_bitplan[1])
         &&(bytes_in_bitplan[0]==bytes_in_bitplan[2])&&(bytes_in_bitplan[0]==bytes_in_bitplan[3]))
     {    
-        std::cout<<"At "<<index<<", found "<<std::dec<<bytes_in_bitplan[0]*4<<" bytes ("<<bytes_in_bitplan[0]*4/Tile::tile_size()<<" tiles) compressed into "<<offset<<" bytes."<<std::endl;
+        std::cout<<"At "<<index<<", found "<<std::dec<<bytes_in_bitplan[0]*4<<" bytes ("<<bytes_in_bitplan[0]*4.0/Tile::tile_size()<<" tiles) compressed into "<<offset<<" bytes."<<std::endl;
         compressed_size=offset;
         if (bytes_in_bitplan[0]*4<Tile::tile_size())
         {
