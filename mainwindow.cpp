@@ -55,7 +55,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->return_realrom_pushButton, SIGNAL(pressed()), this, SLOT(return_to_real_rom()));
 
 
-
     QObject::connect(ui->actionApply_Hack_File_fast, SIGNAL(activated()), this, SLOT(applyHackFile_fast()));
     QObject::connect(ui->actionApply_Hack_File_confirm, SIGNAL(activated()), this, SLOT(applyHackFile()));
 
@@ -67,7 +66,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->offset_lineEdit, SIGNAL(returnPressed()), this, SLOT(apply_offset()));
     QObject::connect(ui->Apply_offset_pushButton, SIGNAL(pressed()), this, SLOT(apply_offset()));
 
-    //QObject::connect(ui->tilesScrollBar, SIGNAL(valueChanged(int)), this, SLOT(change_offset_scrollbar(int)));
+    QObject::connect(ui->tilesScrollBar, SIGNAL(valueChanged(int)), this, SLOT(change_offset_scrollbar(int)));
 
 
     QObject::connect(ui->mode_1bpp_radioButton, SIGNAL(clicked()), this, SLOT(change_mode()));
@@ -97,6 +96,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->palettewidget->set_palette(&palette);
     ui->tileswidget->set_tiles(current_rom_shown->get_tiles());
     ui->zoomwidget->set_tile(ui->tileswidget->get_selected_tile());
+
+    ui->tilesScrollBar->setSingleStep(16);//the unit is 1 tile
+    ui->tilesScrollBar->setPageStep(160);
 
     std::cout<<"Init finished!"<<std::endl;
 }
@@ -148,9 +150,11 @@ bool MainWindow::apply_offset()
     ui->Apply_offset_pushButton->setEnabled(false);
     ui->tile_offset_label->setText(QString("Tile Offset: 0x%1").arg(real_rom.get_offset()+ui->tileswidget->get_selection_number()*Tile::tile_size(),0,16));
 
+    //at first we have to disconnect the scrollbar from change_offset_scrollbar, otherwise we will have infinite loop
+    ui->tilesScrollBar->disconnect();
     ui->tilesScrollBar->setMaximum(real_rom.get_romlength()/(Tile::tile_size()));//the unit for the scrollbar is 1 tile
     ui->tilesScrollBar->setValue(offset/(Tile::tile_size()));
-
+    QObject::connect(ui->tilesScrollBar, SIGNAL(valueChanged(int)), this, SLOT(change_offset_scrollbar(int)));//re-connect
 
     ui->tileswidget->repaint();
     ui->zoomwidget->repaint();
@@ -158,14 +162,34 @@ bool MainWindow::apply_offset()
     return true;
 }
 
-//we don't listen to the scrollbar, because there are not enought possible values to be precise
-/*void MainWindow::change_offset_scrollbar(int val)
-{
 
-    std::cout<<"Scroll! "<<val<<std::endl;
-    ui->offset_lineEdit->setText(QString("%1").arg(val*(Tile::tile_size()*16),0,16));
-    apply_offset();
-}*/
+void MainWindow::change_offset_scrollbar(int val)
+{
+    //previous value of the scrollbar has to be real_rom.get_offset()/(Tile::tile_size())
+
+    //std::cout<<"scroll "<<(float)val<<" "<<(float)(real_rom.get_offset()/(Tile::tile_size()))<<std::endl;
+    long difference=(val-real_rom.get_offset()/(Tile::tile_size()))/16;//number of lines
+    if (difference>0)
+    {
+        //move_down16tiles();
+        long offset=real_rom.get_offset();
+        offset+=Tile::tile_size()*difference*16;
+        if (offset<0) offset=0;
+        ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
+        apply_offset();
+
+    }else{
+        //move_up16tiles();
+        long offset=real_rom.get_offset();
+        offset+=Tile::tile_size()*difference*16;
+        if (offset<0) offset=0;
+        ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
+        apply_offset();
+    }
+
+    //ui->offset_lineEdit->setText(QString("%1").arg(val*(Tile::tile_size()*16),0,16));
+    //apply_offset();
+}
 
 void MainWindow::enable_offset_button()
 {
@@ -316,8 +340,7 @@ void MainWindow::change_mode()
         Tile::number_bpp=3;
     if (ui->mode_4bpp_radioButton->isChecked())
         Tile::number_bpp=4;
-    ui->tilesScrollBar->setSingleStep(1);
-    ui->tilesScrollBar->setPageStep(10);
+
     apply_offset();
 }
 
@@ -421,8 +444,11 @@ bool MainWindow::compress_picture()
 bool MainWindow::decompress_tiles()
 {
     //set 4bpp mode
-    ui->mode_4bpp_radioButton->setChecked(true);
-    change_mode();
+    if (Tile::number_bpp!=4)
+    {
+        ui->mode_4bpp_radioButton->setChecked(true);
+        change_mode();
+    }
 
     ui->Apply_offset_pushButton->setEnabled(false);
 
@@ -471,7 +497,7 @@ bool MainWindow::decompress_tiles()
 
 void MainWindow::show_decompressed_data()
 {
-
+    ui->tilesScrollBar->setEnabled(false);
     ui->label->setText("Compressed Tiles");
     current_rom_shown=&decompressed_rom;
     ui->tileswidget->set_tiles(current_rom_shown->get_tiles());
@@ -493,6 +519,7 @@ void MainWindow::show_decompressed_data()
 
 void MainWindow::return_to_real_rom()
 {
+    ui->tilesScrollBar->setEnabled(true);
     ui->label->setText("Tiles");
     current_rom_shown=&real_rom;
     ui->tileswidget->set_tiles(current_rom_shown->get_tiles());

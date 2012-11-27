@@ -162,8 +162,15 @@ long Rom::test_decompress_tiles(Rom * origin, long index)
     for (int num_bitplane=0;num_bitplane<4;num_bitplane++)
     {
         if (num_bitplane==1)
+        {
              if (bytes_in_bitplan[0]==0)//already false
                 break;
+            if (bytes_in_bitplan[0]*4 % Tile::tile_size()!=0)
+            {
+                //std::cout<<"At "<<std::hex<<index<<", found 1 bitplan for "<<bytes_in_bitplan[0]*4.0/Tile::tile_size()<<" tiles. It's not a round number, forget it."<<std::endl;
+                break;
+            }
+        }
         if (num_bitplane==2)
             if (bytes_in_bitplan[0]!=bytes_in_bitplan[1])//already false
                 break;
@@ -202,7 +209,7 @@ long Rom::test_decompress_tiles(Rom * origin, long index)
     if ((bytes_in_bitplan[0]>0)&&(bytes_in_bitplan[0]==bytes_in_bitplan[1])
         &&(bytes_in_bitplan[0]==bytes_in_bitplan[2])&&(bytes_in_bitplan[0]==bytes_in_bitplan[3]))
     {    
-        std::cout<<"At "<<index<<", found "<<std::dec<<bytes_in_bitplan[0]*4<<" bytes ("<<bytes_in_bitplan[0]*4.0/Tile::tile_size()<<" tiles) compressed into "<<offset<<" bytes."<<std::endl;
+        std::cout<<"At "<<std::hex<<index<<", found "<<std::dec<<bytes_in_bitplan[0]*4<<" bytes ("<<bytes_in_bitplan[0]*4.0/Tile::tile_size()<<" tiles) compressed into "<<offset<<" bytes."<<std::endl;
         compressed_size=offset;
         if (bytes_in_bitplan[0]*4<Tile::tile_size())
         {

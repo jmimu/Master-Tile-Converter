@@ -61,7 +61,7 @@ public slots:
     void update_tiles();
     void enable_offset_button();
     bool apply_offset();
-    //void change_offset_scrollbar(int val);
+    void change_offset_scrollbar(int val);
 
     bool compress_picture();
     bool decompress_tiles();//return false if reached end of ROM

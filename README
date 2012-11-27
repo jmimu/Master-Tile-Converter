@@ -40,11 +40,9 @@ TODO:
  * how to show more than 192 compressed tiles ?
  * for uncompressed data, replace scrollbar down button by 16 more tiles
  * make a "compress and import" entry in the menu
- * when arrives at the end of the rom looking for compressed data, return to normal mode
  * read compressed data in rom, give number of tiles and bytes
  * import checks (palette)
  * add "undo" button!
- * update position in the rom at the end of compressed data searching
  * add default config in an external file (palette, mode, offset)
 
 
@@ -68,3 +66,4 @@ Usage :
  - Save the resulting rom.
 Done !
 
+More detailed information at: http://jmimu.free.fr/mastertileconverter/
