@@ -606,6 +606,11 @@ bool Rom::import_rawdata(std::string filename,long adress)//<used for compressed
 
     std::cout<<"Read "<<data_length<<" bytes in raw data file "<<filename<<"."<<std::endl;
 
+    if (adress+data_length>=romlength)
+    {
+        std::cout<<"Error: not enought space in ROM at this adress for this raw data file."<<std::endl;
+        return false;
+    }
     //import data in romdata
     long j=adress;
     for (long i=0;i<data_length;i++)
@@ -615,6 +620,7 @@ bool Rom::import_rawdata(std::string filename,long adress)//<used for compressed
     }
 
     std::cout<<"Raw data imported."<<std::endl;
+    create_tiles(m_offset);
 
     delete[] data_buffer;
 

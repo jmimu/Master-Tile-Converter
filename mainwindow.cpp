@@ -290,8 +290,18 @@ bool MainWindow::import_compressed_data()
     QString fileName = QFileDialog::getOpenFileName(this,tr("Choose data file"), ".", tr("Tile Decoder compressed data (*.dat);;All files (*)"));
     if (fileName!="")
     {
-        real_rom.import_rawdata(fileName.toStdString(),real_rom.get_offset());
-        return true;
+        if (real_rom.import_rawdata(fileName.toStdString(),real_rom.get_offset()))
+        {
+            //update display
+            if (currently_showing_decompressed_data()){
+                decompress_tiles();
+            }else{
+                update_tiles();
+            }
+            return true;
+        }else{
+            return false;
+        }
     }
     return false;
 }
