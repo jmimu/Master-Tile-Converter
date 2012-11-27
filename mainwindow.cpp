@@ -49,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->actionImport_Compressed_Data, SIGNAL(activated()), this, SLOT(import_compressed_data()));
 
     QObject::connect(ui->actionCompress_Picture, SIGNAL(activated()), this, SLOT(compress_picture()));
+    QObject::connect(ui->actionCompressed_and_Import_Data, SIGNAL(activated()), this, SLOT(compress_and_import()));
     QObject::connect(ui->actionDecompress_Tiles, SIGNAL(activated()), this, SLOT(decompress_tiles()));
 
     QObject::connect(ui->find_next_compr_pushButton, SIGNAL(pressed()), this, SLOT(decompress_tiles()));
@@ -318,7 +319,9 @@ bool MainWindow::import_compressed_data()
         {
             //update display
             if (currently_showing_decompressed_data()){
+                apply_offset();
                 decompress_tiles();
+                update_tiles();
             }else{
                 update_tiles();
             }
@@ -431,10 +434,49 @@ bool MainWindow::compress_picture()
             unsigned long nb_bytes=rom_tmp.compress_tiles(nb_tiles);
 
             QMessageBox::StandardButton reply;
-            reply = QMessageBox::information(this, "Compression done.", QString("The %1 tiles have been compressed to \"compr_tmp.dat\". Its size is %2 bytes").arg(nb_tiles).arg(nb_bytes));
+            reply = QMessageBox::information(this, "Compression done.", QString("The %1 tiles have been compressed to \"compr_tmp.dat\" in MTC folder. Its size is %2 bytes").arg(nb_tiles).arg(nb_bytes));
             //if (reply == QMessageBox::Ok)
 
             return true;
+        }
+    }
+    return false;
+}
+
+//creates the file compr_tmp.dat in MTC folder
+bool MainWindow::compress_and_import()
+{
+    QString fileName = QFileDialog::getOpenFileName(this,tr("Choose BMP file"), ".", tr("BMP File (*.bmp)"));
+    if (fileName!="")
+    {
+        Rom rom_tmp(&palette);
+        if (rom_tmp.import_BMP(fileName.toStdString(),4))
+        {
+            bool ok;
+            unsigned long nbr_total_tiles=rom_tmp.get_romlength()/4/8;
+            int nb_tiles = QInputDialog::getInt(this, tr("How many tiles to compress?"),
+                                         tr("Number of tiles for file\n\"")+fileName+"\"?", nbr_total_tiles, 0, nbr_total_tiles, 1, &ok);
+            unsigned long nb_bytes=rom_tmp.compress_tiles(nb_tiles);
+
+            QMessageBox::StandardButton reply;
+            reply = QMessageBox::information(this, "Compression done.", QString("The %1 tiles have been compressed to \"compr_tmp.dat\". Its size is %2 bytes").arg(nb_tiles).arg(nb_bytes));
+
+            //part from import_rawdata
+            if (real_rom.import_rawdata("compr_tmp.dat",real_rom.get_offset()))
+            {
+                //update display
+                if (currently_showing_decompressed_data()){
+                    apply_offset();
+                    decompress_tiles();
+                    update_tiles();
+                }else{
+                    update_tiles();
+                }
+                return true;
+            }else{
+                return false;
+            }
+
         }
     }
     return false;

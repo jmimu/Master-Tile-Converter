@@ -564,7 +564,6 @@ compressed tiles</string>
     <addaction name="separator"/>
     <addaction name="actionExport_Picture"/>
     <addaction name="actionImport_Picture"/>
-    <addaction name="actionImport_Compressed_Data"/>
     <addaction name="separator"/>
     <addaction name="actionSave_Rom"/>
     <addaction name="separator"/>
@@ -589,6 +588,9 @@ compressed tiles</string>
     </property>
     <addaction name="actionCompress_Picture"/>
     <addaction name="actionDecompress_Tiles"/>
+    <addaction name="separator"/>
+    <addaction name="actionImport_Compressed_Data"/>
+    <addaction name="actionCompressed_and_Import_Data"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuCompressed_Tiles"/>
@@ -662,6 +664,11 @@ compressed tiles</string>
   <action name="actionDecompress_Tiles">
    <property name="text">
     <string>Find Next Compressed Tiles</string>
+   </property>
+  </action>
+  <action name="actionCompressed_and_Import_Data">
+   <property name="text">
+    <string>Compressed and Import Data</string>
    </property>
   </action>
  </widget>

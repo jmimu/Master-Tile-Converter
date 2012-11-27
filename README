@@ -38,9 +38,7 @@ Version 0.5.
 
 TODO:
  * how to show more than 192 compressed tiles ?
- * for uncompressed data, replace scrollbar down button by 16 more tiles
- * make a "compress and import" entry in the menu
- * read compressed data in rom, give number of tiles and bytes
+ * read compressed data in rom, give number of tiles and bytes => make a message area?
  * import checks (palette)
  * add "undo" button!
  * add default config in an external file (palette, mode, offset)

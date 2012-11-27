@@ -163,7 +163,7 @@ long Rom::test_decompress_tiles(Rom * origin, long index)
     {
         if (num_bitplane==1)
         {
-             if (bytes_in_bitplan[0]==0)//already false
+            if (bytes_in_bitplan[0]==0)//already false
                 break;
             if (bytes_in_bitplan[0]*4 % Tile::tile_size()!=0)
             {

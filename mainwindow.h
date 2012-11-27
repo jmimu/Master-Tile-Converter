@@ -64,6 +64,7 @@ public slots:
     void change_offset_scrollbar(int val);
 
     bool compress_picture();
+    bool compress_and_import();
     bool decompress_tiles();//return false if reached end of ROM
     void return_to_real_rom();
     void show_decompressed_data();
