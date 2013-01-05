@@ -579,8 +579,9 @@ bool MainWindow::compress_picture()
                                          tr("Number of tiles for file\n\"")+fileName+"\"?", nbr_total_tiles, 0, nbr_total_tiles, 1, &ok);
             unsigned long nb_bytes=rom_tmp.compress_tiles(nb_tiles);
 
-            QMessageBox::StandardButton reply;
-            reply = QMessageBox::information(this, "Compression done.", QString("The %1 tiles have been compressed to \"compr_tmp.dat\" in MTC folder. Its size is %2 bytes").arg(nb_tiles).arg(nb_bytes));
+            //QMessageBox::StandardButton reply;
+            //reply =
+            QMessageBox::information(this, "Compression done.", QString("The %1 tiles have been compressed to \"compr_tmp.dat\" in MTC folder. Its size is %2 bytes").arg(nb_tiles).arg(nb_bytes));
             //if (reply == QMessageBox::Ok)
 
             return true;
@@ -604,8 +605,9 @@ bool MainWindow::compress_and_import()
                                          tr("Number of tiles for file\n\"")+fileName+"\"?", nbr_total_tiles, 0, nbr_total_tiles, 1, &ok);
             unsigned long nb_bytes=rom_tmp.compress_tiles(nb_tiles);
 
-            QMessageBox::StandardButton reply;
-            reply = QMessageBox::information(this, "Compression done.", QString("The %1 tiles have been compressed to \"compr_tmp.dat\". Its size is %2 bytes").arg(nb_tiles).arg(nb_bytes));
+            //QMessageBox::StandardButton reply;
+            //reply =
+            QMessageBox::information(this, "Compression done.", QString("The %1 tiles have been compressed to \"compr_tmp.dat\". Its size is %2 bytes").arg(nb_tiles).arg(nb_bytes));
 
             //part from import_rawdata
             if (real_rom.import_rawdata("compr_tmp.dat",real_rom.get_offset()))

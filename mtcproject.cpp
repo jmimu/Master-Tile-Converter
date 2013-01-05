@@ -193,13 +193,13 @@ MTCbookmark * MTCproject::read_project(QString filename)
     QFile file( filename );
     if( !file.open( QIODevice::ReadOnly ) ){
         std::cout<<"Unable to open xml file "<<filename.toStdString()<<std::endl;
-        return false;
+        return 0;
     }else{
         if( !doc.setContent( &file ) )
         {
             file.close();
             std::cout<<"Unable to read xml"<<std::endl;
-            return false;
+            return 0;
         }else{
             file.close();
             QDomElement root = doc.documentElement();
