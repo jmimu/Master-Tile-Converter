@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <math.h>
 
-Palette::Palette() : m_sprites_palette(true)
+Palette::Palette(QString description) : m_sprites_palette(true),m_description(description),from_filename("?")
 {
     std::cout<<"Init palette..."<<std::endl;
     /*for (int i=0;i<16;i++)
@@ -37,23 +37,23 @@ plot(127+127*cos(pi/16*x))
 replot(127+127*cos(pi/16*x+2*pi/3))
 replot(127+127*cos(pi/16*x+4*pi/3))
    */
-    /*
+
     int nbr=32;
     for (int i=0;i<nbr;i++)
     {
         unsigned short r,g,b;
-        r=127+127*cos(2*3.14159/nbr*i);
-        g=127+127*cos(2*3.14159/nbr*i+2*3.14159/3);
-        b=127+127*cos(2*3.14159/nbr*i+4*3.14159/3);
+        r=127+127*cos(2*3.14159/nbr*i*7);
+        g=127+127*cos(2*3.14159/nbr*i*7+2*3.14159/3);
+        b=127+127*cos(2*3.14159/nbr*i*7+4*3.14159/3);
         if (i<nbr/2)
             colors_back.append( QColor(r,g,b).rgb() );
         else
-            colors_sprites.append( QColor(r,g,b).rgb() );
-    }*/
+            colors_sprites.append( QColor(r,r,r).rgb() );
+    }
 
 
     //default: make Alex Kidd palette
-    colors_back.append( QColor(0x0, 0x0, 0xff).rgb() );
+    /*colors_back.append( QColor(0x0, 0x0, 0xff).rgb() );
     colors_back.append( QColor(0xff, 0xff, 0xff).rgb() );
     colors_back.append( QColor(0xff, 0x55, 0xff).rgb() );
     colors_back.append( QColor(0xff, 0xaa, 0xff).rgb() );
@@ -85,7 +85,7 @@ replot(127+127*cos(pi/16*x+4*pi/3))
     colors_sprites.append( QColor(0xaa, 0xaa, 0xff).rgb() );
     colors_sprites.append( QColor(0xaa, 0x55, 0xff).rgb() );
     colors_sprites.append( QColor(0x55, 0x0, 0x0).rgb() );//modified from 0xff 0x0 0x0
-    colors_sprites.append( QColor(0xaa, 0xaa, 0x0).rgb() );
+    colors_sprites.append( QColor(0xaa, 0xaa, 0x0).rgb() );*/
 
 }
 
@@ -122,13 +122,49 @@ bool Palette::read_from_file(QString fileName)
         b= ((pal_data[i] & 0x30)>>4)* 0x55;
         g= ((pal_data[i] & 0x0C)>>2)* 0x55;
         r= ((pal_data[i] & 0x03)>>0)* 0x55;
-        std::cout<<"read: 0x"<<std::hex<<(int)r<<" 0x"<<(int)g<<" 0x"<<(int)b<<std::endl;
+        //std::cout<<"read: 0x"<<std::hex<<(int)r<<" 0x"<<(int)g<<" 0x"<<(int)b<<std::endl;
         if (i<16)
             colors_back.append( QColor(r,g,b).rgb() );
         else
             colors_sprites.append( QColor(r,g,b).rgb() );
     }
 
-
+    from_filename=fileName;
     return true;
+}
+
+bool Palette::read_from_romdata(unsigned char * data,long offset)
+{
+
+    colors_back.clear();
+    colors_sprites.clear();
+
+    unsigned char r,g,b;
+    for (int i=offset;i<offset+32;i++)
+    {
+        b= ((data[i] & 0x30)>>4)* 0x55;
+        g= ((data[i] & 0x0C)>>2)* 0x55;
+        r= ((data[i] & 0x03)>>0)* 0x55;
+        //std::cout<<"read: 0x"<<std::hex<<(int)r<<" 0x"<<(int)g<<" 0x"<<(int)b<<std::endl;
+        if (i<offset+16)
+            colors_back.append( QColor(r,g,b).rgb() );
+        else
+            colors_sprites.append( QColor(r,g,b).rgb() );
+    }
+    from_offset=offset;
+    return true;
+}
+
+
+QDomElement Palette::toNode(QDomDocument &d)
+{
+    QDomElement cn = d.createElement( "palette" );
+    if (from_filename=="?")
+        cn.setAttribute( "offset", QString("%1").arg(from_offset,0,16));
+    else
+        cn.setAttribute( "file", from_filename );
+
+    cn.setAttribute( "description", m_description );
+
+    return cn;
 }

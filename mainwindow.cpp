@@ -37,14 +37,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    palette(),real_rom(&palette),decompressed_rom(&palette),current_rom_shown(&real_rom)
+    ui(new Ui::MainWindow),m_project(new MTCproject),
+    real_rom(m_project->getPalette()),decompressed_rom(m_project->getPalette()),current_rom_shown(&real_rom)
 {
     std::cout<<"Setup UI..."<<std::endl;
     ui->setupUi(this);
     QObject::connect(ui->actionOpen_Rom, SIGNAL(activated()), this, SLOT(loadROM()));
     QObject::connect(ui->actionSave_Rom, SIGNAL(activated()), this, SLOT(saveROM()));
-    QObject::connect(ui->actionImport_Palette, SIGNAL(activated()), this, SLOT(loadPalette()));
+    QObject::connect(ui->actionImport_Palette, SIGNAL(activated()), this, SLOT(loadPaletteFile()));
     QObject::connect(ui->actionAbout, SIGNAL(activated()), this, SLOT(show_about()));
     QObject::connect(ui->actionImport_Compressed_Data, SIGNAL(activated()), this, SLOT(import_compressed_data()));
 
@@ -77,6 +77,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QObject::connect(ui->actionExport_Picture, SIGNAL(activated()), this, SLOT(export_picture()));
     QObject::connect(ui->actionImport_Picture, SIGNAL(activated()), this, SLOT(import_picture()));
+    QObject::connect(ui->actionSave_Project, SIGNAL(activated()), this, SLOT(saveMTCproject()));
+    QObject::connect(ui->actionOpen_Project, SIGNAL(activated()), this, SLOT(loadMTCproject()));
 
 
     QObject::connect(ui->up_1Byte_pushButton, SIGNAL(pressed()), this, SLOT(move_up1Byte()));
@@ -90,16 +92,31 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->up_160tiles_pushButton, SIGNAL(pressed()), this, SLOT(move_up160tiles()));
     QObject::connect(ui->down_160tiles_pushButton, SIGNAL(pressed()), this, SLOT(move_down160tiles()));
 
+    QObject::connect(ui->palette_comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(change_palette()));
+    QObject::connect(ui->palette_pushButton, SIGNAL(pressed()), this, SLOT(add_palette_from_ROM()));
+    QObject::connect(ui->bookmark_comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(goto_bookmark()));
+    QObject::connect(ui->bookmark_pushButton, SIGNAL(pressed()), this, SLOT(add_bookmark()));
+
 
     std::cout<<"Init UI..."<<std::endl;
-    ui->offset_lineEdit->setText(QString("%1").arg(real_rom.get_offset(),0,16));
+
+    update_palettes();
+    update_bookmarks();
+
+    //ui->offset_lineEdit->setText(QString("%1").arg(real_rom.get_offset(),0,16));
+    ui->offset_lineEdit->setText(QString("%1").arg(m_project->getOffset(),0,16));
+    apply_offset();
+
     ui->offset_lineEdit->selectAll();
-    ui->palettewidget->set_palette(&palette);
+    ui->palettewidget->set_palette(m_project->getPalette());
     ui->tileswidget->set_tiles(current_rom_shown->get_tiles());
     ui->zoomwidget->set_tile(ui->tileswidget->get_selected_tile());
 
     ui->tilesScrollBar->setSingleStep(16);//the unit is 1 tile
     ui->tilesScrollBar->setPageStep(160);
+
+
+    m_project->setROM(&real_rom);//to be able to read palettes from the rom
 
     std::cout<<"Init finished!"<<std::endl;
 }
@@ -115,6 +132,39 @@ void MainWindow::show_about()
     dialog.show();
     dialog.exec();
 
+}
+
+bool MainWindow::saveMTCproject()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save MTC project"),m_project->getFilename(),tr("MTC project (*.xml)"));
+    if (fileName!="")
+        return m_project->save_project(fileName);
+    return false;
+}
+
+bool MainWindow::loadMTCproject()
+{
+    QString fileName = QFileDialog::getOpenFileName(this,tr("Load an MTC Project"), ".", tr("MTC project (*.xml)"));
+    if (fileName!="")
+    {
+        MTCbookmark* start=m_project->read_project(fileName);
+        if (start==0)
+        {
+            QMessageBox::information(NULL, "Error.", QString("Error reading ")+fileName);
+            return false;
+        }
+        ui->offset_lineEdit->setText(QString("%1").arg(m_project->getOffset(),0,16));
+
+        //TODO palette part, mode...
+        apply_offset();
+        update_palettes();
+        update_bookmarks();
+        goto_bookmark(start);
+        delete start;
+
+        return true;
+    }
+    return false;
 }
 
 
@@ -141,6 +191,7 @@ bool MainWindow::apply_offset()
         std::cerr<<"Error in offset!"<<std::endl;
         return false;
     }
+    m_project->setOffset(offset);
 
     if (currently_showing_decompressed_data())
     {
@@ -149,6 +200,7 @@ bool MainWindow::apply_offset()
 
     real_rom.create_tiles(offset);
     ui->Apply_offset_pushButton->setEnabled(false);
+    ui->bookmark_pushButton->setEnabled(true);
     ui->tile_offset_label->setText(QString("Tile Offset: 0x%1").arg(real_rom.get_offset()+ui->tileswidget->get_selection_number()*Tile::tile_size(),0,16));
 
     //at first we have to disconnect the scrollbar from change_offset_scrollbar, otherwise we will have infinite loop
@@ -159,6 +211,8 @@ bool MainWindow::apply_offset()
 
     ui->tileswidget->repaint();
     ui->zoomwidget->repaint();
+    if (!((ui->bookmark_comboBox->currentIndex()>0)&&(m_project->getBookmark(ui->bookmark_comboBox->currentIndex()-1)->get_offset()==offset)))
+        ui->bookmark_comboBox->setCurrentIndex(0);//bookmark is "???"
 
     return true;
 }
@@ -167,7 +221,6 @@ bool MainWindow::apply_offset()
 void MainWindow::change_offset_scrollbar(int val)
 {
     //previous value of the scrollbar has to be real_rom.get_offset()/(Tile::tile_size())
-
     //std::cout<<"scroll "<<(float)val<<" "<<(float)(real_rom.get_offset()/(Tile::tile_size()))<<std::endl;
     long difference=(val-real_rom.get_offset()/(Tile::tile_size()))/16;//number of lines
     if (difference>0)
@@ -178,7 +231,6 @@ void MainWindow::change_offset_scrollbar(int val)
         if (offset<0) offset=0;
         ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
         apply_offset();
-
     }else{
         //move_up16tiles();
         long offset=real_rom.get_offset();
@@ -187,7 +239,6 @@ void MainWindow::change_offset_scrollbar(int val)
         ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
         apply_offset();
     }
-
     //ui->offset_lineEdit->setText(QString("%1").arg(val*(Tile::tile_size()*16),0,16));
     //apply_offset();
 }
@@ -195,6 +246,7 @@ void MainWindow::change_offset_scrollbar(int val)
 void MainWindow::enable_offset_button()
 {
     ui->Apply_offset_pushButton->setEnabled(true);
+    ui->bookmark_pushButton->setEnabled(false);
 }
 
 void MainWindow::update_tiles()
@@ -202,10 +254,10 @@ void MainWindow::update_tiles()
     std::vector<Tile*>::iterator it;
     for ( it=current_rom_shown->get_tiles()->begin() ; it < current_rom_shown->get_tiles()->end(); it++ )
     {
-        (*it)->update_palette(&palette);
+        (*it)->update_palette(m_project->getPalette());
     }
     ui->tileswidget->set_tiles(current_rom_shown->get_tiles());
-    ui->palettewidget->set_palette(&palette);
+    ui->palettewidget->set_palette(m_project->getPalette());
     ui->tile_offset_label->setText(QString("Tile Offset: 0x%1").arg(current_rom_shown->get_offset()+ui->tileswidget->get_selection_number()*Tile::tile_size(),0,16));
     ui->zoomwidget->set_tile(ui->tileswidget->get_selected_tile());
     ui->tileswidget->repaint();
@@ -213,22 +265,115 @@ void MainWindow::update_tiles()
     ui->zoomwidget->repaint();
 }
 
-bool MainWindow::loadPalette()
+bool MainWindow::loadPaletteFile()
 {
     QString fileName = QFileDialog::getOpenFileName(this,tr("Choose palette"), ".", tr("SMS Meka Raw Palette Files (*)"));
     if (fileName!="")
     {
-        palette.read_from_file(fileName);
-        update_tiles();
-        return true;
+        QString description = QInputDialog::getText(this,"Palette Description", "Enter palette description", QLineEdit::Normal);
+        if (description!="")
+        {
+            m_project->addPalette(description,fileName);
+            ui->palette_comboBox->addItem(m_project->getPalette()->get_description());
+            ui->palette_comboBox->setCurrentIndex(m_project->getPaletteIndex());
+            update_tiles();
+            return true;
+        }
     }
     return false;
 }
 
-void MainWindow::change_palette()
+void MainWindow::add_palette_from_ROM()
 {
-    palette.set_colors(ui->sprite_palette_radioButton->isChecked());
+    QString description = QInputDialog::getText(this,"Palette Description", "Enter palette description", QLineEdit::Normal);
+    if (description!="")
+    {
+        m_project->addPalette(description,m_project->getOffset());
+        ui->palette_comboBox->addItem(m_project->getPalette()->get_description());
+        ui->palette_comboBox->setCurrentIndex(m_project->getPaletteIndex());
+        update_tiles();
+    }
+}
+
+
+void MainWindow::change_palette()//when a new palette is selected on the combobox
+{
+    m_project->setPalette(ui->palette_comboBox->currentIndex());
+    m_project->set_sprite_part_of_palette(ui->sprite_palette_radioButton->isChecked());
+    m_project->getPalette()->set_colors(ui->sprite_palette_radioButton->isChecked());
+    current_rom_shown->set_palette(m_project->getPalette());
     update_tiles();
+}
+
+//get list of palettes from mtcproject (only when reading a MTC file)
+void MainWindow::update_palettes()
+{
+    ui->palette_comboBox->clear();
+    std::vector<Palette*>::iterator palette_it;
+    for( palette_it = m_project->getPalettes()->begin(); palette_it != m_project->getPalettes()->end(); ++palette_it)
+    {
+        ui->palette_comboBox->addItem((*palette_it)->get_description());
+    }
+    ui->palette_comboBox->setCurrentIndex(m_project->getPaletteIndex());
+}
+
+//get list of palettes from mtcproject (only when reading a MTC file)
+void MainWindow::update_bookmarks()
+{
+    ui->bookmark_comboBox->clear();
+    std::vector<MTCbookmark*>::iterator bookmark_it;
+    ui->bookmark_comboBox->addItem("???");//when not on a bookmark, show "???"
+    for( bookmark_it = m_project->getBookmarks()->begin(); bookmark_it != m_project->getBookmarks()->end(); ++bookmark_it)
+    {
+        ui->bookmark_comboBox->addItem(QString("%1: ").arg((*bookmark_it)->get_offset(),0,16)+(*bookmark_it)->get_description());
+    }
+    ui->bookmark_comboBox->setCurrentIndex(0);//if not on a bookmark
+}
+
+void MainWindow::add_bookmark()
+{
+    QString description = QInputDialog::getText(this,"Bookmark Description", "Enter bookmark description", QLineEdit::Normal);
+    if (description!="")
+    {
+        m_project->add_bookmark(description,m_project->getOffset(),m_project->getMode());
+        ui->bookmark_comboBox->addItem(QString("%1: ").arg(m_project->getOffset(),0,16)+description);
+        ui->bookmark_comboBox->setCurrentIndex(ui->bookmark_comboBox->count()-1);
+        update_tiles();
+    }
+}
+
+void MainWindow::goto_bookmark(MTCbookmark * bookmark)
+{
+    if (bookmark==0)
+    {
+        int bookmark_index=ui->bookmark_comboBox->currentIndex();
+        if (bookmark_index>0)//first bookmark is "???" = we are not on a bookmark
+        {
+            bookmark=m_project->getBookmark(bookmark_index-1);
+        }else return;
+    }
+
+    long offset=bookmark->get_offset();
+    long mode=bookmark->get_mode();
+    ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
+    switch (mode)
+    {
+    case 1:
+        ui->mode_1bpp_radioButton->setChecked(true);
+        break;
+    case 2:
+        ui->mode_2bpp_radioButton->setChecked(true);
+        break;
+    case 3:
+        ui->mode_3bpp_radioButton->setChecked(true);
+        break;
+    default:
+        ui->mode_4bpp_radioButton->setChecked(true);
+        break;
+    }
+    change_mode();
+    apply_offset();
+
 }
 
 bool MainWindow::loadROM()
@@ -236,8 +381,7 @@ bool MainWindow::loadROM()
     QString fileName = QFileDialog::getOpenFileName(this,tr("Choose ROM"), ".", tr("SMS ROM Files (*.sms)"));
     if (fileName!="")
     {
-        real_rom.loadfile(fileName.toStdString());
-
+        m_project->load_ROM(fileName);
         return apply_offset();
     }
     return false;
@@ -247,7 +391,9 @@ bool MainWindow::saveROM()
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save ROM"),"out.sms",tr("SMS ROM (*.sms)"));
     if (fileName!="")
-        return real_rom.save_ROM(fileName.toStdString());
+    {
+        m_project->save_ROM(fileName);
+    }
     return false;
 }
 
@@ -343,7 +489,7 @@ void MainWindow::change_mode()
         Tile::number_bpp=3;
     if (ui->mode_4bpp_radioButton->isChecked())
         Tile::number_bpp=4;
-
+    m_project->setMode(Tile::number_bpp);
     apply_offset();
 }
 
@@ -424,7 +570,7 @@ bool MainWindow::compress_picture()
     QString fileName = QFileDialog::getOpenFileName(this,tr("Choose BMP file"), ".", tr("BMP File (*.bmp)"));
     if (fileName!="")
     {
-        Rom rom_tmp(&palette);
+        Rom rom_tmp(m_project->getPalette());
         if (rom_tmp.import_BMP(fileName.toStdString(),4))
         {
             bool ok;
@@ -449,7 +595,7 @@ bool MainWindow::compress_and_import()
     QString fileName = QFileDialog::getOpenFileName(this,tr("Choose BMP file"), ".", tr("BMP File (*.bmp)"));
     if (fileName!="")
     {
-        Rom rom_tmp(&palette);
+        Rom rom_tmp(m_project->getPalette());
         if (rom_tmp.import_BMP(fileName.toStdString(),4))
         {
             bool ok;

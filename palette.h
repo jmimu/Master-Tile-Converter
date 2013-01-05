@@ -23,21 +23,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QColor>
 #include <QRgb>
 #include <QVector>
-
+#include <QString>
+#include <QtXml/QDomDocument>
 
 class Palette
 {
 public:
-    Palette();
+    Palette(QString description);
     bool read_from_file(QString fileName);
+    bool read_from_romdata(unsigned char * data,long offset);
     QVector<QRgb> &get_colors() { if (m_sprites_palette) return colors_sprites; else return colors_back;};
     QVector<QRgb> &get_back_colors() { return colors_back; };
     QVector<QRgb> &get_sprites_colors() { return colors_sprites; };
-    void set_colors(bool sprites_palette) { m_sprites_palette=sprites_palette; }
+    void set_colors(bool sprites_palette) { m_sprites_palette=sprites_palette; };
+    QString get_description(){return m_description;};
+    QDomElement toNode(QDomDocument &d);
 protected:
     bool m_sprites_palette;//which palette?
+    QString m_description;
     QVector<QRgb> colors_back;//format for QImage
     QVector<QRgb> colors_sprites;//format for QImage
+
+    //origin of the palette
+    QString from_filename;
+    long from_offset;
 };
 
 #endif // PALETTE_H

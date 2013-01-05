@@ -1,5 +1,6 @@
 TARGET = mastertileconverter
 TEMPLATE = app
+QT       += core gui xml
 SOURCES += main.cpp \
     mainwindow.cpp \
     tile.cpp \
@@ -9,7 +10,8 @@ SOURCES += main.cpp \
     zoomwidget.cpp \
     rom.cpp \
     romheader.cpp \
-    dialog_about.cpp
+    dialog_about.cpp \
+    mtcproject.cpp
 HEADERS += mainwindow.h \
     tile.h \
     palette.h \
@@ -18,7 +20,8 @@ HEADERS += mainwindow.h \
     zoomwidget.h \
     rom.h \
     romheader.h \
-    dialog_about.h
+    dialog_about.h \
+    mtcproject.h
 FORMS += mainwindow.ui \
     dialog_about.ui
 RESOURCES += data.qrc

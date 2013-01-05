@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tile.h"
 #include "palette.h"
 #include "rom.h"
+#include "mtcproject.h"
 
 namespace Ui {
     class MainWindow;
@@ -44,7 +45,7 @@ protected:
 
 private:
     Ui::MainWindow *ui;
-    Palette palette;
+    MTCproject *m_project;
     Rom real_rom;//the rom from the file
     Rom decompressed_rom;//a rom created by decompressing data
     Rom * current_rom_shown;//which rom is shown
@@ -53,12 +54,19 @@ public slots:
     void show_about();
     bool loadROM();
     bool saveROM();
-    bool loadPalette();
+    bool loadMTCproject();
+    bool saveMTCproject();
+    bool loadPaletteFile();
     bool export_picture();
     bool import_picture();
     bool import_compressed_data();
     void change_palette();
+    void add_palette_from_ROM();
     void update_tiles();
+    void update_palettes();
+    void update_bookmarks();
+    void add_bookmark();
+    void goto_bookmark(MTCbookmark * bookmark=0);
     void enable_offset_button();
     bool apply_offset();
     void change_offset_scrollbar(int val);
