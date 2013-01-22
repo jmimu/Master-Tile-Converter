@@ -108,7 +108,7 @@ Palette* MTCproject::setPalette(int i)
 Palette* MTCproject::addPalette(QString description,long offset)
 {
     Palette* newpal=new Palette(description);
-    newpal->read_from_romdata(m_rom->get_romdata(),offset);
+    newpal->read_from_romdata(m_rom->get_romdata(),m_rom->get_romlength(),offset);
     m_palettes.push_back(newpal);
     m_current_palette_index=m_palettes.size()-1;
     return m_palettes.at(m_current_palette_index);
@@ -118,6 +118,7 @@ Palette* MTCproject::addPalette(QString description,QString filename)
 {
     Palette* newpal=new Palette(description);
     newpal->read_from_file(filename);
+    newpal->try_to_find_in_rom(filename,m_rom->get_romdata(),m_rom->get_romlength());
     m_palettes.push_back(newpal);
     m_current_palette_index=m_palettes.size()-1;
     return m_palettes.at(m_current_palette_index);

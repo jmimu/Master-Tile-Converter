@@ -31,7 +31,8 @@ class Palette
 public:
     Palette(QString description);
     bool read_from_file(QString fileName);
-    bool read_from_romdata(unsigned char * data,long offset);
+    int try_to_find_in_rom(QString fileName, unsigned char *romdata, long romlength);//read from file, and return number of correct bytes (perfect=32) (-2 if file error, -1 if sequence not found in data) best offset is written in from_offset
+    bool read_from_romdata(unsigned char * romdata, long romlength, long offset);
     QVector<QRgb> &get_colors() { if (m_sprites_palette) return colors_sprites; else return colors_back;};
     QVector<QRgb> &get_back_colors() { return colors_back; };
     QVector<QRgb> &get_sprites_colors() { return colors_sprites; };
@@ -47,6 +48,7 @@ protected:
     //origin of the palette
     QString from_filename;
     long from_offset;
+    int m_correct_bytes_in_rom;//if from file, tells if from_offset is correct (32=perfect)
 };
 
 #endif // PALETTE_H

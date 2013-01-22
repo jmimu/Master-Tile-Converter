@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QCloseEvent>
 
 #include <vector>
 
@@ -50,8 +51,11 @@ private:
     Rom decompressed_rom;//a rom created by decompressing data
     Rom * current_rom_shown;//which rom is shown
 
+protected:
+    void closeEvent(QCloseEvent *event);
+
 public slots:
-    void show_about();
+    void show_about();    
     bool loadROM();
     bool saveROM();
     bool loadMTCproject();

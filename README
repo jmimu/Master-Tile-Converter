@@ -45,6 +45,7 @@ TODO:
  * add the palette in bookmark ?
  * try to remove palette dependency for rom
  * export the rom when saving project (to save all the work done)
+ * when importing a palette file, try to find it in the rom (give offset, and write it in xml file, and read that in xml file too)
 
 
 Usage :

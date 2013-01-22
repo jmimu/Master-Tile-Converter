@@ -42,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     std::cout<<"Setup UI..."<<std::endl;
     ui->setupUi(this);
+
     QObject::connect(ui->actionOpen_Rom, SIGNAL(activated()), this, SLOT(loadROM()));
     QObject::connect(ui->actionSave_Rom, SIGNAL(activated()), this, SLOT(saveROM()));
     QObject::connect(ui->actionImport_Palette, SIGNAL(activated()), this, SLOT(loadPaletteFile()));
@@ -133,6 +134,21 @@ void MainWindow::show_about()
     dialog.exec();
 
 }
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    int response = QMessageBox::question(this, "Quitting",
+                     tr("Do you want to quit?\nNon-saved project will be lost!"),
+                     tr("Yes"), tr("No"), QString(), 0, 1);
+    if ( response == 1 )
+    {
+        event->ignore();
+        return;
+    }
+    event->accept();
+}
+
+
 
 bool MainWindow::saveMTCproject()
 {
