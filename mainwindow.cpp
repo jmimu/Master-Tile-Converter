@@ -217,7 +217,8 @@ bool MainWindow::apply_offset()
     real_rom.create_tiles(offset);
     ui->Apply_offset_pushButton->setEnabled(false);
     ui->bookmark_pushButton->setEnabled(true);
-    ui->tile_offset_label->setText(QString("Tile Offset: 0x%1").arg(real_rom.get_offset()+ui->tileswidget->get_selection_number()*Tile::tile_size(),0,16));
+    ui->palette_pushButton->setEnabled(true);
+    ui->tile_offset_label->setText(QString("Tile offset: 0x%1").arg(real_rom.get_offset()+ui->tileswidget->get_selection_number()*Tile::tile_size(),0,16));
 
     //at first we have to disconnect the scrollbar from change_offset_scrollbar, otherwise we will have infinite loop
     ui->tilesScrollBar->disconnect();
@@ -263,6 +264,7 @@ void MainWindow::enable_offset_button()
 {
     ui->Apply_offset_pushButton->setEnabled(true);
     ui->bookmark_pushButton->setEnabled(false);
+    ui->palette_pushButton->setEnabled(false);
 }
 
 void MainWindow::update_tiles()
