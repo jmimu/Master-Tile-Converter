@@ -72,7 +72,7 @@ public:
     int getPaletteIndex(){return m_current_palette_index;}
     Palette* setPalette(int i);
     Palette* addPalette(QString description,long offset);
-    Palette* addPalette(QString description,QString filename);
+    Palette* addPalette(QString description,QString filename,bool show_msg=false);
     void setROM(Rom *rom){m_rom=rom;}
     Rom * getROM(){return m_rom;}
 

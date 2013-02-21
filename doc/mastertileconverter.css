@@ -1,5 +1,6 @@
 body
 {
+    position: relative; /*needed for son absolute position ("fork me")*/
     width: 960px;
     margin: auto;
     /*margin-top: 10px;

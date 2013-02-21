@@ -21,7 +21,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
 #include <fstream>
-
+#include <vector>
+#include <QMessageBox>
 #include <math.h>
 
 Palette::Palette(QString description) : m_sprites_palette(true),m_description(description),from_filename("?"),m_correct_bytes_in_rom(-1)
@@ -89,8 +90,10 @@ replot(127+127*cos(pi/16*x+4*pi/3))
 
 }
 
-int Palette::try_to_find_in_rom(QString fileName, unsigned char *romdata, long romlength)
+int Palette::try_to_find_in_rom(QString fileName, unsigned char *romdata, long romlength,bool show_msg)
 {
+    from_offset=-1;//we will try to find that...
+
     std::cout<<"Try to find palette "<<fileName.toStdString()<<" in ROM\n";
     long pal_length;
     unsigned char * pal_data;
@@ -116,8 +119,8 @@ int Palette::try_to_find_in_rom(QString fileName, unsigned char *romdata, long r
 
     //try to find the data in rom
     int correct_bytes_in_rom=0;
-    int best_offset=0;
     int best_correct_bytes_in_rom=0;
+    std::vector<int> best_offsets;//offsets where we have best_correct_bytes_in_rom
 
     long in_rom_at;
 
@@ -140,15 +143,36 @@ int Palette::try_to_find_in_rom(QString fileName, unsigned char *romdata, long r
         {
             //std::cout<<"At "<<in_rom_at<<": "<<correct_bytes_in_rom<<" correct bytes."<<std::endl;
             best_correct_bytes_in_rom=correct_bytes_in_rom;
-            best_offset=in_rom_at;
+            best_offsets.clear();
+            best_offsets.push_back(in_rom_at);
+            continue;
+        }
+        if (correct_bytes_in_rom==best_correct_bytes_in_rom)
+        {
+            best_offsets.push_back(in_rom_at);
             continue;
         }
     }
     if (best_correct_bytes_in_rom>0)
     {
-        std::cout<<"Best offset: "<<best_offset<<": "<<std::dec<<best_correct_bytes_in_rom<<"/32 correct bytes."<<std::endl;
-        from_offset=best_offset;
+        QString info=QString("List of offsets with %1/32 correct bytes:\n").arg(best_correct_bytes_in_rom,0,10);
+        for (int i=0;i<best_offsets.size();i++)
+        {
+            info+=QString("- 0x%1\n").arg(best_offsets.at(i),0,16);
+        }
+        std::cout<<info.toStdString()<<std::endl;
+
+        if (best_offsets.size()>0)
+        {
+            from_offset=best_offsets.at(0);
+        }
         m_correct_bytes_in_rom=best_correct_bytes_in_rom;
+
+        if (show_msg)
+        {
+            QMessageBox::information(NULL, "Palette", info);
+        }
+
         return best_correct_bytes_in_rom;
     }
 

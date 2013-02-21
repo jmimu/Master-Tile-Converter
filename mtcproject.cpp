@@ -47,7 +47,7 @@ QDomElement MTCbookmark::toNode(QDomDocument &d)
 //-------------------------------------------------------------
 
 MTCproject::MTCproject(QString filename) : m_current_palette_index(0),
-    m_current_mode(3),m_current_offset(0x10eb1),m_sprite_part_of_palette(true)
+    m_current_mode(4),m_current_offset(0x0),m_sprite_part_of_palette(true)
 {
     std::cout<<"Create new MTCproject"<<std::endl;
     m_filename=filename;
@@ -114,11 +114,11 @@ Palette* MTCproject::addPalette(QString description,long offset)
     return m_palettes.at(m_current_palette_index);
 }
 
-Palette* MTCproject::addPalette(QString description,QString filename)
+Palette* MTCproject::addPalette(QString description, QString filename, bool show_msg)
 {
     Palette* newpal=new Palette(description);
     newpal->read_from_file(filename);
-    newpal->try_to_find_in_rom(filename,m_rom->get_romdata(),m_rom->get_romlength());
+    newpal->try_to_find_in_rom(filename,m_rom->get_romdata(),m_rom->get_romlength(),show_msg);
     m_palettes.push_back(newpal);
     m_current_palette_index=m_palettes.size()-1;
     return m_palettes.at(m_current_palette_index);

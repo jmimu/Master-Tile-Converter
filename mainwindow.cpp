@@ -291,7 +291,7 @@ bool MainWindow::loadPaletteFile()
         QString description = QInputDialog::getText(this,"Palette Description", "Enter palette description", QLineEdit::Normal);
         if (description!="")
         {
-            m_project->addPalette(description,fileName);
+            m_project->addPalette(description,fileName,true);
             ui->palette_comboBox->addItem(m_project->getPalette()->get_description());
             ui->palette_comboBox->setCurrentIndex(m_project->getPaletteIndex());
             update_tiles();
