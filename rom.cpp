@@ -277,7 +277,7 @@ long Rom::decompress_tiles(Rom * origin, long index)
     romlength=decompressed_bitplane[0].size()*4;
     romdata = new unsigned char [romlength];
     long j=0;
-    for (long i=0;i<decompressed_bitplane[0].size();i++)
+    for (unsigned long i=0;i<decompressed_bitplane[0].size();i++)
         for (long b=0;b<4;b++)
         {
             romdata[j]=decompressed_bitplane[b].at(i);
@@ -383,7 +383,7 @@ long Rom::compress_tiles(int nbr_tiles)
                  compressed_data.push_back(nb_different_bytes+128);
                  //std::cout<<"We write "<<(int)(nb_different_bytes+128);
 
-                 for (long j=0;j<the_diff_bytes.size();j++)
+                 for (unsigned long j=0;j<the_diff_bytes.size();j++)
                  {
                      compressed_data.push_back(the_diff_bytes.at(j));
                      //std::cout<<" "<<(int)the_diff_bytes.at(j);

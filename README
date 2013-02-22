@@ -38,11 +38,8 @@ Version 0.6.
 
 TODO:
  * set working dir where rom is
- * export the rom when saving the project, to be able to read it when reloading the project (direcly copy the rom file when open rom, to have a current name to write to)
- * import checks (palette) (error if more than 32 bytes !)
  * add "undo" button!
  * try to remove palette dependency for rom
- * export the rom when saving project (to save all the work done)
 
 
 Usage :

@@ -156,7 +156,7 @@ int Palette::try_to_find_in_rom(QString fileName, unsigned char *romdata, long r
     if (best_correct_bytes_in_rom>0)
     {
         QString info=QString("List of offsets with %1/32 correct bytes:\n").arg(best_correct_bytes_in_rom,0,10);
-        for (int i=0;i<best_offsets.size();i++)
+        for (unsigned int i=0;i<best_offsets.size();i++)
         {
             info+=QString("- 0x%1\n").arg(best_offsets.at(i),0,16);
         }
@@ -192,6 +192,12 @@ bool Palette::read_from_file(QString fileName)
     is.seekg (0, std::ios::end);
     pal_length = is.tellg();
     is.seekg (0, std::ios::beg);
+
+    if (pal_length!=32)
+    {
+        std::cout<<"Error: "<<fileName.toStdString()<<" is not 32 bytes palette."<<std::endl;
+        return false;
+    }
 
     // allocate memory:
     pal_data = new unsigned char [pal_length];

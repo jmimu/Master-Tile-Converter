@@ -79,7 +79,7 @@ void TilesWidget::mousePressEvent( QMouseEvent *event )
     {
         int x=(event->x()/(4*8));
         int y=(event->y()/(4*8));
-        int new_selected_tile=y*nb_tiles_width+x;
+        unsigned int new_selected_tile=y*nb_tiles_width+x;
         if (new_selected_tile<m_tiles->size())
         {
             selected_tile=new_selected_tile;
