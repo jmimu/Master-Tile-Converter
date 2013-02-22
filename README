@@ -47,10 +47,6 @@ TODO:
  * try to remove palette dependency for rom
  * export the rom when saving project (to save all the work done)
 
-bug Cs :
-At 1c268, found 8128 bytes (254 tiles) compressed into 4139 bytes.
-Segmentation fault
-
 
 
 Usage :

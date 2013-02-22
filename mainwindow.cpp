@@ -172,6 +172,7 @@ bool MainWindow::loadMTCproject()
         ui->offset_lineEdit->setText(QString("%1").arg(m_project->getOffset(),0,16));
 
         //TODO palette part, mode...
+        decompressed_rom.set_palette(m_project->getPalette());//m_project->read_project updates only real_rom palette
         apply_offset();
         update_palettes();
         update_bookmarks();
@@ -319,7 +320,9 @@ void MainWindow::change_palette()//when a new palette is selected on the combobo
     m_project->setPalette(ui->palette_comboBox->currentIndex());
     m_project->set_sprite_part_of_palette(ui->sprite_palette_radioButton->isChecked());
     m_project->getPalette()->set_colors(ui->sprite_palette_radioButton->isChecked());
-    current_rom_shown->set_palette(m_project->getPalette());
+    //current_rom_shown->set_palette(m_project->getPalette());
+    real_rom.set_palette(m_project->getPalette());
+    decompressed_rom.set_palette(m_project->getPalette());
     update_tiles();
 }
 
@@ -466,9 +469,11 @@ bool MainWindow::import_picture()
         {
             update_tiles();
             std::cout<<"Import OK!"<<std::endl;
+            ui->statusBar->showMessage("Import OK!");
             return true;
         }
         std::cout<<"Import error..."<<std::endl;
+        ui->statusBar->showMessage("Import error...");
     }
     return false;
 
@@ -686,6 +691,7 @@ bool MainWindow::decompress_tiles()
     if (offset>=real_rom.get_romlength())
     {
         std::cout<<"Reached end of ROM. No more compressed data."<<std::endl;
+        ui->statusBar->showMessage("Reached end of ROM. No more compressed data.");
         offset=real_rom.get_romlength();
         ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
         ui->Apply_offset_pushButton->setEnabled(false);//do not let apply offset button enabled while offset changes
@@ -696,8 +702,8 @@ bool MainWindow::decompress_tiles()
     }
     decompressed_rom.decompress_tiles(&real_rom,offset);
     decompressed_rom.create_tiles(0);
-    update_tiles();
     show_decompressed_data();
+    update_tiles();
 
 
     return (true);
