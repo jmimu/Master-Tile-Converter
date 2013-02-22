@@ -104,7 +104,7 @@ bool MTCproject::load_ROM(QString ROMpath, bool is_original_rom)
     return true;
 }
 
-Palette* MTCproject::setPalette(int i)
+Palette* MTCproject::setPalette(unsigned int i)
 {
     if (i<m_palettes.size())
         m_current_palette_index=i;

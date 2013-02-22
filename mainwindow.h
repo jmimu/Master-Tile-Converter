@@ -93,8 +93,8 @@ public slots:
     void move_down1tile();
     void move_up16tiles();
     void move_down16tiles();
-    void move_up160tiles();
-    void move_down160tiles();
+    void move_up96tiles();
+    void move_down96tiles();
 
     void change_mode();//number of bpp
 };

@@ -413,7 +413,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>160 tiles</string>
+      <string>96 tiles</string>
      </property>
     </widget>
     <widget class="QPushButton" name="up_160tiles_pushButton">
@@ -426,7 +426,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>160 tiles</string>
+      <string>96 tiles</string>
      </property>
     </widget>
    </widget>
@@ -635,7 +635,7 @@ compressed tiles</string>
      <x>0</x>
      <y>0</y>
      <width>736</width>
-     <height>28</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

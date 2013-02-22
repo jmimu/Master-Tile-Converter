@@ -90,8 +90,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->down_1tile_pushButton, SIGNAL(pressed()), this, SLOT(move_down1tile()));
     QObject::connect(ui->up_16tiles_pushButton, SIGNAL(pressed()), this, SLOT(move_up16tiles()));
     QObject::connect(ui->down_16tiles_pushButton, SIGNAL(pressed()), this, SLOT(move_down16tiles()));
-    QObject::connect(ui->up_160tiles_pushButton, SIGNAL(pressed()), this, SLOT(move_up160tiles()));
-    QObject::connect(ui->down_160tiles_pushButton, SIGNAL(pressed()), this, SLOT(move_down160tiles()));
+    QObject::connect(ui->up_160tiles_pushButton, SIGNAL(pressed()), this, SLOT(move_up96tiles()));
+    QObject::connect(ui->down_160tiles_pushButton, SIGNAL(pressed()), this, SLOT(move_down96tiles()));
 
     QObject::connect(ui->palette_comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(change_palette()));
     QObject::connect(ui->palette_pushButton, SIGNAL(pressed()), this, SLOT(add_palette_from_ROM()));
@@ -666,7 +666,7 @@ bool MainWindow::decompress_tiles()
     ui->Apply_offset_pushButton->setEnabled(false);
 
     bool ok;
-    unsigned long offset=0;
+    long offset=0;
     offset=ui->offset_lineEdit->text().toULong(&ok,16);
 
     if (currently_showing_decompressed_data())
@@ -770,7 +770,7 @@ void MainWindow::move_up1Byte()
 void MainWindow::move_down1Byte()
 {
     //return_to_real_rom();
-    long offset=real_rom.get_offset();
+    unsigned long offset=real_rom.get_offset();
     offset+=1;
     if (offset>=real_rom.get_romlength()-Tile::tile_size()*16)
         offset=real_rom.get_romlength()-Tile::tile_size()*16;
@@ -791,7 +791,7 @@ void MainWindow::move_up1row()
 void MainWindow::move_down1row()
 {
     //return_to_real_rom();
-    long offset=real_rom.get_offset();
+    unsigned long offset=real_rom.get_offset();
     offset+=Tile::row_size();
     if (offset>=real_rom.get_romlength()-Tile::tile_size()*16)
         offset=real_rom.get_romlength()-Tile::tile_size()*16;
@@ -812,7 +812,7 @@ void MainWindow::move_up1tile()
 void MainWindow::move_down1tile()
 {
     //return_to_real_rom();
-    long offset=real_rom.get_offset();
+    unsigned long offset=real_rom.get_offset();
     offset+=Tile::tile_size();
     if (offset>=real_rom.get_romlength()-Tile::tile_size()*16)
         offset=real_rom.get_romlength()-Tile::tile_size()*16;
@@ -833,7 +833,7 @@ void MainWindow::move_up16tiles()
 void MainWindow::move_down16tiles()
 {
     //return_to_real_rom();
-    long offset=real_rom.get_offset();
+    unsigned long offset=real_rom.get_offset();
     offset+=Tile::tile_size()*16;
     if (offset>=real_rom.get_romlength()-Tile::tile_size()*16)
         offset=real_rom.get_romlength()-Tile::tile_size()*16;
@@ -841,21 +841,21 @@ void MainWindow::move_down16tiles()
     apply_offset();
 }
 
-void MainWindow::move_up160tiles()
+void MainWindow::move_up96tiles()
 {
     //return_to_real_rom();
     long offset=real_rom.get_offset();
-    offset-=Tile::tile_size()*160;
+    offset-=Tile::tile_size()*96;
     if (offset<0) offset=0;
     ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));
     apply_offset();
 }
 
-void MainWindow::move_down160tiles()
+void MainWindow::move_down96tiles()
 {
     //return_to_real_rom();
-    long offset=real_rom.get_offset();
-    offset+=Tile::tile_size()*160;
+    unsigned long offset=real_rom.get_offset();
+    offset+=Tile::tile_size()*96;
     if (offset>=real_rom.get_romlength()-Tile::tile_size()*16)
         offset=real_rom.get_romlength()-Tile::tile_size()*16;
     ui->offset_lineEdit->setText(QString("%1").arg(offset,0,16));

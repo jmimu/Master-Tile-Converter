@@ -29,6 +29,7 @@
               <ul>
                   <li>Read SMS roms</li>
                   <li>Import <a href="http://www.smspower.org/meka/">Meka</a> palette</li>
+                  <li>Find where the palette may be in the ROM</li>
                   <li>Display 4bpp, 3bpp, 2bpp and 1bpp uncompressed tiles</li>
                   <li>Export 4bpp, 3bpp, 2bpp and 1bpp uncompressed tiles</li>
                   <li>Import BMP tiles</li>
@@ -47,7 +48,7 @@
           <h2>Downloads</h2>
             <p>Binary version for Windows: <a href="https://github.com/jmimu/Master-Tile-Converter/downloads">https://github.com/jmimu/Master-Tile-Converter/downloads</a></p>
             <p>Development version sources (using <a href="http://git-scm.com/">git</a>): <a href="https://github.com/jmimu/Master-Tile-Converter">https://github.com/jmimu/Master-Tile-Converter</a></p>
-            <p>How to compile: install <a href="http://qt.nokia.com/downloads/downloads#qt-creator">QtCreator</a>, and open <strong>mastertileconverter.pro</strong>, and compile!</p>
+            <p>How to compile: install <a href="http://qt.nokia.com/downloads/downloads#qt-creator">QtCreator</a>, open <strong>mastertileconverter.pro</strong>, and compile!</p>
 
           <h2>Help</h2>              
             <h3>Interface</h3>
@@ -55,15 +56,17 @@
             <h3>Instructions</h3>
               <ul>
                   <li>Open a SMS ROM in meka. When you see the tile you want to modify, export the palette (raw).</li>
-                  <li>Run mastertileconverter, and open the SMS ROM (<strong>File>Open rom</strong>).</li>
-                  <li>Import your Meka palette (<strong>File>Import palette</strong>). Default palette is Alex Kidd in Miracle World fisrt level.</li>
+                  <li>Run mastertileconverter, and open the SMS ROM (<strong>File>Open ROM</strong>).</li>
+                  <li>Import your Meka palette (<strong>File>Import Palette</strong>).</li>
                   <li>Choose the part of the palette (sprite or background).</li>
                   <li>Choose tile mode (1bpp, 2bpp, 3bpp or 4bpp).</li>
-                  <li>Go through the whole tiles (using UP/DOWN 160 tiles button) to find the tiles you want.</li>
+                  <li>Go through the whole tiles (using UP/DOWN 96 tiles button, or the scroll bar) to find the tiles you want.</li>
                   <li>Align the tiles (see "Align tile" above), or input a known offset (and click on "Apply").</li>
+                  <li>You can add a bookmark to save this offset.</li>
                   <li>Export, modify and import BMP (see "Modify tiles" above).</li>
                   <li>If you can't find the tiles, maybe they are compressed (see "Compressed data" above).</li>
-                  <li>Save the modified rom (file>save rom). The ROM checksum will be updated.</li>
+                  <li>Save the modified rom (<strong>ROM>Save ROM</strong>). The ROM checksum will be updated.</li>
+                  <li>You can record your work as a project (<strong>File>Save Project</strong>). The ROM checksum will be updated.</li>
               </ul>
 
             <h3>Align tile</h3>
@@ -104,8 +107,15 @@
                 ;only for emulators<br/>
                 17EDE:00 00 00 *unactivate boot
                 </code>
-                <p>You can apply this file with <strong>hacks>apply hack</strong>.</p>
+                <p>You can apply this file with <strong>Hacks>Apply Hack File</strong>. The "confirm" version will ask you to confirm every modification, the "fast" version will apply all the modifications.</p>
 
+
+            <h3>Palette hack</h3>
+                <p>You can also use Master Tile Converter to modify a palette in the rom.</p>
+                <p>When importing a palette, Master Tile Converter will tell you the most likely places where the palette may be recorded in the ROM if not compressed, with a indicator on how many colors are correct.</p>
+                <p>You can then try to change one byte in the rom corresponding to the color you want to change, and record this as a hack file.</p>
+                <p class="centrage"><img  class="screenshot" src="images/CS_palette_hack.png"  alt="Palette hack"/></p>
+                <p>To have Cyber Shinobi's Joe fully covered by his cloths, the hack will be: "<code>725E:25 *blue skin for joe</code>". In order to avoid defaults on foes face, you may have to add: "<code>7264:25 *blue skin for foes</code>". Now they are all blue, but it's ok, they are just robots!</p>
 
           <h2>Example</h2>
               <p>You can find examples of modifications for Alex Kidd in Miracle World in the <strong>ex</strong> directory.</p>

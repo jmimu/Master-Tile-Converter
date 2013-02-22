@@ -509,7 +509,7 @@ bool Rom::import_BMP(std::string filename,int nbbpp)
 
     unsigned char byte1,byte2,byte3,byte4;//what to write
 
-    long index=m_offset;
+    unsigned long index=m_offset;
     for (int y_tile=0;y_tile<nb_tiles_height;y_tile++)
     {
         for (int x_tile=0;x_tile<nb_tiles_width;x_tile++)
