@@ -410,7 +410,7 @@ bool MainWindow::loadROM()
 
 bool MainWindow::saveROM()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save ROM"),"out.sms",tr("SMS ROM (*.sms)"));
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save ROM"),m_project->get_original_ROM_filename()+"_new.sms",tr("SMS ROM (*.sms)"));
     if (fileName!="")
     {
         m_project->save_ROM(fileName);
@@ -700,7 +700,8 @@ bool MainWindow::decompress_tiles()
         return_to_real_rom();
         return false;
     }
-    decompressed_rom.decompress_tiles(&real_rom,offset);
+    int nbr_uncompressed_tiles=decompressed_rom.decompress_tiles(&real_rom,offset);
+    ui->statusBar->showMessage(QString("Found %1 tiles.").arg(nbr_uncompressed_tiles,0,10));
     decompressed_rom.create_tiles(0);
     show_decompressed_data();
     update_tiles();

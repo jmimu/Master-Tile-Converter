@@ -39,14 +39,10 @@ Version 0.6.
 TODO:
  * set working dir where rom is
  * export the rom when saving the project, to be able to read it when reloading the project (direcly copy the rom file when open rom, to have a current name to write to)
- * how to show more than 192 compressed tiles ? => show a message if more than 192
- * read compressed data in rom, give number of tiles and bytes => make a message area?
  * import checks (palette) (error if more than 32 bytes !)
  * add "undo" button!
- * add the palette in bookmark ?
  * try to remove palette dependency for rom
  * export the rom when saving project (to save all the work done)
-
 
 
 Usage :

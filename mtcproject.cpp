@@ -87,14 +87,20 @@ void MTCproject::clear()
     }
 }
 
-bool MTCproject::load_ROM(QString ROMpath)
+bool MTCproject::load_ROM(QString ROMpath, bool is_original_rom)
 {
     if (!m_rom->loadfile(ROMpath.toStdString()))
     {
         QMessageBox::information(NULL, "Error.", QString("Error reading ")+ROMpath);
         return false;
     }
-    m_ROM_filename=ROMpath;
+    if (is_original_rom)
+    {
+        m_original_ROM_filename=ROMpath;
+        m_ROM_filename=m_filename+"_current_ROM.sms";
+    }else{
+        m_ROM_filename=ROMpath;
+    }
     return true;
 }
 
@@ -139,13 +145,20 @@ void MTCproject::add_bookmark(MTCbookmark *b)
 
 bool MTCproject::save_project(QString filename)
 {
+    //at first, save current rom
+    m_rom->save_ROM(m_ROM_filename.toStdString());
+
     QDomDocument doc( "MTCproject" );
     QDomElement root = doc.createElement( "MTCproject" );
     doc.appendChild( root );
 
-    QDomElement ROM_node = doc.createElement( "ROM" );
-    root.appendChild( ROM_node );
-    ROM_node.setAttribute( "path", m_ROM_filename );
+    QDomElement original_ROM_node = doc.createElement( "original_ROM" );
+    root.appendChild( original_ROM_node );
+    original_ROM_node.setAttribute( "path", m_original_ROM_filename );
+
+    QDomElement current_ROM_node = doc.createElement( "current_ROM" );
+    root.appendChild( current_ROM_node );
+    current_ROM_node.setAttribute( "path", m_ROM_filename );
 
     QDomElement start_node = doc.createElement( "start" );
     root.appendChild( start_node );
@@ -185,6 +198,8 @@ bool MTCproject::save_project(QString filename)
 MTCbookmark * MTCproject::read_project(QString filename)
 {
     clear();
+    m_filename=filename;
+
     m_palettes.push_back(new Palette("Empty"));
     MTCbookmark *start=0;
 
@@ -213,8 +228,11 @@ MTCbookmark * MTCproject::read_project(QString filename)
                 while( !n1.isNull() ) {
                     QDomElement e1 = n1.toElement();
                     if( !e1.isNull() ) {
-                        if( e1.tagName() == "ROM" ) {
-                            all_ok&=load_ROM(e1.attribute( "path", "" ));
+                        if( e1.tagName() == "current_ROM" ) {
+                            all_ok&=load_ROM(e1.attribute( "path", "" ),false);
+                        }
+                        if( e1.tagName() == "original_ROM" ) {
+                            m_original_ROM_filename=e1.attribute( "path", "" );
                         }
                         if( e1.tagName() == "start" ) {
                             QDomNode n2 = n1.firstChild();
@@ -269,7 +287,6 @@ MTCbookmark * MTCproject::read_project(QString filename)
             }
         }
     }
-
 
     m_current_palette_index=m_palettes.size()-1;
     m_rom->set_palette(getPalette());

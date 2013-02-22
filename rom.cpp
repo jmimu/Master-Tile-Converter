@@ -226,6 +226,7 @@ long Rom::test_decompress_tiles(Rom * origin, long index)
 
 //with "Phantasy Star" RLE
 //http://www.smspower.org/Development/Compression
+//return number of tiles uncompressed
 long Rom::decompress_tiles(Rom * origin, long index)
 {
     if (index>=origin->get_romlength()) return -1;
@@ -290,7 +291,7 @@ long Rom::decompress_tiles(Rom * origin, long index)
         m_tiles.push_back(new Tile(m_palette));
 
     //std::cout<<"Found "<<(long)decompressed_bitplane[0].size()<<" compressed bytes"<<std::endl;
-    return (offset-1);
+    return nbr_decompressed_tiles;
 }
 
 

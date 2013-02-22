@@ -62,7 +62,7 @@ public:
     std::vector<MTCbookmark*> * getBookmarks(){return &m_bookmarks;}
     MTCbookmark* getBookmark(int i){return m_bookmarks.at(i);}
 
-    bool load_ROM(QString ROMpath);
+    bool load_ROM(QString ROMpath,bool is_original_rom=true);
     void save_ROM(QString ROMpath){m_rom->save_ROM(ROMpath.toStdString());m_ROM_filename=ROMpath;}
 
     void add_bookmark(QString description,unsigned long offset,short mode);
@@ -81,6 +81,7 @@ public:
     void setMode(int mode){m_current_mode=mode;}
     int getMode(){return m_current_mode;}
     QString getFilename(){return m_filename;}
+    QString get_original_ROM_filename(){return m_original_ROM_filename;}
     void set_sprite_part_of_palette(bool sprite_part_of_palette){m_sprite_part_of_palette=sprite_part_of_palette;}
 
 private:
@@ -89,6 +90,7 @@ private:
     std::vector<Palette*> m_palettes;
     std::vector<MTCbookmark*> m_bookmarks;
     QString m_filename;
+    QString m_original_ROM_filename;
     QString m_ROM_filename;
 
     //just for save and load
