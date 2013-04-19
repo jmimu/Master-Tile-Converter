@@ -81,6 +81,10 @@ public slots:
     void return_to_real_rom();
     void show_decompressed_data();
 
+    bool palette2asm();
+    bool tile2asm();
+    bool BMP2asm();
+
 
     bool applyHackFile(bool confirm=true);
     bool applyHackFile_fast(){return applyHackFile(false);};

@@ -37,8 +37,8 @@ void TilesWidget::set_tiles(std::vector<Tile*> * tiles)
 void TilesWidget::paintEvent(QPaintEvent*) {
     QPainter painter(this);
     painter.scale(4,4);
-    painter.fillRect(0,0,16*8,12*8,Qt::darkCyan);
-    painter.fillRect(0,0,16*8,12*8,Qt::DiagCrossPattern);
+    painter.fillRect(0,0,nb_tiles_width*8,NB_TILES_LINES*8,Qt::darkCyan);
+    painter.fillRect(0,0,nb_tiles_width*8,NB_TILES_LINES*8,Qt::DiagCrossPattern);
     if (m_tiles)
     {
         long x=0;

@@ -98,6 +98,10 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->bookmark_comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(goto_bookmark()));
     QObject::connect(ui->bookmark_pushButton, SIGNAL(pressed()), this, SLOT(add_bookmark()));
 
+    QObject::connect(ui->actionPalette2asm, SIGNAL(activated()), this, SLOT(palette2asm()));
+    QObject::connect(ui->actionTiles2asm, SIGNAL(activated()), this, SLOT(tile2asm()));
+    QObject::connect(ui->actionImage2asm, SIGNAL(activated()), this, SLOT(BMP2asm()));
+
 
     std::cout<<"Init UI..."<<std::endl;
 
@@ -753,6 +757,56 @@ void MainWindow::return_to_real_rom()
     ui->up_1row_pushButton->setEnabled(true);
     ui->up_1tile_pushButton->setEnabled(true);
     ui->return_realrom_pushButton->setEnabled(false);
+}
+
+
+bool MainWindow::palette2asm()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("ASM Palette"),"palette.inc",tr("ASM files (*.asm *.inc)"));
+    if (fileName!="")
+        return m_project->getPalette()->save_to_asm(fileName);
+    return false;
+}
+
+bool MainWindow::tile2asm()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("ASM Tiles"),"tiles.inc",tr("ASM files (*.asm *.inc)"));
+    if (fileName!="")
+    {
+        bool ok;
+        int nbr_tiles_max=(real_rom.get_romlength()-real_rom.get_offset())/Tile::tile_size();
+        int nb_tiles = QInputDialog::getInt(this, tr("How many tiles to export?"),
+                                     tr("Number of tiles to export in ASM (not compressed, using current BPP mode)"), 192, 0, nbr_tiles_max, 1, &ok);
+        if (ok)
+            return real_rom.rom_data2asm(fileName.toStdString(),real_rom.get_offset(),nb_tiles,Tile::tile_size());
+        else return false;
+    }
+    return false;
+}
+
+bool MainWindow::BMP2asm()
+{
+    QString fileNameBMP = QFileDialog::getOpenFileName(this, tr("BMP File"),".",tr("BMP files (*.BMP *.bmp)"));
+    if (fileNameBMP!="")
+    {
+        Rom rom_tmp(m_project->getPalette());
+        rom_tmp.import_BMP(fileNameBMP.toStdString(),Tile::number_bpp);
+        int nbr_tiles_max=rom_tmp.get_romlength()/Tile::tile_size();
+
+
+        QString fileName = QFileDialog::getSaveFileName(this, tr("ASM Tiles"),"tiles.inc",tr("ASM files (*.asm *.inc)"));
+        if (fileName!="")
+        {
+            bool ok;
+            int nb_tiles = QInputDialog::getInt(this, tr("How many tiles to export?"),
+                                         tr("Number of tiles to export in ASM (not compressed, using current BPP mode)"), nbr_tiles_max, 0, nbr_tiles_max, 1, &ok);
+            if (ok)
+                return rom_tmp.rom_data2asm(fileName.toStdString(),0,nb_tiles,Tile::tile_size());
+            else return false;
+        }
+        return false;
+    }
+    return false;
 }
 
 

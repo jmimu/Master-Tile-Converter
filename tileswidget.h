@@ -26,6 +26,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "tile.h"
 
+#define NB_TILES_LINES 14
+
 class TilesWidget : public QWidget
 {
     Q_OBJECT
@@ -33,8 +35,8 @@ public:
     TilesWidget(QWidget * parent = 0, Qt::WindowFlags f = 0 );
     void set_tiles(std::vector<Tile*> * tiles);
     int nb_tiles_width;
-    Tile* get_selected_tile(){ if (m_tiles) return m_tiles->at(selected_tile);else return 0;};
-    int get_selection_number(){return selected_tile;};
+    Tile* get_selected_tile(){ if (m_tiles) return m_tiles->at(selected_tile);else return 0;}
+    int get_selection_number(){return selected_tile;}
 protected:
     void paintEvent(QPaintEvent*);
     void mousePressEvent( QMouseEvent* event);

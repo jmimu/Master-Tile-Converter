@@ -28,11 +28,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "romheader.h"
 
+#include "tileswidget.h"
+
 Rom::Rom(Palette * palette) : romlength(0),romdata(0),m_palette(palette),m_offset(0x10341),compressed_size(0)
 {
     std::cout<<"Init ROM..."<<std::endl;
     m_tiles.clear();
-    for (int i=0;i<12*16;i++) // number of tiles is fixed for uncompressed data
+    for (int i=0;i<NB_TILES_LINES*16;i++) // number of tiles is fixed for uncompressed data
         m_tiles.push_back(new Tile(m_palette));
 }
 
@@ -96,7 +98,7 @@ bool Rom::loadfile(std::string filename)
 
 bool Rom::export_BMP(std::string filename,int nbbpp,long nb_tiles)
 {
-    long nbr_tiles_lines=12;
+    long nbr_tiles_lines=NB_TILES_LINES;
     int nb_tiles_width=16;
     if (nb_tiles>0)//this is compressed data
     {
@@ -144,6 +146,33 @@ bool Rom::export_BMP(std::string filename,int nbbpp,long nb_tiles)
 
     return img.save(filename.c_str(),"BMP");
 }
+
+
+bool Rom::rom_data2asm(std::string filename,long offset,long num_tiles, int tile_bytes)
+{
+    std::ofstream file;
+    file.open (filename.c_str());
+    if (file.fail()) return false;
+
+    //organize by tiles
+    long index=offset;
+    for (long i=0;i<num_tiles;i++)
+    {
+        file<<".db ";
+        for (long j=0;j<tile_bytes;j++)
+        {
+            file<<QString("$%1").arg(romdata[index],2,16,QLatin1Char('0')).toStdString();
+            if (j<tile_bytes-1)
+                file<<",";
+            index++;
+        }
+        file<<"\n";
+    }
+
+    file.close();
+    return true;
+}
+
 
 
 //with "Phantasy Star" RLE

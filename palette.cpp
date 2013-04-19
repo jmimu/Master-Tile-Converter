@@ -39,6 +39,7 @@ replot(127+127*cos(pi/16*x+2*pi/3))
 replot(127+127*cos(pi/16*x+4*pi/3))
    */
 
+    /*
     int nbr=32;
     for (int i=0;i<nbr;i++)
     {
@@ -50,11 +51,11 @@ replot(127+127*cos(pi/16*x+4*pi/3))
             colors_back.append( QColor(r,g,b).rgb() );
         else
             colors_sprites.append( QColor(r,r,r).rgb() );
-    }
+    }*/
 
 
     //default: make Alex Kidd palette
-    /*colors_back.append( QColor(0x0, 0x0, 0xff).rgb() );
+    colors_back.append( QColor(0x0, 0x0, 0xff).rgb() );
     colors_back.append( QColor(0xff, 0xff, 0xff).rgb() );
     colors_back.append( QColor(0xff, 0x55, 0xff).rgb() );
     colors_back.append( QColor(0xff, 0xaa, 0xff).rgb() );
@@ -86,7 +87,7 @@ replot(127+127*cos(pi/16*x+4*pi/3))
     colors_sprites.append( QColor(0xaa, 0xaa, 0xff).rgb() );
     colors_sprites.append( QColor(0xaa, 0x55, 0xff).rgb() );
     colors_sprites.append( QColor(0x55, 0x0, 0x0).rgb() );//modified from 0xff 0x0 0x0
-    colors_sprites.append( QColor(0xaa, 0xaa, 0x0).rgb() );*/
+    colors_sprites.append( QColor(0xaa, 0xaa, 0x0).rgb() );
 
 }
 
@@ -226,6 +227,35 @@ bool Palette::read_from_file(QString fileName)
 
     from_filename=fileName;
 
+    return true;
+}
+
+bool Palette::save_to_asm(QString fileName)
+{
+    std::ofstream file;
+    file.open (fileName.toStdString().c_str());
+    if (file.fail()) return false;
+
+    file<<".db ";
+
+    unsigned char sms_color,sms_r,sms_g,sms_b;
+    QRgb rgb_color;
+    for (unsigned int i=0;i<32;i++)
+    {
+        if (i<16)
+            rgb_color=colors_back.at(i);
+        else
+            rgb_color=colors_sprites.at(i-16);
+        sms_r=(rgb_color&0x000000C0)>>6;
+        sms_g=(rgb_color&0x0000C000)>>12;
+        sms_b=(rgb_color&0x00C00000)>>18;
+        sms_color=sms_r+sms_g+sms_b;
+        file<<(QString("$%1").arg(sms_color,2,16,QLatin1Char('0')).toStdString());
+        if (i<31)
+            file<<",";
+    }
+
+    file.close();
     return true;
 }
 
