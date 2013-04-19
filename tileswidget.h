@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "tile.h"
 
-#define NB_TILES_LINES 14
+#define NB_TILES_LINES 16
 
 class TilesWidget : public QWidget
 {

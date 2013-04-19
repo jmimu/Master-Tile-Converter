@@ -120,7 +120,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tilesScrollBar->setSingleStep(16);//the unit is 1 tile
     ui->tilesScrollBar->setPageStep(160);
 
-
+    ui->sprite_palette_radioButton->setChecked(true);
     m_project->setROM(&real_rom);//to be able to read palettes from the rom
 
     std::cout<<"Init finished!"<<std::endl;
@@ -182,6 +182,8 @@ bool MainWindow::loadMTCproject()
         update_bookmarks();
         goto_bookmark(start);
         delete start;
+
+        ui->sprite_palette_radioButton->setChecked(m_project->is_sprite_part_of_palette());
 
         return true;
     }

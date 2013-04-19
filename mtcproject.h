@@ -82,6 +82,7 @@ public:
     int getMode(){return m_current_mode;}
     QString getFilename(){return m_filename;}
     QString get_original_ROM_filename(){return m_original_ROM_filename;}
+    bool is_sprite_part_of_palette(){return m_sprite_part_of_palette;}
     void set_sprite_part_of_palette(bool sprite_part_of_palette){m_sprite_part_of_palette=sprite_part_of_palette;}
 
 private:
