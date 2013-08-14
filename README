@@ -40,7 +40,8 @@ TODO:
  * set working dir where rom is (for picture, asm...)
  * add "undo" button!
  * try to remove palette dependency for rom
- * Add Mark III support?
+ * Add Mark II support?
+ * show a message if incorrect patch, and show how man patches have been applied
 
 
 Usage :

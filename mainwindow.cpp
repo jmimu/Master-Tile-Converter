@@ -120,8 +120,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tilesScrollBar->setSingleStep(16);//the unit is 1 tile
     ui->tilesScrollBar->setPageStep(160);
 
-    ui->sprite_palette_radioButton->setChecked(true);
+    ui->background_palette_radioButton->setChecked(true);
     m_project->setROM(&real_rom);//to be able to read palettes from the rom
+    
+    change_mode();
 
     std::cout<<"Init finished!"<<std::endl;
 }
@@ -792,7 +794,7 @@ bool MainWindow::BMP2asm()
     if (fileNameBMP!="")
     {
         Rom rom_tmp(m_project->getPalette());
-        rom_tmp.import_BMP(fileNameBMP.toStdString(),Tile::number_bpp);
+        rom_tmp.import_BMP(fileNameBMP.toStdString(),Tile::number_bpp,true);//update palette at the same time
         int nbr_tiles_max=rom_tmp.get_romlength()/Tile::tile_size();
 
 

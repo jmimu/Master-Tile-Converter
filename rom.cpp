@@ -154,6 +154,9 @@ bool Rom::rom_data2asm(std::string filename,long offset,long num_tiles, int tile
     file.open (filename.c_str());
     if (file.fail()) return false;
 
+    m_palette->save_to_asm(file);
+
+    file<<"Tiles_Start:\n";
     //organize by tiles
     long index=offset;
     for (long i=0;i<num_tiles;i++)
@@ -168,6 +171,7 @@ bool Rom::rom_data2asm(std::string filename,long offset,long num_tiles, int tile
         }
         file<<"\n";
     }
+    file<<"Tiles_End:\n";
 
     file.close();
     return true;
@@ -441,7 +445,7 @@ long Rom::compress_tiles(int nbr_tiles)
 }
 
 //TODO import format check !
-bool Rom::import_BMP(std::string filename,int nbbpp)
+bool Rom::import_BMP(std::string filename,int nbbpp,bool update_palette)
 {
     int nb_tiles_width=0;
     int nb_tiles_height=0;
@@ -458,7 +462,7 @@ bool Rom::import_BMP(std::string filename,int nbbpp)
     if (img.colorCount()==0)
     {
         QMessageBox msgBox;
-        msgBox.setText("The picutre must be in indexed colors.");
+        msgBox.setText("The picture must be in indexed colors.");
         msgBox.setIcon(QMessageBox::Critical);
         msgBox.exec();
         return false;
@@ -470,7 +474,7 @@ bool Rom::import_BMP(std::string filename,int nbbpp)
         if (img.colorCount()>4)//4 to avoid gimp 2 colors mode
         {
             QMessageBox msgBox;
-            msgBox.setText("Wrong image palette or color profile.\nMaximum palette size is 4.");
+            msgBox.setText("Wrong image palette or MTC color profile.\nMaximum palette size is 4.");
             msgBox.setIcon(QMessageBox::Critical);
             msgBox.exec();
             return false;
@@ -481,7 +485,7 @@ bool Rom::import_BMP(std::string filename,int nbbpp)
         if (img.colorCount()>4)
         {
             QMessageBox msgBox;
-            msgBox.setText("Wrong image palette or color profile.\nMaximum palette size is 4.");
+            msgBox.setText("Wrong image palette or MTC color profile.\nMaximum palette size is 4.");
             msgBox.setIcon(QMessageBox::Critical);
             msgBox.exec();
             return false;
@@ -492,7 +496,7 @@ bool Rom::import_BMP(std::string filename,int nbbpp)
         if (img.colorCount()>8)
         {
             QMessageBox msgBox;
-            msgBox.setText("Wrong image palette or color profile.\nMaximum palette size is 8.");
+            msgBox.setText("Wrong image palette or MTC color profile.\nMaximum palette size is 8.");
             msgBox.setIcon(QMessageBox::Critical);
             msgBox.exec();
             return false;
@@ -503,7 +507,7 @@ bool Rom::import_BMP(std::string filename,int nbbpp)
         if (img.colorCount()>16)
         {
             QMessageBox msgBox;
-            msgBox.setText("Wrong image palette or color profile.\nMaximum palette size is 16.");
+            msgBox.setText("Wrong image palette or MTC color profile.\nMaximum palette size is 16.");
             msgBox.setIcon(QMessageBox::Critical);
             msgBox.exec();
             return false;
@@ -533,6 +537,11 @@ bool Rom::import_BMP(std::string filename,int nbbpp)
         if (romdata) delete[] romdata;
         romdata = new unsigned char [romlength];
         m_offset=0;
+    }
+    
+    if (update_palette) //get palette from BMP and convert it to SMS palette
+    {
+        m_palette->read_from_image(&img);
     }
 
 

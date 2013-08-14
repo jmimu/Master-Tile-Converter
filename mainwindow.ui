@@ -215,7 +215,7 @@
             <string>Background</string>
            </property>
            <property name="checked">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -225,7 +225,7 @@
             <string>Sprite</string>
            </property>
            <property name="checked">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -526,7 +526,7 @@ compressed tiles</string>
             <string>3 bpp</string>
            </property>
            <property name="checked">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -544,6 +544,9 @@ compressed tiles</string>
           <widget class="QRadioButton" name="mode_4bpp_radioButton">
            <property name="text">
             <string>4 bpp</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -570,7 +573,7 @@ compressed tiles</string>
      <x>0</x>
      <y>0</y>
      <width>740</width>
-     <height>25</height>
+     <height>16</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

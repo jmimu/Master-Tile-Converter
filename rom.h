@@ -35,7 +35,7 @@ public:
     long get_offset(){return m_offset;}
     std::vector<Tile*> * get_tiles(){return & m_tiles;}
     bool export_BMP(std::string filename,int nbbpp,long nb_tiles=0);
-    bool import_BMP(std::string filename,int nbbpp);
+    bool import_BMP(std::string filename,int nbbpp,bool update_palette=false);
     bool rom_data2asm(std::string filename,long offset,long num_tiles,int tile_bytes);
     long test_decompress_tiles(Rom * origin, long index);//return number of bytes read if ok, 0 if not valid, -1 if out of rom
     long decompress_tiles(Rom * origin, long index);//return number of tiles uncompressed

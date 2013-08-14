@@ -230,12 +230,24 @@ bool Palette::read_from_file(QString fileName)
     return true;
 }
 
+
 bool Palette::save_to_asm(QString fileName)
 {
     std::ofstream file;
     file.open (fileName.toStdString().c_str());
     if (file.fail()) return false;
+    save_to_asm(file);
+    
+    file.close();
+    return true;
+}
 
+void Palette::save_to_asm(std::ofstream &file)
+{
+    
+
+    file<<"Palette_Start:\n";
+    
     file<<".db ";
 
     unsigned char sms_color,sms_r,sms_g,sms_b;
@@ -246,17 +258,21 @@ bool Palette::save_to_asm(QString fileName)
             rgb_color=colors_back.at(i);
         else
             rgb_color=colors_sprites.at(i-16);
-        sms_r=(rgb_color&0x000000C0)>>6;
+        sms_b=(rgb_color&0x000000C0)>>2;
         sms_g=(rgb_color&0x0000C000)>>12;
-        sms_b=(rgb_color&0x00C00000)>>18;
+        sms_r=(rgb_color&0x00C00000)>>22;
         sms_color=sms_r+sms_g+sms_b;
         file<<(QString("$%1").arg(sms_color,2,16,QLatin1Char('0')).toStdString());
+
+        //std::cout<<"Convert color "<<i<<": "<<(QString("$%1").arg(rgb_color,2,16,QLatin1Char('0')).toStdString())
+        //    <<" => "<<(QString("$%1").arg(sms_color,2,16,QLatin1Char('0')).toStdString())<<std::endl;
+
         if (i<31)
             file<<",";
     }
 
-    file.close();
-    return true;
+    file<<"\nPalette_End:\n\n";
+
 }
 
 bool Palette::read_from_romdata(unsigned char * romdata,long romlength,long offset)
@@ -306,4 +322,19 @@ QDomElement Palette::toNode(QDomDocument &d)
     cn.setAttribute( "description", m_description );
 
     return cn;
+}
+
+void Palette::read_from_image(QImage *img)
+{
+    QVector<QRgb> colortable=img->colorTable();
+    for (unsigned int i=0;i<colortable.size();i++)
+    {
+        //std::cout<<"Read color "<<i<<": "<<(QString("$%1").arg(colortable[i],2,16,QLatin1Char('0')).toStdString())<<std::endl;            
+        if (m_sprites_palette)
+        {
+            colors_sprites[i]=colortable[i];
+        }else{
+            colors_back[i]=colortable[i];
+        }
+    }
 }

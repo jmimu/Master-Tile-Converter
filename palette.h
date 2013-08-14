@@ -25,13 +25,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QVector>
 #include <QString>
 #include <QtXml/QDomDocument>
+#include <QImage>
 
 class Palette
 {
 public:
     Palette(QString description);
     bool read_from_file(QString fileName);
+    void read_from_image(QImage *img);
     bool save_to_asm(QString fileName);
+    void save_to_asm(std::ofstream &file);
     int try_to_find_in_rom(QString fileName, unsigned char *romdata, long romlength,bool show_msg=false);//read from file, and return number of correct bytes (perfect=32) (-2 if file error, -1 if sequence not found in data) best offset is written in from_offset
     bool read_from_romdata(unsigned char * romdata, long romlength, long offset);
     QVector<QRgb> &get_colors() { if (m_sprites_palette) return colors_sprites; else return colors_back;}
