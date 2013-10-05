@@ -700,3 +700,71 @@ bool Rom::save_ROM(std::string filename)
     std::cout<<"Wrote ROM file: "<<filename<<"."<<std::endl;
     return true;
 }
+
+bool Rom::createIPS(std::string original_rom_filename,std::string ips_filename)
+{
+    //at first we re-compute the new checksum of current rom
+    ROMHeader header(this);
+    header.fix_checksum();
+
+
+    unsigned char * original_romdata;
+    unsigned long original_romlength=0;
+
+    //re-read original rom
+    std::ifstream is;
+    is.open (original_rom_filename.c_str(), std::ios::binary );
+    if (is.fail()) return false;
+    // get length of file:
+    is.seekg (0, std::ios::end);
+    original_romlength = is.tellg();
+    is.seekg (0, std::ios::beg);
+    // allocate memory:
+    original_romdata = new unsigned char [original_romlength];
+    // read data as a block:
+    is.read ((char*)original_romdata,original_romlength);
+    is.close();
+
+    std::vector<unsigned char> ips_data;
+    ips_data.push_back('P');
+    ips_data.push_back('A');
+    ips_data.push_back('T');
+    ips_data.push_back('C');
+    ips_data.push_back('H');
+    for (unsigned long i=0;i<romlength;i++)
+    {
+        if (romdata[i]==original_romdata[i])
+            continue;
+        //std::cout<<"Diff at offset "<<std::hex<<i<<std::endl;
+        unsigned long patch_start_offset=i;
+        std::vector<unsigned  char> patch_data;
+        while ((i<romlength)&&(romdata[i]!=original_romdata[i]))
+        {
+            //std::cout<<"Diff: "<<std::hex<<(unsigned char)romdata[i]<<" != "<<(unsigned char)original_romdata[i]<<std::endl;
+            patch_data.push_back(romdata[i]);
+            i++;
+        }
+        if (i>=romlength)
+            break;
+        //std::cout<<"add "<<std::hex<<patch_data.size()<<" bytes"<<std::endl;
+        ips_data.push_back((patch_start_offset & 0x00FF0000)>>16);
+        ips_data.push_back((patch_start_offset & 0x0000FF00)>>8);
+        ips_data.push_back((patch_start_offset & 0x000000FF));
+        ips_data.push_back((patch_data.size() & 0xFF00)>>8);
+        ips_data.push_back((patch_data.size() & 0x00FF));
+        for (unsigned long j=0;j<patch_data.size();j++)
+        {
+            ips_data.push_back(patch_data[j]);
+        }
+    }
+    ips_data.push_back('E');
+    ips_data.push_back('O');
+    ips_data.push_back('F');
+
+    //write ips file
+    std::ofstream os;
+    os.open (ips_filename.c_str(), std::ofstream::binary );
+    os.write ((char*)&ips_data[0],ips_data.size());
+    os.close();
+}
+

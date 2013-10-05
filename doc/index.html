@@ -19,6 +19,12 @@
 
         </div>
         
+        <div id="barres">
+          <hr/> 
+          <hr/> 
+          <hr/> 
+        </div>
+        
         <div id="corps">
 
           
@@ -37,6 +43,7 @@
                   <li>Compress 4bpp tiles</li>
                   <li>Import compressed tiles</li>
                   <li>Export modified ROM</li>
+                  <li>Create IPS patch</li>
                   <li>Correct ROM checksum</li>
                   <li>Apply hacks to ROM (byte modification)</li>
                   <li>Work on GNU/Linux, MacOS and Windows</li>
@@ -46,7 +53,7 @@
             <p>Contact: <img src="images/ctct.png" alt="contact"/></p>
           
           <h2>Downloads</h2>
-            <p>Executable version 0.7 for Windows: <a href="http://jmimu.free.fr/mastertileconverter/downloads/mastertileconverter_win_v07.zip">http://jmimu.free.fr/mastertileconverter/downloads/mastertileconverter_win_v07.zip</a></p>
+            <p>Executable version 0.9 for Windows: <a href="http://jmimu.free.fr/mastertileconverter/downloads/mastertileconverter_win_v09.zip">http://jmimu.free.fr/mastertileconverter/downloads/mastertileconverter_win_v07.zip</a></p>
             <p>Development version sources (using <a href="http://git-scm.com/">git</a>): <a href="https://github.com/jmimu/Master-Tile-Converter">https://github.com/jmimu/Master-Tile-Converter</a></p>
             <p>How to compile: install <a href="http://qt-project.org/downloads">QtCreator (Qt 4)</a>, open <strong>mastertileconverter.pro</strong>, and compile!</p>
 
@@ -116,6 +123,8 @@
                 <p>You can then try to change one byte in the rom corresponding to the color you want to change, and record this as a hack file.</p>
                 <p class="centrage"><img  class="screenshot" src="images/CS_palette_hack.png"  alt="Palette hack"/></p>
                 <p>To have Cyber Shinobi's Joe fully covered by his cloths, the hack will be: "<code>725E:25 *blue skin for joe</code>". In order to avoid defaults on foes face, you may have to add: "<code>7264:25 *blue skin for foes</code>". Now they are all blue, but it's ok, they are just robots!</p>
+                <p>After applying the hack file you created you can save the modified rom with <strong>ROM>Save ROM</strong>.</p>
+                <p>You can also export your modifications as an IPS patch to share it with others using the <strong>ROM>Create IPS patch</strong> command.</p>
 
           <h2>Example</h2>
               <p>You can find examples of modifications for Alex Kidd in Miracle World in the <strong>ex</strong> directory.</p>
@@ -134,7 +143,7 @@
 
         </div>
         <div id="pied_de_page">
-            <footer>©  2012 <a href="http://tataches.legtux.org/"><img id="signature" src="images/sign_am1.png" alt="Signature"/></a></footer>
+            <footer>©  2012-2013 <a href="http://tataches.legtux.org/"><img id="signature" src="images/sign_am1.png" alt="Signature"/></a></footer>
         </div>
 
       </div>

@@ -45,6 +45,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QObject::connect(ui->actionOpen_Rom, SIGNAL(activated()), this, SLOT(loadROM()));
     QObject::connect(ui->actionSave_Rom, SIGNAL(activated()), this, SLOT(saveROM()));
+    QObject::connect(ui->actionCreate_IPS_patch, SIGNAL(activated()), this, SLOT(createIPS()));
     QObject::connect(ui->actionImport_Palette, SIGNAL(activated()), this, SLOT(loadPaletteFile()));
     QObject::connect(ui->actionAbout, SIGNAL(activated()), this, SLOT(show_about()));
     QObject::connect(ui->actionImport_Compressed_Data, SIGNAL(activated()), this, SLOT(import_compressed_data()));
@@ -426,6 +427,16 @@ bool MainWindow::saveROM()
     return false;
 }
 
+bool MainWindow::createIPS()
+{
+    QString ipsfileName = QFileDialog::getSaveFileName(this, tr("Save ROM"),m_project->get_original_ROM_filename()+"_patch.ips",tr("IPS patch (*.ips)"));
+    if (ipsfileName!="")
+    {
+        return current_rom_shown->createIPS(m_project->get_original_ROM_filename().toStdString(),ipsfileName.toStdString());
+    }
+    return false;
+}
+
 //TODO: change file name depending if decompressed data or not
 bool MainWindow::export_picture()
 {
@@ -580,10 +591,13 @@ bool MainWindow::applyHackFile(bool confirm)
                         do_it=(msgBox.exec()==QMessageBox::Yes);
                     }
                     if (do_it)
+                    {
+                        std::cout<<"Apply hack: \""<<comment<<"\""<<std::endl;
                         if (!real_rom.set_romdata(address,&data))
                         {
                             std::cerr<<"Modification out of rom: "<<line<<std::endl;
                         }
+                    }
                 }
             }
         }

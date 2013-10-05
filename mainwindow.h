@@ -58,6 +58,7 @@ public slots:
     void show_about();    
     bool loadROM();
     bool saveROM();
+    bool createIPS();
     bool loadMTCproject();
     bool saveMTCproject();
     bool loadPaletteFile();
@@ -87,7 +88,7 @@ public slots:
 
 
     bool applyHackFile(bool confirm=true);
-    bool applyHackFile_fast(){return applyHackFile(false);};
+    bool applyHackFile_fast(){return applyHackFile(false);}
 
     void move_up1Byte();
     void move_down1Byte();

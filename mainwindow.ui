@@ -573,7 +573,7 @@ compressed tiles</string>
      <x>0</x>
      <y>0</y>
      <width>740</width>
-     <height>16</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -583,6 +583,7 @@ compressed tiles</string>
     <addaction name="actionOpen_Rom"/>
     <addaction name="actionSave_Rom"/>
     <addaction name="separator"/>
+    <addaction name="actionCreate_IPS_patch"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -731,6 +732,11 @@ compressed tiles</string>
   <action name="actionImage2asm">
    <property name="text">
     <string>BMP to Asm</string>
+   </property>
+  </action>
+  <action name="actionCreate_IPS_patch">
+   <property name="text">
+    <string>Create IPS patch</string>
    </property>
   </action>
  </widget>

@@ -11,6 +11,9 @@ body
     background-color:#222;
     /*background-image:url(images/back.png);
     background-repeat:repeat;*/
+    outline-width: 2px;
+    outline-style: solid;
+    outline-color: #454545;
 }
 
 .centrage
@@ -120,4 +123,14 @@ img.divers
     padding: 10px;
     border: 2px solid #FFFFFF;
     height:300px;
+}
+
+
+#barres hr
+{
+  width:100%;
+  /*height:10px;*/
+  border: 2px solid #FFFFFF;
+  border-color: #454545;
+  border-top-color: #656565;
 }

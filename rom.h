@@ -48,6 +48,7 @@ public:
     void set_offset(long offset){if (offset<romlength) m_offset=offset;}
     void set_palette(Palette *palette){m_palette=palette;}
     long get_compressed_size(){return compressed_size;}
+    bool createIPS(std::string original_rom_filename, std::string ips_filename);
 protected:
     long romlength;
     unsigned char * romdata; // exact data of the ROM
