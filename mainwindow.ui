@@ -612,7 +612,6 @@ compressed tiles</string>
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionNew_Project"/>
     <addaction name="actionOpen_Project"/>
     <addaction name="actionSave_Project"/>
     <addaction name="separator"/>
@@ -776,7 +775,7 @@ compressed tiles</string>
  <connections>
   <connection>
    <sender>actionExit</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>close()</slot>
    <hints>

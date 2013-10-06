@@ -1,6 +1,6 @@
 TARGET = mastertileconverter
 TEMPLATE = app
-QT       += core gui xml
+QT       += core gui xml widgets
 SOURCES += main.cpp \
     mainwindow.cpp \
     tile.cpp \
@@ -25,5 +25,5 @@ HEADERS += mainwindow.h \
 FORMS += mainwindow.ui \
     dialog_about.ui
 RESOURCES += data.qrc
-#CONFIG += debug
+CONFIG += debug
 OTHER_FILES += README

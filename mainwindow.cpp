@@ -43,23 +43,23 @@ MainWindow::MainWindow(QWidget *parent) :
     std::cout<<"Setup UI..."<<std::endl;
     ui->setupUi(this);
 
-    QObject::connect(ui->actionOpen_Rom, SIGNAL(activated()), this, SLOT(loadROM()));
-    QObject::connect(ui->actionSave_Rom, SIGNAL(activated()), this, SLOT(saveROM()));
-    QObject::connect(ui->actionCreate_IPS_patch, SIGNAL(activated()), this, SLOT(createIPS()));
-    QObject::connect(ui->actionImport_Palette, SIGNAL(activated()), this, SLOT(loadPaletteFile()));
-    QObject::connect(ui->actionAbout, SIGNAL(activated()), this, SLOT(show_about()));
-    QObject::connect(ui->actionImport_Compressed_Data, SIGNAL(activated()), this, SLOT(import_compressed_data()));
+    QObject::connect(ui->actionOpen_Rom, SIGNAL(triggered()), this, SLOT(loadROM()));
+    QObject::connect(ui->actionSave_Rom, SIGNAL(triggered()), this, SLOT(saveROM()));
+    QObject::connect(ui->actionCreate_IPS_patch, SIGNAL(triggered()), this, SLOT(createIPS()));
+    QObject::connect(ui->actionImport_Palette, SIGNAL(triggered()), this, SLOT(loadPaletteFile()));
+    QObject::connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(show_about()));
+    QObject::connect(ui->actionImport_Compressed_Data, SIGNAL(triggered()), this, SLOT(import_compressed_data()));
 
-    QObject::connect(ui->actionCompress_Picture, SIGNAL(activated()), this, SLOT(compress_picture()));
-    QObject::connect(ui->actionCompressed_and_Import_Data, SIGNAL(activated()), this, SLOT(compress_and_import()));
-    QObject::connect(ui->actionDecompress_Tiles, SIGNAL(activated()), this, SLOT(decompress_tiles()));
+    QObject::connect(ui->actionCompress_Picture, SIGNAL(triggered()), this, SLOT(compress_picture()));
+    QObject::connect(ui->actionCompressed_and_Import_Data, SIGNAL(triggered()), this, SLOT(compress_and_import()));
+    QObject::connect(ui->actionDecompress_Tiles, SIGNAL(triggered()), this, SLOT(decompress_tiles()));
 
     QObject::connect(ui->find_next_compr_pushButton, SIGNAL(pressed()), this, SLOT(decompress_tiles()));
     QObject::connect(ui->return_realrom_pushButton, SIGNAL(pressed()), this, SLOT(return_to_real_rom()));
 
 
-    QObject::connect(ui->actionApply_Hack_File_fast, SIGNAL(activated()), this, SLOT(applyHackFile_fast()));
-    QObject::connect(ui->actionApply_Hack_File_confirm, SIGNAL(activated()), this, SLOT(applyHackFile()));
+    QObject::connect(ui->actionApply_Hack_File_fast, SIGNAL(triggered()), this, SLOT(applyHackFile_fast()));
+    QObject::connect(ui->actionApply_Hack_File_confirm, SIGNAL(triggered()), this, SLOT(applyHackFile()));
 
 
     QObject::connect(ui->background_palette_radioButton, SIGNAL(clicked()), this, SLOT(change_palette()));
@@ -77,10 +77,10 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->mode_3bpp_radioButton, SIGNAL(clicked()), this, SLOT(change_mode()));
     QObject::connect(ui->mode_4bpp_radioButton, SIGNAL(clicked()), this, SLOT(change_mode()));
 
-    QObject::connect(ui->actionExport_Picture, SIGNAL(activated()), this, SLOT(export_picture()));
-    QObject::connect(ui->actionImport_Picture, SIGNAL(activated()), this, SLOT(import_picture()));
-    QObject::connect(ui->actionSave_Project, SIGNAL(activated()), this, SLOT(saveMTCproject()));
-    QObject::connect(ui->actionOpen_Project, SIGNAL(activated()), this, SLOT(loadMTCproject()));
+    QObject::connect(ui->actionExport_Picture, SIGNAL(triggered()), this, SLOT(export_picture()));
+    QObject::connect(ui->actionImport_Picture, SIGNAL(triggered()), this, SLOT(import_picture()));
+    QObject::connect(ui->actionSave_Project, SIGNAL(triggered()), this, SLOT(saveMTCproject()));
+    QObject::connect(ui->actionOpen_Project, SIGNAL(triggered()), this, SLOT(loadMTCproject()));
 
 
     QObject::connect(ui->up_1Byte_pushButton, SIGNAL(pressed()), this, SLOT(move_up1Byte()));
@@ -99,9 +99,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->bookmark_comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(goto_bookmark()));
     QObject::connect(ui->bookmark_pushButton, SIGNAL(pressed()), this, SLOT(add_bookmark()));
 
-    QObject::connect(ui->actionPalette2asm, SIGNAL(activated()), this, SLOT(palette2asm()));
-    QObject::connect(ui->actionTiles2asm, SIGNAL(activated()), this, SLOT(tile2asm()));
-    QObject::connect(ui->actionImage2asm, SIGNAL(activated()), this, SLOT(BMP2asm()));
+    QObject::connect(ui->actionPalette2asm, SIGNAL(triggered()), this, SLOT(palette2asm()));
+    QObject::connect(ui->actionTiles2asm, SIGNAL(triggered()), this, SLOT(tile2asm()));
+    QObject::connect(ui->actionImage2asm, SIGNAL(triggered()), this, SLOT(BMP2asm()));
 
 
     std::cout<<"Init UI..."<<std::endl;

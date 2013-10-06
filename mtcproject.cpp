@@ -46,7 +46,7 @@ QDomElement MTCbookmark::toNode(QDomDocument &d)
 
 //-------------------------------------------------------------
 
-MTCproject::MTCproject(QString filename) : m_current_palette_index(0),
+MTCproject::MTCproject(QString filename) : m_ROM_filename(""),m_current_palette_index(0),
     m_current_mode(4),m_current_offset(0x0),m_sprite_part_of_palette(true)
 {
     std::cout<<"Create new MTCproject"<<std::endl;
@@ -145,8 +145,13 @@ void MTCproject::add_bookmark(MTCbookmark *b)
 
 bool MTCproject::save_project(QString filename)
 {
+    m_filename=filename;
     //at first, save current rom
-    m_rom->save_ROM(m_ROM_filename.toStdString());
+    if (m_ROM_filename!="")
+    {
+        m_ROM_filename=m_filename+"_current_ROM.sms";
+        m_rom->save_ROM(m_ROM_filename.toStdString());
+    }
 
     QDomDocument doc( "MTCproject" );
     QDomElement root = doc.createElement( "MTCproject" );
@@ -229,7 +234,8 @@ MTCbookmark * MTCproject::read_project(QString filename)
                     QDomElement e1 = n1.toElement();
                     if( !e1.isNull() ) {
                         if( e1.tagName() == "current_ROM" ) {
-                            all_ok&=load_ROM(e1.attribute( "path", "" ),false);
+                            if (e1.attribute( "path", "" )!="")
+                                all_ok&=load_ROM(e1.attribute( "path", "" ),false);
                         }
                         if( e1.tagName() == "original_ROM" ) {
                             m_original_ROM_filename=e1.attribute( "path", "" );

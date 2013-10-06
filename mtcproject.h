@@ -63,7 +63,7 @@ public:
     MTCbookmark* getBookmark(int i){return m_bookmarks.at(i);}
 
     bool load_ROM(QString ROMpath,bool is_original_rom=true);
-    void save_ROM(QString ROMpath){m_rom->save_ROM(ROMpath.toStdString());m_ROM_filename=ROMpath;}
+    void save_ROM(QString ROMpath){m_rom->save_ROM(ROMpath.toStdString());/*m_ROM_filename=ROMpath;*/}
 
     void add_bookmark(QString description,unsigned long offset,short mode);
     void add_bookmark(MTCbookmark *b);
