@@ -465,7 +465,7 @@ bool Rom::import_BMP(std::string filename,int nbbpp,bool update_palette)
 {
     int nb_tiles_width=0;
     int nb_tiles_height=0;
-    QImage img(filename.c_str(),"BMP");
+    QImage img(filename.c_str());
 
     if (img.isNull())
     {

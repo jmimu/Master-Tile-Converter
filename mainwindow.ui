@@ -582,7 +582,7 @@ compressed tiles</string>
      <x>0</x>
      <y>0</y>
      <width>740</width>
-     <height>25</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -739,7 +739,7 @@ compressed tiles</string>
   </action>
   <action name="actionImage2asm">
    <property name="text">
-    <string>BMP to Asm</string>
+    <string>Image to Asm</string>
    </property>
   </action>
   <action name="actionCreate_IPS_patch">

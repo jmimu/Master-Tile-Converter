@@ -804,7 +804,7 @@ bool MainWindow::tile2asm()
 
 bool MainWindow::BMP2asm()
 {
-    QString fileNameBMP = QFileDialog::getOpenFileName(this, tr("BMP File"),".",tr("BMP files (*.BMP *.bmp)"));
+    QString fileNameBMP = QFileDialog::getOpenFileName(this, tr("Image File"),".",tr("Image files (*.BMP *.bmp *.PNG *.png)"));
     if (fileNameBMP!="")
     {
         Rom rom_tmp(m_project->getPalette());
