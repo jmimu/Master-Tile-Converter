@@ -408,7 +408,7 @@ void MainWindow::goto_bookmark(MTCbookmark * bookmark)
 
 bool MainWindow::loadROM()
 {
-    QString fileName = QFileDialog::getOpenFileName(this,tr("Choose ROM"), ".", tr("SMS ROM Files (*.sms)"));
+    QString fileName = QFileDialog::getOpenFileName(this,tr("Choose ROM"), ".", tr("All ROM (*.sms *.gb *.gg *.sg);;SMS ROM (*.sms);;All Files (*)"));
     if (fileName!="")
     {
         m_project->load_ROM(fileName);

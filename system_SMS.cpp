@@ -15,17 +15,18 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-
-#include "romheader.h"
+#include "system_SMS.h"
 
 #include <iostream>
 
-ROMHeader::ROMHeader(Rom *rom):m_rom(rom),m_computed_checksum(0),m_read_checksum(0),m_region(0),m_rom_size(0)
+
+#include "rom.h"
+
+System_SMS::System_SMS():System()
 {
 }
 
-bool ROMHeader::check_TMR_SEGA()
+bool System_SMS::check_ROM()
 {
     char * signature=(char*)"TMR SEGA";
     for (int i=0;i<8;i++)
@@ -39,7 +40,7 @@ bool ROMHeader::check_TMR_SEGA()
 }
 
 
-unsigned short ROMHeader::read_checksum()
+unsigned short System_SMS::read_checksum()
 {
     unsigned short checksum=0;
     checksum=m_rom->get_romdata()[CHECKSUM_ADDRESS+1];
@@ -49,7 +50,7 @@ unsigned short ROMHeader::read_checksum()
     return checksum;
 }
 
-void ROMHeader::read_region_and_size()
+void System_SMS::read_region_and_size()
 {
     m_region=m_rom->get_romdata()[REGION_AND_SIZE_ADDRESS]>>4;
     m_rom_size=m_rom->get_romdata()[REGION_AND_SIZE_ADDRESS]%0x10;
@@ -62,7 +63,7 @@ void ROMHeader::read_region_and_size()
 // SMS Check (c) Omar Cornut (Bock) 2000-2006
 // Sega 8-bit ROM tool, showing checksum and various informations
 //---------------------------------------------------------------------------
-unsigned short ROMHeader::compute_checksum()
+unsigned short System_SMS::compute_checksum()
 {
     read_region_and_size();
 
@@ -102,7 +103,7 @@ unsigned short ROMHeader::compute_checksum()
 }
 
 
-void ROMHeader::fix_checksum()
+void System_SMS::fix_checksum()
 {
     compute_checksum();
 

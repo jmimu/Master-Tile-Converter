@@ -56,7 +56,16 @@ MTCproject::MTCproject(QString filename) : m_ROM_filename(""),m_current_palette_
         m_filename=filename;
         //todo: load file
     }else{
-        m_palettes.push_back(new Palette("Empty")); //TODO ??
+        m_palettes.push_back(new Palette("Default SMS"));
+        m_palettes.push_back(new Palette("Default GB"));
+        m_palettes[1]->set_one_color(false,0,QColor(0x00, 0x00, 0x00).rgb());
+        m_palettes[1]->set_one_color(false,1,QColor(0x55, 0x55, 0x55).rgb());
+        m_palettes[1]->set_one_color(false,2,QColor(0xaa, 0xaa, 0xaa).rgb());
+        m_palettes[1]->set_one_color(false,3,QColor(0xff, 0xff, 0xff).rgb());
+        m_palettes[1]->set_one_color(true,3,QColor(0x00, 0x00, 0x00).rgb());
+        m_palettes[1]->set_one_color(true,2,QColor(0x55, 0x55, 0x55).rgb());
+        m_palettes[1]->set_one_color(true,1,QColor(0xaa, 0xaa, 0xaa).rgb());
+        m_palettes[1]->set_one_color(true,0,QColor(0xff, 0xff, 0xff).rgb());
         m_filename="MTC.xml";
     }
 }

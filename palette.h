@@ -40,7 +40,8 @@ public:
     QVector<QRgb> &get_colors() { if (m_sprites_palette) return colors_sprites; else return colors_back;}
     QVector<QRgb> &get_back_colors() { return colors_back; }
     QVector<QRgb> &get_sprites_colors() { return colors_sprites; }
-    void set_colors(bool sprites_palette) { m_sprites_palette=sprites_palette; }
+    void set_colors(bool sprites_palette) { m_sprites_palette=sprites_palette; } //choose if back of sprite part
+    void set_one_color(bool sprites_palette,unsigned int index,QRgb color);
     QString get_description(){return m_description;}
     QDomElement toNode(QDomDocument &d);
 protected:

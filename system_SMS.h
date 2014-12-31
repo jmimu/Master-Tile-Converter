@@ -17,10 +17,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 
-#ifndef ROMHEADER_H
-#define ROMHEADER_H
+#ifndef SYSTEM_SMS_H
+#define SYSTEM_SMS_H
 
-#include "rom.h"
+#include "system.h"
 
 //see http://www.smspower.org/Development/ROMHeader
 
@@ -57,22 +57,22 @@ $2	1MB	Unused, buggy
 
 
 
-class ROMHeader
+class System_SMS:public System
 {
 public:
-    ROMHeader(Rom *rom);
-    bool check_TMR_SEGA();
-    unsigned short read_checksum();//get the checksum written in header
-    void read_region_and_size();
-    unsigned short compute_checksum();
-    void fix_checksum();
-protected:
+    System_SMS();
+    virtual bool check_ROM();
+    virtual unsigned short read_checksum();//get the checksum written in header
+    virtual void read_region_and_size();
+    virtual unsigned short compute_checksum();
+    virtual void fix_checksum();
+/*protected:
     Rom * m_rom;
     unsigned short m_computed_checksum;
     unsigned short m_read_checksum;
     unsigned char m_region;
-    unsigned char m_rom_size;
+    unsigned char m_rom_size;*/
 
 };
 
-#endif // ROMHEADER_H
+#endif // SYSTEM_SMS_H

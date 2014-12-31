@@ -338,3 +338,12 @@ void Palette::read_from_image(QImage *img)
         }
     }
 }
+
+void Palette::set_one_color(bool sprites_palette,unsigned int index,QRgb color)
+{
+    if (index>=colors_sprites.size()) return;
+    if (sprites_palette)
+        colors_sprites[index]=color;
+    else
+        colors_back[index]=color;
+}

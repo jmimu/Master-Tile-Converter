@@ -9,9 +9,11 @@ SOURCES += main.cpp \
     palettewidget.cpp \
     zoomwidget.cpp \
     rom.cpp \
-    romheader.cpp \
     dialog_about.cpp \
-    mtcproject.cpp
+    mtcproject.cpp \
+    system.cpp \
+    system_SMS.cpp \
+    system_unknown.cpp
 HEADERS += mainwindow.h \
     tile.h \
     palette.h \
@@ -19,9 +21,11 @@ HEADERS += mainwindow.h \
     palettewidget.h \
     zoomwidget.h \
     rom.h \
-    romheader.h \
     dialog_about.h \
-    mtcproject.h
+    mtcproject.h \
+    system.h \
+    system_SMS.h \
+    system_unknown.h
 FORMS += mainwindow.ui \
     dialog_about.ui
 RESOURCES += data.qrc

@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "tile.h"
 #include "palette.h"
+#include "system.h"
 
 class Rom
 {
@@ -59,6 +60,8 @@ protected:
     long m_offset;
 
     long compressed_size;//only for comressed data
+
+    System * m_system;
 
 };
 

@@ -26,11 +26,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 #include <fstream>
 
-#include "romheader.h"
+#include "system_SMS.h"
+#include "system_unknown.h"
 
 #include "tileswidget.h"
 
-Rom::Rom(Palette * palette) : romlength(0),romdata(0),m_palette(palette),m_offset(0x10341),compressed_size(0)
+Rom::Rom(Palette * palette) : romlength(0),romdata(0),m_palette(palette),m_offset(0x10341),compressed_size(0),m_system(0)
 {
     std::cout<<"Init ROM..."<<std::endl;
     m_tiles.clear();
@@ -42,6 +43,7 @@ Rom::~Rom()
 {
     if (romdata) delete[] romdata;
     m_tiles.clear();
+    if (m_system) delete m_system;
 }
 
 void Rom::create_tiles(long offset)
@@ -61,6 +63,7 @@ void Rom::create_tiles(long offset)
 bool Rom::loadfile(std::string filename)
 {
     if (romdata) delete[] romdata;
+    if (m_system) delete m_system;
     
     //from http://www.cplusplus.com/reference/iostream/istream/read/
     std::ifstream is;
@@ -81,17 +84,30 @@ bool Rom::loadfile(std::string filename)
 
     std::cout<<"Read "<<romlength<<" bytes."<<std::endl;
 
-    ROMHeader header(this);
-    if (!header.check_TMR_SEGA())
+    //check ROM system
+    //search file extension
+    unsigned extension_found = filename.find_last_of(".");
+    std::string file_extension=filename.substr(extension_found+1);
+    std::cout<<"ROM file extension: "<<file_extension<<std::endl;
+    if ((file_extension=="sms")||(file_extension=="SMS")
+            ||(file_extension=="gg")||(file_extension=="GG"))
+    {
+        m_system=new System_SMS();
+    }else{
+        m_system=new System_Unknown();
+    }
+
+    m_system->setROM(this);
+    if (!m_system->check_ROM())
     {
         QMessageBox msgBox;
-        msgBox.setText("Bad rom signature (must be \"TMR SEGA\").");
+        msgBox.setText("Bad rom signature.");
         msgBox.setIcon(QMessageBox::Critical);
         msgBox.exec();
         return false;
     }
-    std::cout<<"Read checksum: "<<std::hex<<header.read_checksum()<<std::endl;
-    header.compute_checksum();
+    std::cout<<"Read checksum: "<<std::hex<<m_system->read_checksum()<<std::endl;
+    m_system->compute_checksum();
 
     return true;
 }
@@ -687,8 +703,7 @@ bool Rom::set_romdata(long address,std::vector<unsigned char> *data)
 
 bool Rom::save_ROM(std::string filename)
 {
-    ROMHeader header(this);
-    header.fix_checksum();
+    m_system->fix_checksum();
 
     //from http://www.cplusplus.com/reference/iostream/istream/read/
     std::ofstream os;
@@ -704,8 +719,7 @@ bool Rom::save_ROM(std::string filename)
 bool Rom::createIPS(std::string original_rom_filename,std::string ips_filename)
 {
     //at first we re-compute the new checksum of current rom
-    ROMHeader header(this);
-    header.fix_checksum();
+    m_system->fix_checksum();
 
 
     unsigned char * original_romdata;

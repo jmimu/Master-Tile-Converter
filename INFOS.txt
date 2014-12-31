@@ -1,3 +1,10 @@
+A faire :
+ - afficher le nom de la rom, du système et si modifiée dans l'interface
+ - faire un fichier de config avec dernier répertoire utilisé (rom ou projet)
+ - Ajouter une classe System_GB ?
+ - Faire que le système détermine les modes de BPP et la palette par défaut ?
+********************************************************************************
+
 On part de "[BIOS] Alex Kidd in Miracle World (USA, Europe).sms".
 
  * mettre à jour la checksum : $7FFA (voir valeur calculée par SMSandGGHeaderReader.exe)
