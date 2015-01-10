@@ -267,7 +267,9 @@ void Palette::save_to_asm(std::ofstream &file)
         //std::cout<<"Convert color "<<i<<": "<<(QString("$%1").arg(rgb_color,2,16,QLatin1Char('0')).toStdString())
         //    <<" => "<<(QString("$%1").arg(sms_color,2,16,QLatin1Char('0')).toStdString())<<std::endl;
 
-        if (i<31)
+        if (i==15)
+            file<<"\n.db ";
+        else if (i<31)
             file<<",";
     }
 
@@ -324,17 +326,25 @@ QDomElement Palette::toNode(QDomDocument &d)
     return cn;
 }
 
-void Palette::read_from_image(QImage *img)
+void Palette::read_from_image(QImage *img,bool update_both_palettes)
 {
     QVector<QRgb> colortable=img->colorTable();
     for (unsigned int i=0;i<colortable.size();i++)
     {
         //std::cout<<"Read color "<<i<<": "<<(QString("$%1").arg(colortable[i],2,16,QLatin1Char('0')).toStdString())<<std::endl;            
-        if (m_sprites_palette)
+        if (update_both_palettes)
         {
+            //update both palettes
             colors_sprites[i]=colortable[i];
-        }else{
             colors_back[i]=colortable[i];
+        }else{
+            //update only selected palette
+            if (m_sprites_palette)
+            {
+                colors_sprites[i]=colortable[i];
+            }else{
+                colors_back[i]=colortable[i];
+            }
         }
     }
 }

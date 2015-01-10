@@ -32,7 +32,7 @@ class Palette
 public:
     Palette(QString description);
     bool read_from_file(QString fileName);
-    void read_from_image(QImage *img);
+    void read_from_image(QImage *img, bool update_both_palettes=false);
     bool save_to_asm(QString fileName);
     void save_to_asm(std::ofstream &file);
     int try_to_find_in_rom(QString fileName, unsigned char *romdata, long romlength,bool show_msg=false);//read from file, and return number of correct bytes (perfect=32) (-2 if file error, -1 if sequence not found in data) best offset is written in from_offset

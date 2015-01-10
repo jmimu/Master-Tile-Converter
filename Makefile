@@ -1345,73 +1345,6 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		/usr/include/qt5/QtCore/QFile \
 		/usr/include/qt5/QtCore/QTextStream \
 		ui_mainwindow.h \
-		/usr/include/qt5/QtCore/QVariant \
-		/usr/include/qt5/QtWidgets/QAction \
-		/usr/include/qt5/QtWidgets/qaction.h \
-		/usr/include/qt5/QtWidgets/qactiongroup.h \
-		/usr/include/qt5/QtWidgets/QApplication \
-		/usr/include/qt5/QtWidgets/qapplication.h \
-		/usr/include/qt5/QtCore/qcoreapplication.h \
-		/usr/include/qt5/QtCore/qeventloop.h \
-		/usr/include/qt5/QtWidgets/qdesktopwidget.h \
-		/usr/include/qt5/QtGui/qguiapplication.h \
-		/usr/include/qt5/QtGui/qinputmethod.h \
-		/usr/include/qt5/QtWidgets/QButtonGroup \
-		/usr/include/qt5/QtWidgets/qbuttongroup.h \
-		/usr/include/qt5/QtWidgets/QComboBox \
-		/usr/include/qt5/QtWidgets/qcombobox.h \
-		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
-		/usr/include/qt5/QtWidgets/qstyleoption.h \
-		/usr/include/qt5/QtWidgets/qabstractspinbox.h \
-		/usr/include/qt5/QtGui/qvalidator.h \
-		/usr/include/qt5/QtCore/qregularexpression.h \
-		/usr/include/qt5/QtWidgets/qslider.h \
-		/usr/include/qt5/QtWidgets/qabstractslider.h \
-		/usr/include/qt5/QtWidgets/qstyle.h \
-		/usr/include/qt5/QtWidgets/qtabbar.h \
-		/usr/include/qt5/QtWidgets/qrubberband.h \
-		/usr/include/qt5/QtWidgets/qframe.h \
-		/usr/include/qt5/QtCore/qabstractitemmodel.h \
-		/usr/include/qt5/QtWidgets/QGridLayout \
-		/usr/include/qt5/QtWidgets/qgridlayout.h \
-		/usr/include/qt5/QtWidgets/qlayout.h \
-		/usr/include/qt5/QtWidgets/qlayoutitem.h \
-		/usr/include/qt5/QtWidgets/qboxlayout.h \
-		/usr/include/qt5/QtWidgets/QGroupBox \
-		/usr/include/qt5/QtWidgets/qgroupbox.h \
-		/usr/include/qt5/QtWidgets/QHBoxLayout \
-		/usr/include/qt5/QtWidgets/QHeaderView \
-		/usr/include/qt5/QtWidgets/qheaderview.h \
-		/usr/include/qt5/QtWidgets/qabstractitemview.h \
-		/usr/include/qt5/QtWidgets/qabstractscrollarea.h \
-		/usr/include/qt5/QtCore/qitemselectionmodel.h \
-		/usr/include/qt5/QtWidgets/QLabel \
-		/usr/include/qt5/QtWidgets/qlabel.h \
-		/usr/include/qt5/QtWidgets/QLineEdit \
-		/usr/include/qt5/QtWidgets/qlineedit.h \
-		/usr/include/qt5/QtGui/qtextcursor.h \
-		/usr/include/qt5/QtGui/qtextformat.h \
-		/usr/include/qt5/QtGui/qpen.h \
-		/usr/include/qt5/QtGui/qtextoption.h \
-		/usr/include/qt5/QtWidgets/QMenu \
-		/usr/include/qt5/QtWidgets/qmenu.h \
-		/usr/include/qt5/QtWidgets/QMenuBar \
-		/usr/include/qt5/QtWidgets/qmenubar.h \
-		/usr/include/qt5/QtWidgets/QPushButton \
-		/usr/include/qt5/QtWidgets/qpushbutton.h \
-		/usr/include/qt5/QtWidgets/qabstractbutton.h \
-		/usr/include/qt5/QtWidgets/QRadioButton \
-		/usr/include/qt5/QtWidgets/qradiobutton.h \
-		/usr/include/qt5/QtWidgets/QScrollBar \
-		/usr/include/qt5/QtWidgets/qscrollbar.h \
-		/usr/include/qt5/QtWidgets/QSpacerItem \
-		/usr/include/qt5/QtWidgets/QStatusBar \
-		/usr/include/qt5/QtWidgets/qstatusbar.h \
-		/usr/include/qt5/QtWidgets/QVBoxLayout \
-		/usr/include/qt5/QtWidgets/QWidget \
-		palettewidget.h \
-		tileswidget.h \
-		zoomwidget.h \
 		/usr/include/qt5/QtWidgets/QFileDialog \
 		/usr/include/qt5/QtWidgets/qfiledialog.h \
 		/usr/include/qt5/QtCore/qdir.h \
@@ -1419,10 +1352,16 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		/usr/include/qt5/QtWidgets/qdialog.h \
 		/usr/include/qt5/QtGui/QPainter \
 		/usr/include/qt5/QtGui/qpainter.h \
+		/usr/include/qt5/QtGui/qtextoption.h \
+		/usr/include/qt5/QtGui/qpen.h \
 		/usr/include/qt5/QtWidgets/QMessageBox \
 		/usr/include/qt5/QtWidgets/qmessagebox.h \
 		/usr/include/qt5/QtWidgets/QInputDialog \
 		/usr/include/qt5/QtWidgets/qinputdialog.h \
+		/usr/include/qt5/QtWidgets/qlineedit.h \
+		/usr/include/qt5/QtWidgets/qframe.h \
+		/usr/include/qt5/QtGui/qtextcursor.h \
+		/usr/include/qt5/QtGui/qtextformat.h \
 		/usr/include/qt5/QtCore/QRegExp \
 		dialog_about.h \
 		/usr/include/qt5/QtWidgets/QDialog
@@ -2257,43 +2196,7 @@ dialog_about.o: dialog_about.cpp dialog_about.h \
 		/usr/include/qt5/QtCore/qfiledevice.h \
 		/usr/include/qt5/QtGui/qvector2d.h \
 		/usr/include/qt5/QtGui/qtouchdevice.h \
-		ui_dialog_about.h \
-		/usr/include/qt5/QtCore/QVariant \
-		/usr/include/qt5/QtWidgets/QAction \
-		/usr/include/qt5/QtWidgets/qaction.h \
-		/usr/include/qt5/QtGui/qicon.h \
-		/usr/include/qt5/QtWidgets/qactiongroup.h \
-		/usr/include/qt5/QtWidgets/QApplication \
-		/usr/include/qt5/QtWidgets/qapplication.h \
-		/usr/include/qt5/QtCore/qcoreapplication.h \
-		/usr/include/qt5/QtCore/qeventloop.h \
-		/usr/include/qt5/QtWidgets/qdesktopwidget.h \
-		/usr/include/qt5/QtGui/qguiapplication.h \
-		/usr/include/qt5/QtGui/qinputmethod.h \
-		/usr/include/qt5/QtWidgets/QButtonGroup \
-		/usr/include/qt5/QtWidgets/qbuttongroup.h \
-		/usr/include/qt5/QtWidgets/QDialogButtonBox \
-		/usr/include/qt5/QtWidgets/qdialogbuttonbox.h \
-		/usr/include/qt5/QtWidgets/QHeaderView \
-		/usr/include/qt5/QtWidgets/qheaderview.h \
-		/usr/include/qt5/QtWidgets/qabstractitemview.h \
-		/usr/include/qt5/QtWidgets/qabstractscrollarea.h \
-		/usr/include/qt5/QtWidgets/qframe.h \
-		/usr/include/qt5/QtCore/qabstractitemmodel.h \
-		/usr/include/qt5/QtCore/qitemselectionmodel.h \
-		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
-		/usr/include/qt5/QtWidgets/qstyleoption.h \
-		/usr/include/qt5/QtWidgets/qabstractspinbox.h \
-		/usr/include/qt5/QtGui/qvalidator.h \
-		/usr/include/qt5/QtCore/qregularexpression.h \
-		/usr/include/qt5/QtWidgets/qslider.h \
-		/usr/include/qt5/QtWidgets/qabstractslider.h \
-		/usr/include/qt5/QtWidgets/qstyle.h \
-		/usr/include/qt5/QtWidgets/qtabbar.h \
-		/usr/include/qt5/QtWidgets/qtabwidget.h \
-		/usr/include/qt5/QtWidgets/qrubberband.h \
-		/usr/include/qt5/QtWidgets/QLabel \
-		/usr/include/qt5/QtWidgets/qlabel.h
+		ui_dialog_about.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dialog_about.o dialog_about.cpp
 
 mtcproject.o: mtcproject.cpp mtcproject.h \

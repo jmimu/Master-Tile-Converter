@@ -557,7 +557,7 @@ bool Rom::import_BMP(std::string filename,int nbbpp,bool update_palette)
     
     if (update_palette) //get palette from BMP and convert it to SMS palette
     {
-        m_palette->read_from_image(&img);
+        m_palette->read_from_image(&img,true);
     }
 
 
