@@ -32,6 +32,7 @@ TilesWidget::TilesWidget(QWidget * parent, Qt::WindowFlags f) : QWidget(parent,f
 void TilesWidget::set_tiles(std::vector<Tile*> * tiles)
 {
     m_tiles=tiles;
+    if (selected_tile>m_tiles->size()) selected_tile=m_tiles->size()-1;
 }
 
 void TilesWidget::paintEvent(QPaintEvent*) {

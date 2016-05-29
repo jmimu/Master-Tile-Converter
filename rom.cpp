@@ -254,7 +254,7 @@ long Rom::test_decompress_tiles(Rom * origin, long index)
         }
         offset+=1;
     }
-    //std::cout<<"bytes in bitplans: "<<bytes_in_bitplan[0]<<" "<<bytes_in_bitplan[1]<<" "<<bytes_in_bitplan[2]<<" "<<bytes_in_bitplan[3]<<std::endl;
+    std::cout<<"bytes in bitplans: "<<bytes_in_bitplan[0]<<" "<<bytes_in_bitplan[1]<<" "<<bytes_in_bitplan[2]<<" "<<bytes_in_bitplan[3]<<std::endl;
     if ((bytes_in_bitplan[0]>0)&&(bytes_in_bitplan[0]==bytes_in_bitplan[1])
         &&(bytes_in_bitplan[0]==bytes_in_bitplan[2])&&(bytes_in_bitplan[0]==bytes_in_bitplan[3]))
     {    
