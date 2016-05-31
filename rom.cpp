@@ -287,17 +287,26 @@ long Rom::decompress_tiles(Rom * origin, long index)
 
     std::vector<unsigned char> decompressed_bitplane[4];
 
-    //std::cout<<"Testing data at "<<index<<"..."<<std::endl;
+    #ifdef DECOMPRESS_DEBUG
+        std::cout<<"Testing data at "<<index<<"..."<<std::endl;
+    #endif
     for (int num_bitplane=0;num_bitplane<4;num_bitplane++)
     {
-        //std::cout<<"bitplane "<<num_bitplane<<std::endl;
+        #ifdef DECOMPRESS_DEBUG
+            std::cout<<"bitplane "<<num_bitplane<<std::endl;
+        #endif
         while ((index+offset<origin->get_romlength())and((origin->get_romdata())[index+offset]!=0))
         {
+            #ifdef DECOMPRESS_DEBUG
+                std::cout<<"   offset: Ox"<<std::hex<<offset<<" ";
+            #endif
             if ((origin->get_romdata())[index+offset]<128)//identical bytes
             {
                 nb_consecutive_identical_bytes=(origin->get_romdata())[index+offset];
                 offset++;
-                //std::cout<<"   found "<<nb_consecutive_identical_bytes<<" identical bytes"<<std::endl;
+                #ifdef DECOMPRESS_DEBUG
+                    std::cout<<"   found "<<nb_consecutive_identical_bytes<<" identical bytes"<<std::endl;
+                #endif
                 the_byte=(origin->get_romdata())[index+offset];
                 offset++;
                 for (long i=0;i<nb_consecutive_identical_bytes;i++)
@@ -308,7 +317,9 @@ long Rom::decompress_tiles(Rom * origin, long index)
             {
                 nb_consecutive_different_bytes=(origin->get_romdata())[index+offset]-128;
                 offset++;
-                //std::cout<<"   found "<<nb_consecutive_different_bytes<<" different bytes"<<std::endl;
+                #ifdef DECOMPRESS_DEBUG
+                    std::cout<<"   found "<<nb_consecutive_different_bytes<<" different bytes"<<std::endl;
+                #endif
                 for (long i=0;i<nb_consecutive_different_bytes;i++)
                 {
                     the_byte=(origin->get_romdata())[index+offset];
@@ -339,7 +350,9 @@ long Rom::decompress_tiles(Rom * origin, long index)
     for (int i=0;i<nbr_decompressed_tiles;i++) // number of tiles is fixed for uncompressed data
         m_tiles.push_back(new Tile(m_palette));
 
-    //std::cout<<"Found "<<(long)decompressed_bitplane[0].size()<<" compressed bytes"<<std::endl;
+    #ifdef DECOMPRESS_DEBUG
+        std::cout<<"Found "<<(long)decompressed_bitplane[0].size()<<" compressed bytes"<<std::endl;
+    #endif
     return nbr_decompressed_tiles;
 }
 
@@ -365,7 +378,9 @@ long Rom::compress_tiles(int nbr_tiles)
 
     for (long bitplan=0;bitplan<4;bitplan++)
     {
-         //std::cout<<"Bitplan "<<bitplan<<std::endl;
+         #ifdef COMPRESS_DEBUG
+            std::cout<<"Bitplan "<<bitplan<<std::endl;
+         #endif
          long data_index=bitplan;//look for 1 byte over 4
          while (data_index<romlength)
          {
@@ -374,10 +389,14 @@ long Rom::compress_tiles(int nbr_tiles)
              unsigned char the_unique_byte=0;
              long nb_different_bytes=1;
              std::vector<unsigned char> the_diff_bytes;
-             //std::cout<<"We are at data_index="<<data_index<<".  read "<<(int)romdata[data_index]<<std::endl;
+             #ifdef COMPRESS_DEBUG
+                std::cout<<"We are at data_index="<<data_index<<".  read "<<(int)romdata[data_index]<<std::endl;
+             #endif
              for (long i=data_index+4;i<romlength;i+=4)
              {
-                 //std::cout<<"   read "<<(int)romdata[i]<<"   ";
+                 #ifdef COMPRESS_DEBUG
+                    std::cout<<"   read "<<(int)romdata[i]<<"   ";
+                 #endif
                  if (nb_different_bytes>1)//we are in a diff bytes group
                  {
                      if (((romdata[i]==romdata[i-4])&&(i+4<romlength)&&(romdata[i]==romdata[i+4]))   or(nb_different_bytes==127))//found similar bytes, or out of range
@@ -387,7 +406,9 @@ long Rom::compress_tiles(int nbr_tiles)
                          nb_different_bytes--;
                          the_diff_bytes.pop_back();
                          i--;
-                         //std::cout<<" end of group"<<std::endl;
+                         #ifdef COMPRESS_DEBUG
+                            std::cout<<" end of group"<<std::endl;
+                         #endif
                          break;
                      }else{
                          nb_different_bytes++;
@@ -399,50 +420,68 @@ long Rom::compress_tiles(int nbr_tiles)
                      {
                          //end of group
                          i--;
-                         //std::cout<<" end of group"<<std::endl;
+                         #ifdef COMPRESS_DEBUG
+                            std::cout<<" end of group"<<std::endl;
+                         #endif
                          break;
                      }else{
                          nb_similar_bytes++;
                      }
                  }else{//we are at the beginning of a group
-                     //std::cout<<" begin group ";
-                     if ((romdata[i]==romdata[i-4])&&(i+4<romlength)&&(romdata[i]==romdata[i+4]))//found similar bytes
+                     #ifdef COMPRESS_DEBUG
+                        std::cout<<" begin group ";
+                     #endif
+                     if ((romdata[i]==romdata[i-4])/*&&(i+4<romlength)&&(romdata[i]==romdata[i+4])*/)//found similar bytes
                      {
                          nb_different_bytes=0;
                          nb_similar_bytes=2;
                          the_unique_byte=romdata[i];
-                         //std::cout<<" similar ";
+                         #ifdef COMPRESS_DEBUG
+                            std::cout<<" similar ";
+                         #endif
                      }else{
                          nb_different_bytes=2;
                          nb_similar_bytes=0;
                          the_diff_bytes.push_back(romdata[i-4]);
                          the_diff_bytes.push_back(romdata[i]);
-                         //std::cout<<" different from "<<(int)romdata[i-4]<<" ";
+                         #ifdef COMPRESS_DEBUG
+                            std::cout<<" different from "<<(int)romdata[i-4]<<" ";
+                         #endif
                      }
 
                  }
              }//one block has been analyzed, we record it.
-             if (nb_similar_bytes>2)
+             if (nb_similar_bytes>1)
              {
                  compressed_data.push_back(nb_similar_bytes);
                  compressed_data.push_back(the_unique_byte);
                  data_index+=nb_similar_bytes*4;
-                 //std::cout<<"We write "<<(int)nb_similar_bytes<<" "<<(int)the_unique_byte<<std::endl;
+                 #ifdef COMPRESS_DEBUG
+                    std::cout<<"We write "<<(int)nb_similar_bytes<<" "<<(int)the_unique_byte<<std::endl;
+                 #endif
              }else{
                  compressed_data.push_back(nb_different_bytes+128);
-                 //std::cout<<"We write "<<(int)(nb_different_bytes+128);
+                 #ifdef COMPRESS_DEBUG
+                    std::cout<<"We write "<<(int)(nb_different_bytes+128);
+                 #endif
 
                  for (unsigned long j=0;j<the_diff_bytes.size();j++)
                  {
                      compressed_data.push_back(the_diff_bytes.at(j));
-                     //std::cout<<" "<<(int)the_diff_bytes.at(j);
+                     #ifdef COMPRESS_DEBUG
+                        std::cout<<" "<<(int)the_diff_bytes.at(j);
+                     #endif
                  }
-                 //std::cout<<std::endl;
+                 #ifdef COMPRESS_DEBUG
+                    std::cout<<std::endl;
+                 #endif
                  data_index+=nb_different_bytes*4;
              }
 
          }//end of bitplan, write a 0
-         //std::cout<<"end of bitplan"<<std::endl;
+         #ifdef COMPRESS_DEBUG
+            std::cout<<"end of bitplan"<<std::endl;
+         #endif
          compressed_data.push_back(0);
     }//compression finished
 

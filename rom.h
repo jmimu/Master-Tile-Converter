@@ -26,6 +26,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "palette.h"
 #include "system.h"
 
+#define DECOMPRESS_DEBUG
+#define COMPRESS_DEBUG
+
+
 class Rom
 {
 public:
