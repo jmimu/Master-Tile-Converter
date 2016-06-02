@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "tileswidget.h"
 
-Rom::Rom(Palette * palette) : romlength(0),romdata(0),m_palette(palette),m_offset(0x10341),compressed_size(0),m_system(0)
+Rom::Rom(Palette * palette) : romlength(0),romdata(0),m_palette(palette),m_offset(0x0),compressed_size(0),m_system(0)
 {
     std::cout<<"Init ROM..."<<std::endl;
     m_tiles.clear();
@@ -254,7 +254,7 @@ long Rom::test_decompress_tiles(Rom * origin, long index)
         }
         offset+=1;
     }
-    std::cout<<"bytes in bitplans: "<<bytes_in_bitplan[0]<<" "<<bytes_in_bitplan[1]<<" "<<bytes_in_bitplan[2]<<" "<<bytes_in_bitplan[3]<<std::endl;
+    //std::cout<<"bytes in bitplans: "<<bytes_in_bitplan[0]<<" "<<bytes_in_bitplan[1]<<" "<<bytes_in_bitplan[2]<<" "<<bytes_in_bitplan[3]<<std::endl;
     if ((bytes_in_bitplan[0]>0)&&(bytes_in_bitplan[0]==bytes_in_bitplan[1])
         &&(bytes_in_bitplan[0]==bytes_in_bitplan[2])&&(bytes_in_bitplan[0]==bytes_in_bitplan[3]))
     {    
@@ -359,7 +359,7 @@ long Rom::decompress_tiles(Rom * origin, long index)
 
 //with "Phantasy Star" RLE
 //http://www.smspower.org/Development/Compression
-long Rom::compress_tiles(int nbr_tiles)
+long Rom::compress_tiles(int nbr_tiles,std::string outFileName,int target_size)
 {
     /*if (romdata) delete[] romdata;
     romlength=0;
@@ -485,15 +485,60 @@ long Rom::compress_tiles(int nbr_tiles)
          compressed_data.push_back(0);
     }//compression finished
 
+    //expand data if needed
+    //expantion is just slitting differents groups :
+    //8x a b c... => 81 a 81 b 81 c...
+    //this way you can add from 1 to x-1 bytes
+    if ((target_size>0)&&(target_size>compressed_data.size()))
+    {
+        std::vector<unsigned char> compressed_data_expanded;
+        int bytes_to_add=target_size-compressed_data.size();
+        unsigned int compressed_index=0;
+        while (bytes_to_add>0)
+        {
+            if (compressed_data[compressed_index]>0x81)
+            {
+                //group of differents bytes
+                int how_much_differents=compressed_data[compressed_index]-0x80;
+                while((how_much_differents>1)&&(bytes_to_add>0))
+                {
+                    compressed_data_expanded.push_back(0x81);
+                    compressed_index++;
+                    compressed_data_expanded.push_back(compressed_data[compressed_index]);
+                    bytes_to_add--;
+                    how_much_differents--;
+                }
+                if (how_much_differents>=1)
+                {
+                    compressed_data_expanded.push_back(0x80+how_much_differents);
+                    compressed_index++;
+                    break;
+                }
+                compressed_index++;
+            }else{
+                compressed_data_expanded.push_back(compressed_data[compressed_index]);
+                compressed_index++;
+                compressed_data_expanded.push_back(compressed_data[compressed_index]);
+                compressed_index++;
+            }
+        }
+        for (;compressed_index<compressed_data.size();compressed_index++)
+        {
+            compressed_data_expanded.push_back(compressed_data[compressed_index]);
+        }
+        compressed_data=compressed_data_expanded;
+    }
+
+
     //write compressed data to a file
     std::ofstream os;
-    os.open("compr_tmp.dat", std::ios::out | std::ios::binary);
+    os.open(outFileName.c_str(), std::ios::out | std::ios::binary);
     if (!compressed_data.empty())
         os.write((const char*)(&compressed_data[0]),compressed_data.size() * sizeof(unsigned char));
     os.close();
 
 
-    std::cout<<"Wrote compressed data file to \"compr_tmp.dat\"."<<std::endl;
+    std::cout<<"Wrote compressed data file to \""<<outFileName<<"\"."<<std::endl;
 
     return compressed_data.size();
 
@@ -819,5 +864,6 @@ bool Rom::createIPS(std::string original_rom_filename,std::string ips_filename)
     os.open (ips_filename.c_str(), std::ofstream::binary );
     os.write ((char*)&ips_data[0],ips_data.size());
     os.close();
+    return true;
 }
 

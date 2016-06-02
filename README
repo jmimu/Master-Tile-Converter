@@ -33,11 +33,10 @@ Master Tile Converter (MTC) can export and import 3bpp and 4bpp
 tiles in Sega Master System (SMS) roms.
 It uses a portable QT interface.
 You can see a simpler version in python in "simple_version" repertory.
-Version 0.9b.
+Version 0.9c.
 
 
 TODO:
- * be able to expand compressed data to fill original size
  * set working dir where rom is (for picture, asm...)
  * add "undo" button!
  * try to remove palette dependency for rom

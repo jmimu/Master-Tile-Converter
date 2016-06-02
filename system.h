@@ -27,6 +27,7 @@ class System
 {
 public:
     System();
+    virtual ~System();
     void setROM(Rom *rom);
     virtual bool check_ROM()=0;
     virtual unsigned short read_checksum()=0;//get the checksum written in header

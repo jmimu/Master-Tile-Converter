@@ -26,8 +26,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "palette.h"
 #include "system.h"
 
-#define DECOMPRESS_DEBUG
-#define COMPRESS_DEBUG
+//#define DECOMPRESS_DEBUG
+//#define COMPRESS_DEBUG
 
 
 class Rom
@@ -44,7 +44,7 @@ public:
     bool rom_data2asm(std::string filename,long offset,long num_tiles,int tile_bytes);
     long test_decompress_tiles(Rom * origin, long index);//return number of bytes read if ok, 0 if not valid, -1 if out of rom
     long decompress_tiles(Rom * origin, long index);//return number of tiles uncompressed
-    long compress_tiles(int nbr_tiles);//return number of bytes used
+    long compress_tiles(int nbr_tiles, std::string outFileName, int target_size=-1);//return number of bytes used
     bool import_rawdata(std::string filename,long adress);//<used for compressed tiles
     bool save_ROM(std::string filename);
     unsigned char * get_romdata(){return romdata;}

@@ -66,6 +66,12 @@ MTCproject::MTCproject(QString filename) : m_ROM_filename(""),m_current_palette_
         m_palettes[1]->set_one_color(true,2,QColor(0x55, 0x55, 0x55).rgb());
         m_palettes[1]->set_one_color(true,1,QColor(0xaa, 0xaa, 0xaa).rgb());
         m_palettes[1]->set_one_color(true,0,QColor(0xff, 0xff, 0xff).rgb());
+        m_palettes.push_back(new Palette("Default GrayScale"));
+        for (int i=0;i<16;i++)
+        {
+            m_palettes[2]->set_one_color(false,i,QColor((0x50*i)%0xff, (0x50*i)%0xff, (0x50*i)%0xff).rgb());
+            m_palettes[2]->set_one_color(true,i,QColor(0x10*i,0x10*i,0x10*i).rgb());
+        }
         m_filename="MTC.xml";
     }
 }

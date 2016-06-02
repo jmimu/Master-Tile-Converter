@@ -24,6 +24,11 @@ System::System():m_rom(0),m_computed_checksum(0),m_read_checksum(0),m_region(0),
 {
 }
 
+System::~System()
+{
+
+}
+
 void System::setROM(Rom *rom)
 {
     m_rom=rom;

@@ -13,7 +13,8 @@ SOURCES += main.cpp \
     mtcproject.cpp \
     system.cpp \
     system_SMS.cpp \
-    system_unknown.cpp
+    system_unknown.cpp \
+    dialogcompress.cpp
 HEADERS += mainwindow.h \
     tile.h \
     palette.h \
@@ -25,9 +26,11 @@ HEADERS += mainwindow.h \
     mtcproject.h \
     system.h \
     system_SMS.h \
-    system_unknown.h
+    system_unknown.h \
+    dialogcompress.h
 FORMS += mainwindow.ui \
-    dialog_about.ui
+    dialog_about.ui \
+    dialogcompress.ui
 RESOURCES += data.qrc
 CONFIG += debug
 OTHER_FILES += README
