@@ -20,7 +20,7 @@ public slots:
     bool chooseBMP();
     bool chooseOutput();
     bool compress();
-    bool updateCompressButton();
+    void updateCompressButton();
 private:
     Ui::DialogCompress *ui;
     Rom * mRom;

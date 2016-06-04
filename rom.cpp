@@ -228,7 +228,7 @@ long Rom::test_decompress_tiles(Rom * origin, long index)
                 break;
         //std::cout<<"bitplane "<<num_bitplane<<std::endl;
         //end when out of rom or read a 0 (end of a bitplan)
-        while ((index+offset<origin->get_romlength())and((origin->get_romdata())[index+offset]!=0))
+        while ((index+offset<origin->get_romlength())&&((origin->get_romdata())[index+offset]!=0))
         {
             if ((origin->get_romdata())[index+offset]<128)//identical bytes
             {
@@ -416,7 +416,7 @@ long Rom::compress_tiles(int nbr_tiles,std::string outFileName,int target_size)
                      }
                  }else if (nb_similar_bytes>1)//we are in a similar bytes group
                  {
-                     if ((romdata[i]!=romdata[i-4])or(nb_similar_bytes==127))//found diff bytes, or out of range
+                     if ((romdata[i]!=romdata[i-4])||(nb_similar_bytes==127))//found diff bytes, or out of range
                      {
                          //end of group
                          i--;

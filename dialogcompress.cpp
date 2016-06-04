@@ -30,7 +30,7 @@ DialogCompress::~DialogCompress()
     delete ui;
 }
 
-bool DialogCompress::updateCompressButton()
+void DialogCompress::updateCompressButton()
 {
     ui->pushButtonCompress->setEnabled(
                 ui->groupBoxInsert->isChecked()
@@ -48,7 +48,6 @@ bool DialogCompress::chooseBMP()
     {
         if (mRomTmp.import_BMP(fileName.toStdString(),4))
         {
-            bool ok;
             unsigned long nbr_total_tiles=mRomTmp.get_romlength()/4/8;
             ui->spinBoxNbTiles->setValue(nbr_total_tiles);
             ui->spinBoxNbTiles->setMaximum(nbr_total_tiles);
