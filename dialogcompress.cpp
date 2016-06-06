@@ -85,7 +85,7 @@ bool DialogCompress::compress()
     unsigned long nb_bytes=mRomTmp.compress_tiles(nb_tiles,outFileName.toStdString(),target_size);
 
     QString message;
-    if ((ui->groupBoxSize->isChecked())&&(nb_bytes>ui->spinBoxFixedSize->value()))
+    if ((ui->groupBoxSize->isChecked())&&(nb_bytes!=ui->spinBoxFixedSize->value()))
     {
         message=QString("The %1 tiles have been compressed, but its size is %2 bytes instead of %3!!!").arg(nb_tiles).arg(nb_bytes).arg(target_size);
 

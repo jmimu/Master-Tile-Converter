@@ -489,8 +489,14 @@ long Rom::compress_tiles(int nbr_tiles,std::string outFileName,int target_size)
     //expantion is just slitting differents groups :
     //8x a b c... => 81 a 81 b 81 c...
     //this way you can add from 1 to x-1 bytes
+    std::cout<<"Current compressed size: "<<compressed_data.size()<<"."<<std::endl;
+    if (target_size>0)
+    {
+        std::cout<<"Target compressed size: "<<target_size<<"."<<std::endl;
+    }
     if ((target_size>0)&&(target_size>compressed_data.size()))
     {
+        std::cout<<"Expand compressed data..."<<std::endl;
         std::vector<unsigned char> compressed_data_expanded;
         int bytes_to_add=target_size-compressed_data.size();
         unsigned int compressed_index=0;
@@ -498,22 +504,27 @@ long Rom::compress_tiles(int nbr_tiles,std::string outFileName,int target_size)
         {
             if (compressed_data[compressed_index]>0x81)
             {
-                //group of differents bytes
-                int how_much_differents=compressed_data[compressed_index]-0x80;
-                while((how_much_differents>1)&&(bytes_to_add>0))
+                //group of different bytes
+                int how_much_different=compressed_data[compressed_index]-0x80;
+                while((how_much_different>0)&&(bytes_to_add>0))
                 {
                     compressed_data_expanded.push_back(0x81);
                     compressed_index++;
                     compressed_data_expanded.push_back(compressed_data[compressed_index]);
-                    bytes_to_add--;
-                    how_much_differents--;
+                    if (how_much_different>1) bytes_to_add--;
+                    how_much_different--;
                 }
-                if (how_much_differents>=1)
+                if (how_much_different>=1)
                 {
-                    compressed_data_expanded.push_back(0x80+how_much_differents);
+                    compressed_data_expanded.push_back(0x80+how_much_different);
                     compressed_index++;
                     break;
                 }
+                compressed_index++;
+            }
+            else if (compressed_data[compressed_index]==0) //end of bitplan
+            {
+                compressed_data_expanded.push_back(0);
                 compressed_index++;
             }else{
                 compressed_data_expanded.push_back(compressed_data[compressed_index]);
@@ -537,7 +548,7 @@ long Rom::compress_tiles(int nbr_tiles,std::string outFileName,int target_size)
         os.write((const char*)(&compressed_data[0]),compressed_data.size() * sizeof(unsigned char));
     os.close();
 
-
+    std::cout<<"Final compressed size: "<<compressed_data.size()<<"."<<std::endl;
     std::cout<<"Wrote compressed data file to \""<<outFileName<<"\"."<<std::endl;
 
     return compressed_data.size();

@@ -679,7 +679,9 @@ bool MainWindow::decompress_tiles()
         return false;
     }
     int nbr_uncompressed_tiles=decompressed_rom.decompress_tiles(&real_rom,offset);
-    ui->statusBar->showMessage(QString("Found %1 tiles.").arg(nbr_uncompressed_tiles,0,10));
+    ui->statusBar->showMessage(QString("Found %1 tiles in %2 bytes.")
+                               .arg(nbr_uncompressed_tiles,0,10)
+                               .arg(decompressed_rom.get_compressed_size(),0,10));
     decompressed_rom.create_tiles(0);
     show_decompressed_data();
     update_tiles();
