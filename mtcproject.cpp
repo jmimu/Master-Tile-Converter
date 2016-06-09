@@ -72,7 +72,7 @@ MTCproject::MTCproject(QString filename) : m_ROM_filename(""),m_current_palette_
             m_palettes[2]->set_one_color(false,i,QColor((0x50*i)%0xff, (0x50*i)%0xff, ((0x50-1)*i)%0xff).rgb());
             m_palettes[2]->set_one_color(true,i,QColor(0x10*i,0x10*i,(0x10-1)*i).rgb());
         }
-        m_filename="MTC.xml";
+        m_filename="MTC.mtc";
     }
 }
 

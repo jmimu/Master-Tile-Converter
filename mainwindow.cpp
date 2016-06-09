@@ -159,7 +159,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 bool MainWindow::saveMTCproject()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save MTC project"),m_project->getFilename(),tr("MTC project (*.xml)"));
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save MTC project"),m_project->getFilename(),tr("MTC project (*.mtc)"));
     if (fileName!="")
         return m_project->save_project(fileName);
     return false;
@@ -167,7 +167,7 @@ bool MainWindow::saveMTCproject()
 
 bool MainWindow::loadMTCproject()
 {
-    QString fileName = QFileDialog::getOpenFileName(this,tr("Load an MTC Project"), ".", tr("MTC project (*.xml)"));
+    QString fileName = QFileDialog::getOpenFileName(this,tr("Load an MTC Project"), ".", tr("MTC project (*.mtc)"));
     if (fileName!="")
     {
         MTCbookmark* start=m_project->read_project(fileName);
