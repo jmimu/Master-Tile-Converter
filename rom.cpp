@@ -610,7 +610,14 @@ bool Rom::import_BMP(std::string filename,int nbbpp,bool update_palette)
             msgBox.setText("Wrong image palette or MTC color profile.\nMaximum palette size is 8.");
             msgBox.setIcon(QMessageBox::Critical);
             msgBox.exec();
-            return false;
+
+            QMessageBox::StandardButton reply;
+            reply=QMessageBox::question(0,"Convert?","Convert 16-color image into 8-color?",
+                                        QMessageBox::Yes|QMessageBox::No);
+            if ( reply == QMessageBox::Yes )
+            {
+                img.setColorCount(8);
+            }else return false;
         }
     }
     else
@@ -644,7 +651,7 @@ bool Rom::import_BMP(std::string filename,int nbbpp,bool update_palette)
     //if the rom is empty, we just want to create data from BMP:
     if (romlength==0)
     {
-        romlength=nb_tiles_width*4*8*nb_tiles_height;
+        romlength=nb_tiles_width*nbbpp*8*nb_tiles_height;
         if (romdata) delete[] romdata;
         romdata = new unsigned char [romlength];
         m_offset=0;
