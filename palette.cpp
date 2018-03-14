@@ -156,7 +156,7 @@ int Palette::try_to_find_in_rom(QString fileName, unsigned char *romdata, long r
     }
     if (best_correct_bytes_in_rom>0)
     {
-        QString info=QString("List of offsets with %1/32 correct bytes:\n").arg(best_correct_bytes_in_rom,0,10);
+        QString info=QString("List of offsets with %1/%2 correct bytes:\n").arg(best_correct_bytes_in_rom,0,10).arg(pal_length,0,10);
         for (unsigned int i=0;i<best_offsets.size();i++)
         {
             info+=QString("- 0x%1\n").arg(best_offsets.at(i),0,16);
@@ -194,9 +194,9 @@ bool Palette::read_from_file(QString fileName)
     pal_length = is.tellg();
     is.seekg (0, std::ios::beg);
 
-    if (pal_length!=32)
+    if ((pal_length!=32)&&(pal_length!=64))
     {
-        std::cout<<"Error: "<<fileName.toStdString()<<" is not 32 bytes palette."<<std::endl;
+        std::cout<<"Error: "<<fileName.toStdString()<<" is not a 32 or 64 bytes palette."<<std::endl;
         return false;
     }
 
@@ -213,16 +213,34 @@ bool Palette::read_from_file(QString fileName)
     colors_sprites.clear();
 
     unsigned char r,g,b;
-    for (int i=0;i<pal_length;i++)
+    if (pal_length==32)
     {
-        b= ((pal_data[i] & 0x30)>>4)* 0x55;
-        g= ((pal_data[i] & 0x0C)>>2)* 0x55;
-        r= ((pal_data[i] & 0x03)>>0)* 0x55;
-        //std::cout<<"read: 0x"<<std::hex<<(int)r<<" 0x"<<(int)g<<" 0x"<<(int)b<<std::endl;
-        if (i<16)
-            colors_back.append( QColor(r,g,b).rgb() );
-        else
-            colors_sprites.append( QColor(r,g,b).rgb() );
+        for (int i=0;i<32;i++)
+        {
+            b= ((pal_data[i] & 0x30)>>4)* 0x55;
+            g= ((pal_data[i] & 0x0C)>>2)* 0x55;
+            r= ((pal_data[i] & 0x03)>>0)* 0x55;
+            //std::cout<<"read: 0x"<<std::hex<<(int)r<<" 0x"<<(int)g<<" 0x"<<(int)b<<std::endl;
+            if (i<16)
+                colors_back.append( QColor(r,g,b).rgb() );
+            else
+                colors_sprites.append( QColor(r,g,b).rgb() );
+        }
+    }
+    else if (pal_length==64)
+    {
+        for (int i=0;i<64;i+=2)
+        {
+            b= (pal_data[i+1] & 0x0F)* 0x11;
+            g= (pal_data[i]>>4)* 0x11;
+            r= (pal_data[i] & 0x0F)* 0x11;
+            //std::cout<<"data: "<<std::hex<<(int)pal_data[i]<<" "<<std::hex<<(int)pal_data[i+1]<<"  ";
+            //std::cout<<"read: 0x"<<std::hex<<(int)r<<" 0x"<<(int)g<<" 0x"<<(int)b<<std::endl;
+            if (i<32)
+                colors_back.append( QColor(r,g,b).rgb() );
+            else
+                colors_sprites.append( QColor(r,g,b).rgb() );
+        }
     }
 
     from_filename=fileName;
