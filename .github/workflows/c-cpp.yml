@@ -17,7 +17,7 @@ jobs:
     - name: Setup Qt
       uses: jurplel/install-qt-action@v2.8.0
     - name: configure
-      run: ./qmake
+      run: qmake
     - name: make
       run: make
 
