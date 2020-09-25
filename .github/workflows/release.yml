@@ -12,11 +12,23 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@master
-      - name: Generate the artifacts
-        uses: skx/github-action-build@master
-      - name: Upload the artifacts
-        uses: skx/github-action-publish-binaries@master
+      - name: Setup Qt
+        uses: jurplel/install-qt-action@v2.8.0
+      - name: configure
+        run: qmake
+      - name: make
+        run: make
+      - name: zip
+        run: zip mastertileconverter_distrib.zip mastertileconverter README INFOS.txt License.txt
+
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: 'example-*'
+          upload_url: https://uploads.github.com/repos/jmimu/Master-Tile-Converter/releases/31803632/assets{?name,label}
+          asset_path: ./mastertileconverter_distrib.zip
+          asset_name: mastertileconverter_distrib.zip
+          asset_content_type: application/zip
+
