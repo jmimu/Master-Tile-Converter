@@ -8,18 +8,34 @@ name: Handle Release
 jobs:
   generate:
     name: Create release-artifacts
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout the repository
         uses: actions/checkout@master
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
       - name: Setup Qt
         uses: jurplel/install-qt-action@v2.8.0
+        with:
+          arch: 'win64_msvc2017_64'
+          install-deps: 'true'
       - name: configure
         run: qmake
       - name: make
         run: make
-      - name: zip
-        run: zip mastertileconverter_distrib.zip mastertileconverter README INFOS.txt License.txt
+      - name: zip linux
+        if: matrix.os == 'ubuntu-latest'
+        run: zip mastertileconverter_distrib_${{matrix.os}}.zip mastertileconverter README INFOS.txt License.txt
+      - name: zip win
+        if: matrix.os == 'windows-latest'
+        run: zip mastertileconverter_distrib_${{matrix.os}}.zip mastertileconverter.exe README INFOS.txt License.txt
+      - name: zip mac
+        if: matrix.os == 'macOS-latest'
+        run: zip mastertileconverter_distrib_${{matrix.os}}.zip mastertileconverter.app/Contents/MacOS/mastertileconverter README INFOS.txt License.txt
 
       - name: Upload Release Asset
         id: upload-release-asset 
@@ -28,7 +44,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: https://uploads.github.com/repos/jmimu/Master-Tile-Converter/releases/31803632/assets{?name,label}
-          asset_path: ./mastertileconverter_distrib.zip
-          asset_name: mastertileconverter_distrib.zip
+          asset_path: ./mastertileconverter_distrib_${{matrix.os}}.zip
+          asset_name: mastertileconverter_distrib_${{matrix.os}}.zip
           asset_content_type: application/zip
 

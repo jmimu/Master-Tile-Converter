@@ -1,9 +1,0 @@
-set -e
-
-echo "Starting build, params "$1
-pwd
-ls
-
-qmake
-make
-
